@@ -8,10 +8,29 @@ const screens = {
   BUNDLE_DETAIL: 'bundle_detail',
   BUNDLE_CUSTOMIZE: 'bundle_customize',
   BUNDLE_CHECKOUT: 'bundle_checkout',
-  BUNDLE_CONFIRMATION: 'bundle_confirmation'
+  BUNDLE_CONFIRMATION: 'bundle_confirmation',
+  PAYMENT_METHOD: 'payment_method',
+  ONBOARDING_INTRO: 'onboarding_intro',
+  ONBOARDING_ARCHETYPE: 'onboarding_archetype',
+  ONBOARDING_TRAITS: 'onboarding_traits',
+  ONBOARDING_SPORTS: 'onboarding_sports',
+  ONBOARDING_VIBES: 'onboarding_vibes',
+  ONBOARDING_INTERESTS: 'onboarding_interests',
+  ONBOARDING_AVATAR: 'onboarding_avatar',
+  ONBOARDING_REVEAL: 'onboarding_reveal',
+  PROFILE_HUB: 'profile_hub'
 };
 
 let currentScreen = screens.HOME;
+window.hasCompletedOnboarding = false;
+window.onboardingData = {
+  archetype: '',
+  traits: [],
+  sports: [],
+  vibes: '',
+  interests: [],
+  avatar: ''
+};
 
 const appContainer = document.querySelector('#screen-container');
 
@@ -50,7 +69,7 @@ const eveningBundles = [
     subtitle: 'Pickleball + Rooftop Dinner',
     price: '₹2200 for two',
     duration: '3 hours',
-    image: 'https://images.unsplash.com/photo-1622279203923-3afba580a068?w=800&auto=format&fit=crop', // Neon pickleball/tennis vibe
+    image: 'images/date_night.png', // Premium date night vibe
     icons: ['<i class="fa-solid fa-table-tennis-paddle-ball"></i>', '<i class="fa-solid fa-utensils"></i>', '<i class="fa-solid fa-martini-glass"></i>']
   },
   {
@@ -59,7 +78,7 @@ const eveningBundles = [
     subtitle: 'Football + Drinks + Cake',
     price: '₹4500 for group',
     duration: '4 hours',
-    image: 'https://images.unsplash.com/photo-1574629810360-7efbb6b6923c?w=800&auto=format&fit=crop', // Sports bar/celebration
+    image: 'images/birthday.png', // Premium birthday vibe
     icons: ['<i class="fa-solid fa-futbol"></i>', '<i class="fa-solid fa-beer-mug-empty"></i>', '<i class="fa-solid fa-cake-candles"></i>']
   },
   {
@@ -68,7 +87,7 @@ const eveningBundles = [
     subtitle: 'Turf Football + Sports Bar',
     price: '₹3000 for group',
     duration: '3.5 hours',
-    image: 'https://images.unsplash.com/photo-1518605368461-1eb2bc3086eb?w=800&auto=format&fit=crop', // Group football
+    image: 'images/squad_night.png', // Premium squad night vibe
     icons: ['<i class="fa-solid fa-futbol"></i>', '<i class="fa-solid fa-burger"></i>', '<i class="fa-solid fa-beer-mug-empty"></i>']
   }
 ];
@@ -499,12 +518,47 @@ function renderDetail(id) {
 }
 
 function renderProfile() {
+  let nudgeHTML = '';
+  if (window.hasCompletedOnboarding) {
+      nudgeHTML = `
+      <div class="onboarding-nudge glass fade-in" onclick="navigateTo(screens.PROFILE_HUB)" style="cursor: pointer; display: flex; justify-content: space-between; align-items: center; border-left: 4px solid #bc13fe; padding: 16px;">
+        <div style="display: flex; align-items: center; gap: 16px;">
+            <div class="mini-card-banner" style="width: 48px; height: 64px; background: #111; border-radius: 8px; border: 1px solid #bc13fe; display: flex; align-items: center; justify-content: center; position: relative;">
+                 <i class="fa-solid ${window.onboardingData.avatar || 'fa-user'}" style="color: #fff; font-size: 1.5rem;"></i>
+                 <div style="position: absolute; top: 4px; left: 4px; font-weight: 800; font-size: 0.5rem; color: #fff;">99</div>
+            </div>
+            <div>
+               <h3 style="margin-bottom: 4px; font-weight: 800; font-size: 1.2rem;">Identity Hub</h3>
+               <p style="font-size: 0.85rem; color: #bc13fe; font-weight: 700;">Level 12 • ${window.onboardingData.archetype || 'Player'}</p>
+            </div>
+        </div>
+        <i class="fa-solid fa-chevron-right" style="color: var(--text-secondary); font-size: 1.2rem;"></i>
+      </div>
+      `;
+  } else {
+      nudgeHTML = `
+      <div class="onboarding-nudge glass fade-in" id="profile-nudge">
+        <button class="nudge-close" onclick="document.getElementById('profile-nudge').style.display='none';"><i class="fa-solid fa-xmark"></i></button>
+        <div class="nudge-visual">
+           <div class="nudge-card-outline neon-glow"></div>
+        </div>
+        <div class="nudge-content">
+           <h3>Create Your Player</h3>
+           <p>Your District Card shows who you are on the court.</p>
+           <button class="nudge-start-btn" onclick="navigateTo(screens.ONBOARDING_INTRO)">Start</button>
+        </div>
+      </div>
+      `;
+  }
+
   appContainer.innerHTML = `
-    <div class="profile-screen fade-in">
+    <div class="profile-screen fade-in" style="position: relative;">
       <header class="profile-header">
-        <button class="back-btn-small"><i class="fa-solid fa-arrow-left"></i></button>
+        <button class="back-btn-small" onclick="navigateTo(screens.HOME)"><i class="fa-solid fa-arrow-left"></i></button>
         <h2>Profile</h2>
       </header>
+
+      ${nudgeHTML}
 
       <section class="user-info-section">
         <div class="profile-avatar">
@@ -838,14 +892,34 @@ function navigateTo(screen, id = null) {
     renderBooking(id);
   } else if (screen === screens.PROFILE) {
     renderProfile();
+  } else if (screen === screens.PROFILE_HUB) {
+    renderProfileHub();
   } else if (screen === screens.BUNDLE_DETAIL) {
     renderBundleDetail(id);
   } else if (screen === screens.BUNDLE_CUSTOMIZE) {
     renderBundleCustomize(id);
   } else if (screen === screens.BUNDLE_CHECKOUT) {
     renderBundleCheckout(id);
+  } else if (screen === screens.PAYMENT_METHOD) {
+    renderPaymentMethod(id);
   } else if (screen === screens.BUNDLE_CONFIRMATION) {
     renderBundleConfirmation(id);
+  } else if (screen === screens.ONBOARDING_INTRO) {
+    renderOnboardingIntro();
+  } else if (screen === screens.ONBOARDING_ARCHETYPE) {
+    renderOnboardingArchetype();
+  } else if (screen === screens.ONBOARDING_TRAITS) {
+    renderOnboardingTraits();
+  } else if (screen === screens.ONBOARDING_SPORTS) {
+    renderOnboardingSports();
+  } else if (screen === screens.ONBOARDING_VIBES) {
+    renderOnboardingVibes();
+  } else if (screen === screens.ONBOARDING_INTERESTS) {
+    renderOnboardingInterests();
+  } else if (screen === screens.ONBOARDING_AVATAR) {
+    renderOnboardingAvatar();
+  } else if (screen === screens.ONBOARDING_REVEAL) {
+    renderOnboardingReveal();
   }
 }
 
@@ -1178,8 +1252,121 @@ window.renderBundleCheckout = function(id) {
       </div>
 
       <footer class="bundle-detail-footer detail-footer">
-          <button class="book-slots-btn" style="width: 100%;" onclick="navigateTo(screens.BUNDLE_CONFIRMATION, '${id}')">Pay Now</button>
+          <button class="book-slots-btn" style="width: 100%;" onclick="navigateTo(screens.PAYMENT_METHOD, '${id}')">Pay Now</button>
       </footer>
+    </div>
+  `;
+}
+
+window.renderPaymentMethod = function(id) {
+  appContainer.innerHTML = `
+    <div class="payment-screen fade-in">
+      <header class="payment-header">
+        <button class="back-btn-small" onclick="navigateTo(screens.BUNDLE_CHECKOUT, '${id}')"><i class="fa-solid fa-arrow-left"></i></button>
+        <h2>Select Payment Method</h2>
+      </header>
+
+      <div class="main-content payment-content scrollable">
+        
+        <div class="payment-section">
+          <h3 class="payment-section-title">Recommended</h3>
+          <div class="payment-list glass">
+            <div class="payment-card" onclick="navigateTo(screens.BUNDLE_CONFIRMATION, '${id}')">
+              <div class="payment-icon cred-icon"><i class="fa-brands fa-kickstarter-k"></i></div>
+              <span class="payment-name">CRED UPI</span>
+              <i class="fa-solid fa-chevron-right payment-arrow"></i>
+            </div>
+            <div class="payment-card" onclick="navigateTo(screens.BUNDLE_CONFIRMATION, '${id}')">
+              <div class="payment-icon gpay-icon"><i class="fa-brands fa-google-pay"></i></div>
+              <span class="payment-name">Google Pay UPI</span>
+              <i class="fa-solid fa-chevron-right payment-arrow"></i>
+            </div>
+            <div class="payment-card" onclick="navigateTo(screens.BUNDLE_CONFIRMATION, '${id}')">
+              <div class="payment-icon paytm-icon"><span class="paytm-text">Paytm</span></div>
+              <span class="payment-name">Paytm UPI</span>
+              <i class="fa-solid fa-chevron-right payment-arrow"></i>
+            </div>
+          </div>
+        </div>
+
+        <div class="payment-section">
+          <h3 class="payment-section-title">Cards</h3>
+          <div class="payment-list glass">
+            <div class="payment-card">
+              <div class="payment-icon white-icon"><i class="fa-regular fa-credit-card"></i></div>
+              <span class="payment-name">Add credit or debit cards</span>
+              <button class="payment-add-btn">ADD</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="payment-section">
+          <h3 class="payment-section-title">Pay by any UPI app</h3>
+          <div class="payment-list glass">
+            <div class="payment-card" onclick="navigateTo(screens.BUNDLE_CONFIRMATION, '${id}')">
+              <div class="payment-icon jupiter-icon">J</div>
+              <span class="payment-name">Jupiter UPI</span>
+              <i class="fa-solid fa-chevron-right payment-arrow"></i>
+            </div>
+          </div>
+        </div>
+
+        <div class="payment-section">
+          <h3 class="payment-section-title">Wallets</h3>
+          <div class="payment-list glass">
+            <div class="payment-card">
+              <div class="payment-icon amazon-icon">pay</div>
+              <div class="payment-details">
+                 <span class="payment-name">Amazon Pay Balance</span>
+                 <span class="payment-sub">Link your Amazon Pay Balance wallet</span>
+              </div>
+              <button class="payment-add-btn">ADD</button>
+            </div>
+            <div class="payment-card disabled-card with-bubble">
+              <div class="payment-card-main">
+                <div class="payment-icon wallet-icon"><i class="fa-solid fa-wallet"></i></div>
+                <span class="payment-name">District Money</span>
+              </div>
+              <div class="payment-error-bubble">Unavailable due to insufficient balance</div>
+            </div>
+            <div class="payment-card disabled-card with-bubble">
+              <div class="payment-card-main">
+                <div class="payment-icon mobikwik-icon">M+</div>
+                <span class="payment-name muted-text">Mobikwik</span>
+              </div>
+              <div class="payment-error-bubble">Currently disabled due to a technical problem.</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="payment-section">
+          <h3 class="payment-section-title">Pay Later</h3>
+          <div class="payment-list glass">
+            <div class="payment-card">
+              <div class="payment-icon lazypay-icon"><i class="fa-solid fa-play"></i></div>
+              <div class="payment-details">
+                 <span class="payment-name">LazyPay</span>
+                 <span class="payment-sub">Link your LazyPay account</span>
+              </div>
+              <button class="payment-add-btn">ADD</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="payment-section">
+          <h3 class="payment-section-title">Netbanking</h3>
+          <div class="payment-list glass">
+            <div class="payment-card">
+              <div class="payment-icon white-icon"><i class="fa-solid fa-building-columns"></i></div>
+              <span class="payment-name">Netbanking</span>
+              <button class="payment-add-btn">ADD</button>
+            </div>
+          </div>
+        </div>
+        
+        <div style="height: 40px;"></div>
+
+      </div>
     </div>
   `;
 }
@@ -1227,6 +1414,451 @@ window.renderBundleConfirmation = function(id) {
     </div>
   `;
 }
+
+// --- ONBOARDING FLOW ---
+
+window.renderOnboardingIntro = function() {
+  appContainer.innerHTML = `
+    <div class="onboarding-screen fade-in">
+      <header class="ob-header">
+        <button class="back-btn-small" onclick="navigateTo(screens.PROFILE)"><i class="fa-solid fa-arrow-left"></i></button>
+      </header>
+      <div class="ob-content centered-content">
+         <div class="ob-card-hologram">
+            <div class="plasma-border"></div>
+            <i class="fa-solid fa-user-astronaut empty-avatar"></i>
+         </div>
+         <h1 class="ob-title glow-text">Create Your Player</h1>
+         <p class="ob-subtitle">Your District Card shows who you are on the court.</p>
+         <button class="ob-primary-btn neon-glow" onclick="navigateTo(screens.ONBOARDING_ARCHETYPE)">Start</button>
+      </div>
+    </div>
+  `;
+};
+
+window.renderOnboardingArchetype = function() {
+  window.selectArchetype = function(type) {
+     window.onboardingData.archetype = type;
+     navigateTo(screens.ONBOARDING_TRAITS);
+  };
+
+  appContainer.innerHTML = `
+    <div class="onboarding-screen fade-in">
+      <header class="ob-header">
+        <button class="back-btn-small" onclick="navigateTo(screens.ONBOARDING_INTRO)"><i class="fa-solid fa-arrow-left"></i></button>
+        <div class="ob-progress">
+          <div class="progress-bar"><div class="progress-fill" style="width: 14%;"></div></div>
+        </div>
+      </header>
+      <div class="ob-content">
+         <h2 class="ob-step-title">Choose Your Player Type</h2>
+         
+         <div class="archetype-grid">
+            <div class="archetype-card ${window.onboardingData.archetype === 'The Competitor' ? 'selected' : ''}" onclick="selectArchetype('The Competitor')">
+               <div class="arc-icon"><i class="fa-solid fa-trophy"></i></div>
+               <div class="arc-info">
+                 <h4>The Competitor</h4>
+                 <p>Focused, competitive sports player</p>
+               </div>
+            </div>
+            <div class="archetype-card ${window.onboardingData.archetype === 'The Social Player' ? 'selected' : ''}" onclick="selectArchetype('The Social Player')">
+               <div class="arc-icon"><i class="fa-solid fa-users"></i></div>
+               <div class="arc-info">
+                 <h4>The Social Player</h4>
+                 <p>Plays for fun and social connection</p>
+               </div>
+            </div>
+            <div class="archetype-card ${window.onboardingData.archetype === 'The Weekend Warrior' ? 'selected' : ''}" onclick="selectArchetype('The Weekend Warrior')">
+               <div class="arc-icon"><i class="fa-solid fa-calendar-days"></i></div>
+               <div class="arc-info">
+                 <h4>The Weekend Warrior</h4>
+                 <p>Plays mostly on weekends with friends</p>
+               </div>
+            </div>
+            <div class="archetype-card ${window.onboardingData.archetype === 'The Fitness Enthusiast' ? 'selected' : ''}" onclick="selectArchetype('The Fitness Enthusiast')">
+               <div class="arc-icon"><i class="fa-solid fa-heart-pulse"></i></div>
+               <div class="arc-info">
+                 <h4>The Fitness Enthusiast</h4>
+                 <p>Plays sports primarily for fitness</p>
+               </div>
+            </div>
+         </div>
+      </div>
+    </div>
+  `;
+};
+
+window.toggleTrait = function(el, trait) {
+   const idx = window.onboardingData.traits.indexOf(trait);
+   if (idx === -1) {
+      if (window.onboardingData.traits.length < 3) {
+         window.onboardingData.traits.push(trait);
+         el.classList.add('selected-trait');
+      }
+   } else {
+      window.onboardingData.traits.splice(idx, 1);
+      el.classList.remove('selected-trait');
+   }
+   
+   // Enable/Disable continue button
+   const btn = document.getElementById('traits-continue-btn');
+   if (window.onboardingData.traits.length > 0) {
+      btn.classList.remove('disabled');
+   } else {
+      btn.classList.add('disabled');
+   }
+};
+
+window.renderOnboardingTraits = function() {
+  const isSelected = (t) => window.onboardingData.traits.includes(t) ? 'selected-trait' : '';
+  const canContinue = window.onboardingData.traits.length > 0 ? '' : 'disabled';
+
+  appContainer.innerHTML = `
+    <div class="onboarding-screen fade-in">
+      <header class="ob-header">
+        <button class="back-btn-small" onclick="navigateTo(screens.ONBOARDING_ARCHETYPE)"><i class="fa-solid fa-arrow-left"></i></button>
+        <div class="ob-progress">
+          <div class="progress-bar"><div class="progress-fill" style="width: 28%;"></div></div>
+        </div>
+      </header>
+      <div class="ob-content">
+         <h2 class="ob-step-title">How Do You Play?</h2>
+         <p class="ob-instruction">Select up to 3 traits that describe you.</p>
+         
+         <div class="traits-container">
+            <div class="trait-token ${isSelected('Competitive but friendly')}" onclick="toggleTrait(this, 'Competitive but friendly')">Competitive but friendly</div>
+            <div class="trait-token ${isSelected('Strategic thinker')}" onclick="toggleTrait(this, 'Strategic thinker')">Strategic thinker</div>
+            <div class="trait-token ${isSelected('Trash talker')}" onclick="toggleTrait(this, 'Trash talker')">Trash talker</div>
+            <div class="trait-token ${isSelected('Chill player')}" onclick="toggleTrait(this, 'Chill player')">Chill player</div>
+            <div class="trait-token ${isSelected('Team captain')}" onclick="toggleTrait(this, 'Team captain')">Team captain</div>
+            <div class="trait-token ${isSelected('Friendly opponent')}" onclick="toggleTrait(this, 'Friendly opponent')">Friendly opponent</div>
+         </div>
+
+         <footer class="ob-footer">
+            <button id="traits-continue-btn" class="ob-primary-btn ${canContinue}" onclick="if(!this.classList.contains('disabled')) navigateTo(screens.ONBOARDING_SPORTS)">Continue</button>
+         </footer>
+      </div>
+    </div>
+  `;
+};
+
+window.renderOnboardingSports = function() {
+  window.toggleSport = function(el, sport) {
+     const idx = window.onboardingData.sports.indexOf(sport);
+     if (idx === -1) {
+        window.onboardingData.sports.push(sport);
+        el.classList.add('selected-sport');
+     } else {
+        window.onboardingData.sports.splice(idx, 1);
+        el.classList.remove('selected-sport');
+     }
+     const btn = document.getElementById('sports-continue-btn');
+     if (window.onboardingData.sports.length > 0) {
+        btn.classList.remove('disabled');
+     } else {
+        btn.classList.add('disabled');
+     }
+  };
+
+  const isSel = (s) => window.onboardingData.sports.includes(s) ? 'selected-sport' : '';
+  const canCont = window.onboardingData.sports.length > 0 ? '' : 'disabled';
+
+  appContainer.innerHTML = `
+    <div class="onboarding-screen fade-in">
+      <header class="ob-header">
+        <button class="back-btn-small" onclick="navigateTo(screens.ONBOARDING_TRAITS)"><i class="fa-solid fa-arrow-left"></i></button>
+        <div class="ob-progress">
+          <div class="progress-bar"><div class="progress-fill" style="width: 42%;"></div></div>
+        </div>
+      </header>
+      <div class="ob-content">
+         <h2 class="ob-step-title">What Sports Do You Play?</h2>
+         
+         <div class="ob-sports-grid">
+            <div class="ob-sport-card ${isSel('Badminton')}" onclick="toggleSport(this, 'Badminton')"><div class="s-icon">🏸</div><span>Badminton</span></div>
+            <div class="ob-sport-card ${isSel('Pickleball')}" onclick="toggleSport(this, 'Pickleball')"><div class="s-icon">🎾</div><span>Pickleball</span></div>
+            <div class="ob-sport-card ${isSel('Padel')}" onclick="toggleSport(this, 'Padel')"><div class="s-icon">🎾</div><span>Padel</span></div>
+            <div class="ob-sport-card ${isSel('Football')}" onclick="toggleSport(this, 'Football')"><div class="s-icon">⚽</div><span>Football</span></div>
+            <div class="ob-sport-card ${isSel('Cricket')}" onclick="toggleSport(this, 'Cricket')"><div class="s-icon">🏏</div><span>Cricket</span></div>
+            <div class="ob-sport-card ${isSel('Tennis')}" onclick="toggleSport(this, 'Tennis')"><div class="s-icon">🎾</div><span>Tennis</span></div>
+         </div>
+
+         <footer class="ob-footer">
+            <button id="sports-continue-btn" class="ob-primary-btn ${canCont}" onclick="if(!this.classList.contains('disabled')) navigateTo(screens.ONBOARDING_VIBES)">Continue</button>
+         </footer>
+      </div>
+    </div>
+  `;
+};
+
+window.renderOnboardingVibes = function() {
+  window.selectVibe = function(vibe) {
+     window.onboardingData.vibes = vibe;
+     navigateTo(screens.ONBOARDING_INTERESTS);
+  };
+
+  appContainer.innerHTML = `
+    <div class="onboarding-screen fade-in">
+      <header class="ob-header">
+        <button class="back-btn-small" onclick="navigateTo(screens.ONBOARDING_SPORTS)"><i class="fa-solid fa-arrow-left"></i></button>
+        <div class="ob-progress">
+          <div class="progress-bar"><div class="progress-fill" style="width: 56%;"></div></div>
+        </div>
+      </header>
+      <div class="ob-content">
+         <h2 class="ob-step-title">Who Do You Like Playing With?</h2>
+         
+         <div class="vibes-grid">
+            <div class="vibe-card ${window.onboardingData.vibes === 'Competitive players' ? 'selected' : ''}" onclick="selectVibe('Competitive players')">
+               <h3>Competitive players</h3>
+               <i class="fa-solid fa-fire vibe-icon"></i>
+            </div>
+            <div class="vibe-card ${window.onboardingData.vibes === 'Chill players' ? 'selected' : ''}" onclick="selectVibe('Chill players')">
+               <h3>Chill players</h3>
+               <i class="fa-regular fa-snowflake vibe-icon"></i>
+            </div>
+            <div class="vibe-card ${window.onboardingData.vibes === 'Social groups' ? 'selected' : ''}" onclick="selectVibe('Social groups')">
+               <h3>Social groups</h3>
+               <i class="fa-solid fa-people-group vibe-icon"></i>
+            </div>
+            <div class="vibe-card ${window.onboardingData.vibes === 'Serious athletes' ? 'selected' : ''}" onclick="selectVibe('Serious athletes')">
+               <h3>Serious athletes</h3>
+               <i class="fa-solid fa-medal vibe-icon"></i>
+            </div>
+         </div>
+      </div>
+    </div>
+  `;
+};
+
+window.renderOnboardingInterests = function() {
+  window.toggleInterest = function(el, int) {
+     const idx = window.onboardingData.interests.indexOf(int);
+     if (idx === -1) {
+        window.onboardingData.interests.push(int);
+        el.classList.add('selected-interest');
+     } else {
+        window.onboardingData.interests.splice(idx, 1);
+        el.classList.remove('selected-interest');
+     }
+     const btn = document.getElementById('interests-continue-btn');
+     if (window.onboardingData.interests.length > 0) {
+        btn.classList.remove('disabled');
+     } else {
+        btn.classList.add('disabled');
+     }
+  };
+
+  const isSel = (i) => window.onboardingData.interests.includes(i) ? 'selected-interest' : '';
+  const canCont = window.onboardingData.interests.length > 0 ? '' : 'disabled';
+
+  appContainer.innerHTML = `
+    <div class="onboarding-screen fade-in">
+      <header class="ob-header">
+        <button class="back-btn-small" onclick="navigateTo(screens.ONBOARDING_VIBES)"><i class="fa-solid fa-arrow-left"></i></button>
+        <div class="ob-progress">
+          <div class="progress-bar"><div class="progress-fill" style="width: 70%;"></div></div>
+        </div>
+      </header>
+      <div class="ob-content">
+         <h2 class="ob-step-title">What Else Do You Love?</h2>
+         
+         <div class="ob-interests-grid">
+            <div class="interest-card ${isSel('Movies')}" onclick="toggleInterest(this, 'Movies')"><i class="fa-solid fa-film"></i><span>Movies</span></div>
+            <div class="interest-card ${isSel('Dining')}" onclick="toggleInterest(this, 'Dining')"><i class="fa-solid fa-utensils"></i><span>Dining</span></div>
+            <div class="interest-card ${isSel('Nightlife')}" onclick="toggleInterest(this, 'Nightlife')"><i class="fa-solid fa-martini-glass-citrus"></i><span>Nightlife</span></div>
+            <div class="interest-card ${isSel('Fitness')}" onclick="toggleInterest(this, 'Fitness')"><i class="fa-solid fa-dumbbell"></i><span>Fitness</span></div>
+            <div class="interest-card ${isSel('Music')}" onclick="toggleInterest(this, 'Music')"><i class="fa-solid fa-music"></i><span>Music</span></div>
+            <div class="interest-card ${isSel('Gaming')}" onclick="toggleInterest(this, 'Gaming')"><i class="fa-solid fa-gamepad"></i><span>Gaming</span></div>
+         </div>
+
+         <footer class="ob-footer">
+            <button id="interests-continue-btn" class="ob-primary-btn ${canCont}" onclick="if(!this.classList.contains('disabled')) navigateTo(screens.ONBOARDING_AVATAR)">Continue</button>
+         </footer>
+      </div>
+    </div>
+  `;
+};
+
+window.renderOnboardingAvatar = function() {
+  window.selectAvatar = function(avatarClass, el) {
+     window.onboardingData.avatar = avatarClass;
+     const btn = document.getElementById('avatar-continue-btn');
+     if(btn) {
+        btn.classList.remove('disabled');
+     }
+     
+     document.querySelectorAll('.avatar-option').forEach(e => e.classList.remove('selected'));
+     if(el) el.classList.add('selected');
+  };
+
+  appContainer.innerHTML = `
+    <div class="onboarding-screen fade-in">
+      <header class="ob-header">
+        <button class="back-btn-small" onclick="navigateTo(screens.ONBOARDING_INTERESTS)"><i class="fa-solid fa-arrow-left"></i></button>
+        <div class="ob-progress">
+          <div class="progress-bar"><div class="progress-fill" style="width: 85%;"></div></div>
+        </div>
+      </header>
+      <div class="ob-content">
+         <h2 class="ob-step-title">Create Your Player Look</h2>
+         
+         <div class="avatar-creation-area">
+            <div class="avatar-option" onclick="selectAvatar('fa-user-ninja', this)">
+               <i class="fa-solid fa-user-ninja"></i>
+            </div>
+            <div class="avatar-option" onclick="selectAvatar('fa-user-astronaut', this)">
+               <i class="fa-solid fa-user-astronaut"></i>
+            </div>
+            <div class="avatar-option" onclick="selectAvatar('fa-user-secret', this)">
+               <i class="fa-solid fa-user-secret"></i>
+            </div>
+            <div class="avatar-option" onclick="selectAvatar('fa-user-tie', this)">
+               <i class="fa-solid fa-user-tie"></i>
+            </div>
+         </div>
+         
+         <div class="upload-photo-option">
+            <i class="fa-solid fa-camera"></i>
+            <span>Or Upload Photo</span>
+         </div>
+
+         <footer class="ob-footer">
+            <button id="avatar-continue-btn" class="ob-primary-btn disabled" onclick="if(!this.classList.contains('disabled')) navigateTo(screens.ONBOARDING_REVEAL)">Reveal My Card</button>
+         </footer>
+      </div>
+    </div>
+  `;
+};
+
+window.renderOnboardingReveal = function() {
+  const d = window.onboardingData;
+  appContainer.innerHTML = `
+    <div class="onboarding-screen fade-in" style="background: var(--bg-color); justify-content: center; display: flex; flex-direction: column; align-items: center;">
+      
+      <div class="ultimate-card revealed" id="reveal-card">
+         <div class="uc-hologram"></div>
+         <div class="uc-header">
+            <div class="uc-rating">99</div>
+            <div class="uc-position">PRO</div>
+         </div>
+         <div class="uc-avatar">
+            <i class="fa-solid ${d.avatar || 'fa-user'}"></i>
+         </div>
+         <div class="uc-name">ASHISH</div>
+         <div class="uc-archetype">${d.archetype || 'PLAYER'}</div>
+         
+         <div class="uc-stats-divider"></div>
+         
+         <div class="uc-traits">
+            ${d.traits.length ? d.traits.map(t => `<span>${t}</span>`).join('') : '<span>Balanced</span>'}
+         </div>
+         
+         <div class="uc-sports">
+            ${d.sports.length ? d.sports.map(s => `<span>${s}</span>`).join(' • ') : '<span>All Sports</span>'}
+         </div>
+      </div>
+
+      <button class="ob-primary-btn save-card-btn fade-in-up" style="margin-top: 40px; width: 80%; animation-delay: 1.5s;" onclick="
+         window.hasCompletedOnboarding = true; 
+         navigateTo(screens.PROFILE);
+      ">Save My Card</button>
+
+    </div>
+  `;
+  
+  setTimeout(() => {
+     const card = document.getElementById('reveal-card');
+     if(card) card.classList.add('done');
+  }, 800);
+};
+
+window.renderProfileHub = function() {
+  const d = window.onboardingData;
+  const topSport = d.sports && d.sports.length ? d.sports[0] : 'Pickleball';
+  
+  appContainer.innerHTML = `
+    <div class="profile-screen hub-screen fade-in" style="background: #000; min-height: 100vh;">
+      <header class="app-header" style="justify-content: flex-start; gap: 16px; padding: 20px var(--spacing-md); background: transparent; border: none;">
+        <button class="back-btn-small" onclick="navigateTo(screens.PROFILE)" style="width: 32px; height: 32px; border-radius: 50%; background: rgba(255,255,255,0.1); border: none; color: white; display: flex; align-items: center; justify-content: center;"><i class="fa-solid fa-arrow-left"></i></button>
+        <h2 style="font-size: 1.5rem; font-weight: 800; letter-spacing: 0.5px;">Identity Hub</h2>
+      </header>
+      
+      <div style="display: flex; gap: 20px; align-items: center; padding: 10px var(--spacing-md) 30px;">
+         <div style="width: 110px; height: 160px; border-radius: 12px; border: 1px solid #bc13fe; background: #131217; display: flex; flex-direction: column; align-items: center; justify-content: center; position: relative; padding: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.5);">
+             <div style="position: absolute; top: 10px; left: 12px; font-weight: 900; font-size: 1.2rem; font-style: italic;">99</div>
+             <div style="position: absolute; top: 14px; right: 12px; font-weight: 800; font-size: 0.65rem;">PRO</div>
+             <i class="fa-solid ${d.avatar || 'fa-user-secret'}" style="font-size: 3rem; margin-top: 15px; color: #fff;"></i>
+             <div style="margin-top: auto; font-weight: 900; font-size: 0.9rem; letter-spacing: 1px;">ASHISH</div>
+         </div>
+         <div>
+             <h1 style="font-size: 2.2rem; font-weight: 900; margin-bottom: 6px; letter-spacing: -0.5px;">Ashish</h1>
+             <p style="color: #bc13fe; font-weight: 800; font-size: 0.85rem;">Level 12 • ${d.archetype || 'The Weekend Warrior'}</p>
+         </div>
+      </div>
+
+      <section style="padding: 10px var(--spacing-md) 30px;">
+         <div style="border-left: 4px solid #bc13fe; padding-left: 12px; margin-bottom: 20px;">
+             <h3 style="font-size: 1.1rem; font-weight: 900; letter-spacing: 1px; text-transform: uppercase;">PLAYER STATS</h3>
+         </div>
+         <div style="display: flex; gap: 12px; overflow-x: auto; padding-bottom: 8px; scrollbar-width: none;">
+             <div style="min-width: 100px; padding: 20px 12px; background: #0c0b0f; border-radius: 16px; border: 1px solid rgba(255,255,255,0.05); text-align: center; flex: 1;">
+                  <div style="font-size: 1.6rem; font-weight: 900; margin-bottom: 4px;">24</div>
+                  <div style="font-size: 0.65rem; font-weight: 800; color: #888; letter-spacing: 1px;">SESSIONS</div>
+             </div>
+             <div style="min-width: 120px; padding: 20px 12px; background: #0c0b0f; border-radius: 16px; border: 1px solid rgba(255,255,255,0.05); text-align: center; flex: 1;">
+                  <div style="font-size: 1.3rem; font-weight: 800; margin-bottom: 4px; white-space: nowrap;">${topSport}</div>
+                  <div style="font-size: 0.65rem; font-weight: 800; color: #888; letter-spacing: 1px;">TOP SPORT</div>
+             </div>
+             <div style="min-width: 100px; padding: 20px 12px; background: #0c0b0f; border-radius: 16px; border: 1px solid rgba(255,255,255,0.05); text-align: center; flex: 1;">
+                  <div style="font-size: 1.6rem; font-weight: 900; margin-bottom: 4px; color: #ff4757;">3🔥</div>
+                  <div style="font-size: 0.65rem; font-weight: 800; color: #888; letter-spacing: 1px;">WIN STREAK</div>
+             </div>
+         </div>
+      </section>
+
+      <section style="padding: 0 var(--spacing-md) 30px;">
+         <div style="border-left: 4px solid #bc13fe; padding-left: 12px; margin-bottom: 24px;">
+             <h3 style="font-size: 1.1rem; font-weight: 900; letter-spacing: 1px; text-transform: uppercase;">ACHIEVEMENTS</h3>
+         </div>
+         <div style="display: flex; gap: 32px; padding-left: 8px;">
+             <div style="display: flex; flex-direction: column; align-items: center; justify-content: flex-end; height: 80px;">
+                 <i class="fa-solid fa-crown" style="font-size: 2.2rem; margin-bottom: auto; color: #fff;"></i>
+                 <div style="font-size: 0.75rem; font-weight: 800;">Founder</div>
+             </div>
+             <div style="display: flex; flex-direction: column; align-items: center; justify-content: flex-end; height: 80px;">
+                 <i class="fa-solid fa-fire" style="font-size: 2.5rem; margin-bottom: auto; color: #ff4757;"></i>
+                 <div style="font-size: 0.75rem; font-weight: 800;">Hot Streak</div>
+             </div>
+             <div style="display: flex; flex-direction: column; align-items: center; justify-content: flex-end; height: 80px;">
+                 <i class="fa-solid fa-star" style="font-size: 2.5rem; margin-bottom: auto; color: #1e90ff;"></i>
+                 <div style="font-size: 0.75rem; font-weight: 800;">MVP</div>
+             </div>
+         </div>
+      </section>
+
+      <section style="padding: 0 var(--spacing-md) 40px;">
+         <div style="border-left: 4px solid #bc13fe; padding-left: 12px; margin-bottom: 20px;">
+             <h3 style="font-size: 1.1rem; font-weight: 900; letter-spacing: 1px; text-transform: uppercase;">RIVALRIES</h3>
+         </div>
+         <div style="background: #0c0b0f; border-radius: 16px; padding: 16px; display: flex; align-items: center; justify-content: space-between; border: 1px solid rgba(255,255,255,0.05);">
+             <div style="display: flex; align-items: center; gap: 14px;">
+                 <div style="width: 44px; height: 44px; border-radius: 50%; background: #222; display: flex; align-items: center; justify-content: center; font-size: 1.4rem;">
+                     <i class="fa-solid fa-user-ninja"></i>
+                 </div>
+                 <div>
+                     <h4 style="font-size: 1rem; font-weight: 800; margin-bottom: 4px;">Rahul M.</h4>
+                     <p style="font-size: 0.75rem; color: #888; font-weight: 600;">Played 5 times • Tied 2-2</p>
+                 </div>
+             </div>
+             <button style="background: #222; color: #fff; border: 1px solid rgba(255,255,255,0.1); padding: 8px 16px; border-radius: 20px; font-weight: 700; font-size: 0.8rem;">Challenge</button>
+         </div>
+      </section>
+
+      <div style="height: 40px;"></div>
+    </div>
+  `;
+};
 
 // Initial Navigation
 navigateTo(screens.HOME);

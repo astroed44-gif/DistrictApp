@@ -4,7 +4,11 @@ const screens = {
   PLAY: 'play',
   DETAIL: 'detail',
   BOOKING: 'booking',
-  PROFILE: 'profile'
+  PROFILE: 'profile',
+  BUNDLE_DETAIL: 'bundle_detail',
+  BUNDLE_CUSTOMIZE: 'bundle_customize',
+  BUNDLE_CHECKOUT: 'bundle_checkout',
+  BUNDLE_CONFIRMATION: 'bundle_confirmation'
 };
 
 let currentScreen = screens.HOME;
@@ -38,6 +42,42 @@ const venues = [
     amenities: ['Parking', 'Water', 'Locker Room']
   }
 ];
+
+const eveningBundles = [
+  {
+    id: 'date-night',
+    title: 'Date Night Experience',
+    subtitle: 'Pickleball + Rooftop Dinner',
+    price: '₹2200 for two',
+    duration: '3 hours',
+    image: 'https://images.unsplash.com/photo-1622279203923-3afba580a068?w=800&auto=format&fit=crop', // Neon pickleball/tennis vibe
+    icons: ['<i class="fa-solid fa-table-tennis-paddle-ball"></i>', '<i class="fa-solid fa-utensils"></i>', '<i class="fa-solid fa-martini-glass"></i>']
+  },
+  {
+    id: 'birthday',
+    title: 'Birthday Celebration',
+    subtitle: 'Football + Drinks + Cake',
+    price: '₹4500 for group',
+    duration: '4 hours',
+    image: 'https://images.unsplash.com/photo-1574629810360-7efbb6b6923c?w=800&auto=format&fit=crop', // Sports bar/celebration
+    icons: ['<i class="fa-solid fa-futbol"></i>', '<i class="fa-solid fa-beer-mug-empty"></i>', '<i class="fa-solid fa-cake-candles"></i>']
+  },
+  {
+    id: 'squad-night',
+    title: 'Squad Night Out',
+    subtitle: 'Turf Football + Sports Bar',
+    price: '₹3000 for group',
+    duration: '3.5 hours',
+    image: 'https://images.unsplash.com/photo-1518605368461-1eb2bc3086eb?w=800&auto=format&fit=crop', // Group football
+    icons: ['<i class="fa-solid fa-futbol"></i>', '<i class="fa-solid fa-burger"></i>', '<i class="fa-solid fa-beer-mug-empty"></i>']
+  }
+];
+
+window.currentBundleData = {
+   players: 2,
+   food: 'Italian',
+   addons: []
+};
 
 function getHeaderAndTabsHTML(activeTab) {
   return `
@@ -269,7 +309,18 @@ function renderPlay() {
         </div>
       </section>
 
-      <section class="nearby-section">
+      <section class="plan-evening-section">
+        <div class="section-header" style="margin-top: 24px;">
+          <span class="line"></span>
+          <h3 class="section-title">PLAN YOUR EVENING</h3>
+          <span class="line"></span>
+        </div>
+        <div class="bundle-scroll-container">
+          ${eveningBundles.map(bundle => renderBundleCard(bundle)).join('')}
+        </div>
+      </section>
+
+      <section class="nearby-section" style="margin-top: 16px;">
         <div class="section-header">
           <span class="line"></span>
           <h3 class="section-title">BADMINTON COURTS NEAR YOU</h3>
@@ -300,6 +351,29 @@ function renderSportItem(name, icon) {
     <div class="sport-item glass">
       <div class="sport-icon">${icon}</div>
       <span class="sport-name">${name}</span>
+    </div>
+  `;
+}
+
+function renderBundleCard(bundle) {
+  return `
+    <div class="bundle-card" onclick="navigateTo(screens.BUNDLE_DETAIL, '${bundle.id}')">
+      <div class="bundle-image" style="background-image: url('${bundle.image}')">
+         <div class="bundle-duration glass"><i class="fa-regular fa-clock"></i> ${bundle.duration}</div>
+      </div>
+      <div class="bundle-info">
+         <h4 class="bundle-title">${bundle.title}</h4>
+         <p class="bundle-subtitle">${bundle.subtitle}</p>
+         
+         <div class="bundle-timeline-icons">
+            ${bundle.icons.join('<i class="fa-solid fa-arrow-right-long arrow-dim"></i>')}
+         </div>
+         
+         <div class="bundle-price-footer">
+            <span class="price-val">${bundle.price}</span>
+            <button class="book-mini-btn">VIEW</button>
+         </div>
+      </div>
     </div>
   `;
 }
@@ -764,12 +838,395 @@ function navigateTo(screen, id = null) {
     renderBooking(id);
   } else if (screen === screens.PROFILE) {
     renderProfile();
+  } else if (screen === screens.BUNDLE_DETAIL) {
+    renderBundleDetail(id);
+  } else if (screen === screens.BUNDLE_CUSTOMIZE) {
+    renderBundleCustomize(id);
+  } else if (screen === screens.BUNDLE_CHECKOUT) {
+    renderBundleCheckout(id);
+  } else if (screen === screens.BUNDLE_CONFIRMATION) {
+    renderBundleConfirmation(id);
   }
 }
 
 // Attach to window so inline onclick handlers work
 window.navigateTo = navigateTo;
 window.screens = screens;
+
+// Stub functions so rendering doesn't throw errors yet
+window.renderBundleDetail = function(id) {
+  const bundle = eveningBundles.find(b => b.id === id);
+  if (!bundle) return;
+  
+  // Custom timelines based on the bundle type as requested
+  let timelineHTML = '';
+  let includedHTML = '';
+  
+  if (id === 'date-night') {
+    timelineHTML = `
+      <div class="timeline-item">
+        <div class="timeline-time">7:00 PM</div>
+        <div class="timeline-content">
+           <h4>Pickleball at Elite Arena</h4>
+           <p>1 hr court booking reserved</p>
+        </div>
+      </div>
+      <div class="timeline-item">
+        <div class="timeline-time">8:30 PM</div>
+        <div class="timeline-content">
+           <h4>Dinner at Rooftop Lounge</h4>
+           <p>Table for two reserved</p>
+        </div>
+      </div>
+      <div class="timeline-item">
+        <div class="timeline-time">10:00 PM</div>
+        <div class="timeline-content">
+           <h4>Dessert or drinks nearby</h4>
+           <p>Curated list of nearby spots</p>
+        </div>
+      </div>
+    `;
+    includedHTML = `
+      <ul class="included-list">
+        <li><i class="fa-solid fa-check"></i> Court booking (1 hour)</li>
+        <li><i class="fa-solid fa-check"></i> Dinner reservation (Priority Seating)</li>
+        <li><i class="fa-solid fa-check"></i> Complimentary welcome drink</li>
+      </ul>
+    `;
+  } else if (id === 'birthday') {
+    timelineHTML = `
+      <div class="timeline-item">
+        <div class="timeline-time">8:00 PM</div>
+        <div class="timeline-content">
+           <h4>Football at Arena 57</h4>
+           <p>1 hr turf booking reserved</p>
+        </div>
+      </div>
+      <div class="timeline-item">
+        <div class="timeline-time">9:30 PM</div>
+        <div class="timeline-content">
+           <h4>Drinks & Cake at The Taproom</h4>
+           <p>Large group table reserved</p>
+        </div>
+      </div>
+    `;
+    includedHTML = `
+      <ul class="included-list">
+        <li><i class="fa-solid fa-check"></i> Turf booking (1 hour)</li>
+        <li><i class="fa-solid fa-check"></i> Bar reservation for group</li>
+        <li><i class="fa-solid fa-check"></i> Custom birthday cake pre-ordered</li>
+      </ul>
+    `;
+  } else {
+    timelineHTML = `
+      <div class="timeline-item">
+        <div class="timeline-time">7:30 PM</div>
+        <div class="timeline-content">
+           <h4>Turf Football</h4>
+           <p>1 hr turf booking reserved</p>
+        </div>
+      </div>
+      <div class="timeline-item">
+        <div class="timeline-time">9:00 PM</div>
+        <div class="timeline-content">
+           <h4>Sports Bar</h4>
+           <p>Group table for the squad</p>
+        </div>
+      </div>
+    `;
+    includedHTML = `
+      <ul class="included-list">
+        <li><i class="fa-solid fa-check"></i> Turf booking (1 hour)</li>
+        <li><i class="fa-solid fa-check"></i> Bar reservation</li>
+        <li><i class="fa-solid fa-check"></i> 15% off food bill</li>
+      </ul>
+    `;
+  }
+
+  appContainer.innerHTML = `
+    <div class="bundle-detail-screen fade-in">
+      <header class="detail-header" style="background: linear-gradient(180deg, rgba(0,0,0,0.8) 0%, transparent 100%);">
+        <button class="back-btn"><i class="fa-solid fa-arrow-left"></i></button>
+      </header>
+
+      <div class="detail-image-hero bundle-hero" style="background-image: url('${bundle.image}'); height: 320px;"></div>
+
+      <div class="detail-content" style="margin-top: -30px; border-radius: 20px 20px 0 0; position: relative; background: var(--bg-color); padding-top: 24px;">
+        <h2 class="detail-name">${bundle.title}</h2>
+        
+        <div class="bundle-price-row">
+           <span class="price-value">${bundle.price}</span>
+           <span class="duration-badge glass"><i class="fa-regular fa-clock"></i> ${bundle.duration}</span>
+        </div>
+
+        <section class="evening-plan-section">
+           <div class="section-header">
+              <span class="line"></span>
+              <h3 class="section-title">YOUR EVENING PLAN</h3>
+              <span class="line"></span>
+           </div>
+           
+           <div class="timeline-container">
+              ${timelineHTML}
+           </div>
+        </section>
+
+        <section class="evening-plan-section">
+           <div class="section-header">
+              <span class="line"></span>
+              <h3 class="section-title">WHAT'S INCLUDED</h3>
+              <span class="line"></span>
+           </div>
+           ${includedHTML}
+        </section>
+        
+        <!-- Bottom breathing room -->
+        <div style="height: 100px;"></div>
+      </div>
+
+      <footer class="bundle-detail-footer detail-footer">
+          <button class="secondary-btn" id="customize-btn">Customize Evening</button>
+          <button class="book-slots-btn" id="book-bundle-btn">Book This Evening</button>
+      </footer>
+    </div>
+  `;
+
+  document.querySelector('.back-btn').addEventListener('click', () => navigateTo(screens.PLAY));
+  document.getElementById('customize-btn').addEventListener('click', () => navigateTo(screens.BUNDLE_CUSTOMIZE, id));
+  document.getElementById('book-bundle-btn').addEventListener('click', () => navigateTo(screens.BUNDLE_CHECKOUT, id));
+}
+
+window.renderBundleCustomize = function(id) {
+  const bundle = eveningBundles.find(b => b.id === id);
+  if (!bundle) return;
+
+  appContainer.innerHTML = `
+    <div class="profile-screen bundle-customize-screen fade-in">
+      <header class="profile-header">
+        <button class="back-btn-small" onclick="navigateTo(screens.BUNDLE_DETAIL, '${id}')"><i class="fa-solid fa-arrow-left"></i></button>
+        <h2>Customize Your Evening</h2>
+      </header>
+
+      <div class="main-content" style="padding: 0 var(--spacing-md);">
+          <section class="custom-section">
+             <h3>Players</h3>
+             <div class="players-selector selector-group">
+                <button class="pill-btn ${window.currentBundleData.players === 2 ? 'active' : ''}" onclick="window.currentBundleData.players=2; renderBundleCustomize('${id}')">2 Players</button>
+                <button class="pill-btn ${window.currentBundleData.players === 4 ? 'active' : ''}" onclick="window.currentBundleData.players=4; renderBundleCustomize('${id}')">4 Players</button>
+                <button class="pill-btn ${window.currentBundleData.players === 6 ? 'active' : ''}" onclick="window.currentBundleData.players=6; renderBundleCustomize('${id}')">6+ Players</button>
+             </div>
+          </section>
+
+          <section class="custom-section">
+             <h3>Dinner Preference</h3>
+             <div class="dinner-selector selector-group">
+                <button class="pill-btn ${window.currentBundleData.food === 'Italian' ? 'active' : ''}" onclick="window.currentBundleData.food='Italian'; renderBundleCustomize('${id}')">Italian</button>
+                <button class="pill-btn ${window.currentBundleData.food === 'Asian' ? 'active' : ''}" onclick="window.currentBundleData.food='Asian'; renderBundleCustomize('${id}')">Asian</button>
+                <button class="pill-btn ${window.currentBundleData.food === 'Indian' ? 'active' : ''}" onclick="window.currentBundleData.food='Indian'; renderBundleCustomize('${id}')">Indian</button>
+             </div>
+          </section>
+
+          <section class="custom-section">
+             <h3>Add-ons</h3>
+             <div class="addons-list">
+                <div class="addon-item glass" onclick="toggleAddon('Wine Bottle', '${id}')">
+                   <div class="addon-info">
+                     <h4>Wine Bottle</h4>
+                     <p>+ ₹1500</p>
+                   </div>
+                   <div class="checkbox ${window.currentBundleData.addons.includes('Wine Bottle') ? 'checked' : ''}"><i class="fa-solid fa-check"></i></div>
+                </div>
+                <div class="addon-item glass" onclick="toggleAddon('Birthday Cake', '${id}')">
+                   <div class="addon-info">
+                     <h4>Birthday Cake</h4>
+                     <p>+ ₹800</p>
+                   </div>
+                   <div class="checkbox ${window.currentBundleData.addons.includes('Birthday Cake') ? 'checked' : ''}"><i class="fa-solid fa-check"></i></div>
+                </div>
+                <div class="addon-item glass" onclick="toggleAddon('Photographer', '${id}')">
+                   <div class="addon-info">
+                     <h4>Photographer</h4>
+                     <p>+ ₹2500</p>
+                   </div>
+                   <div class="checkbox ${window.currentBundleData.addons.includes('Photographer') ? 'checked' : ''}"><i class="fa-solid fa-check"></i></div>
+                </div>
+             </div>
+          </section>
+          
+          <!-- Spacer -->
+          <div style="height: 120px;"></div>
+      </div>
+
+      <footer class="bundle-detail-footer detail-footer" style="flex-direction: column; align-items: stretch; gap: 8px;">
+          <div class="price-summary-row" style="display: flex; justify-content: space-between; margin-bottom: 8px;">
+             <span style="color: var(--text-secondary);">Estimated Total</span>
+             <span style="font-weight: 800; font-size: 1.1rem;">₹${calculateBundleTotal(id)}</span>
+          </div>
+          <button class="book-slots-btn" style="width: 100%;" onclick="navigateTo(screens.BUNDLE_CHECKOUT, '${id}')">Continue to Checkout</button>
+      </footer>
+    </div>
+  `;
+}
+
+// Helper to toggle add-ons
+window.toggleAddon = function(addon, id) {
+  if (window.currentBundleData.addons.includes(addon)) {
+    window.currentBundleData.addons = window.currentBundleData.addons.filter(a => a !== addon);
+  } else {
+    window.currentBundleData.addons.push(addon);
+  }
+  renderBundleCustomize(id);
+}
+
+// Helper to calculate estimated price dynamically
+window.calculateBundleTotal = function(id) {
+  let base = id === 'date-night' ? 2200 : (id === 'birthday' ? 4500 : 3000);
+  
+  if (window.currentBundleData.players === 4) base += 1000;
+  if (window.currentBundleData.players === 6) base += 2000;
+  
+  if (window.currentBundleData.addons.includes('Wine Bottle')) base += 1500;
+  if (window.currentBundleData.addons.includes('Birthday Cake')) base += 800;
+  if (window.currentBundleData.addons.includes('Photographer')) base += 2500;
+  
+  return base;
+}
+
+window.renderBundleCheckout = function(id) {
+  const bundle = eveningBundles.find(b => b.id === id);
+  if (!bundle) return;
+  
+  const baseCourt = id === 'date-night' ? 900 : (id === 'birthday' ? 1500 : 1200);
+  const baseFnb = id === 'date-night' ? 1500 : (id === 'birthday' ? 3500 : 2000);
+  const addOnCost = calculateBundleTotal(id) - (baseCourt + baseFnb - 200); // reverse engineered for display
+  const total = calculateBundleTotal(id);
+  const discount = 200; // Fixed bundle discount
+  
+  let experience1 = '';
+  let experience2 = '';
+  
+  if (id === 'date-night') {
+     experience1 = `Pickleball Court<br><span style="color:var(--text-secondary); font-size:0.85rem; font-weight:400;">Elite Arena • 7:00 PM</span>`;
+     experience2 = `Dinner Reservation<br><span style="color:var(--text-secondary); font-size:0.85rem; font-weight:400;">Rooftop Lounge • 8:30 PM</span>`;
+  } else if (id === 'birthday') {
+     experience1 = `Turf Football<br><span style="color:var(--text-secondary); font-size:0.85rem; font-weight:400;">Arena 57 • 8:00 PM</span>`;
+     experience2 = `Group Drinks & Cake<br><span style="color:var(--text-secondary); font-size:0.85rem; font-weight:400;">The Taproom • 9:30 PM</span>`;
+  } else {
+     experience1 = `Turf Football<br><span style="color:var(--text-secondary); font-size:0.85rem; font-weight:400;">Arena 57 • 7:30 PM</span>`;
+     experience2 = `Sports Bar Reservation<br><span style="color:var(--text-secondary); font-size:0.85rem; font-weight:400;">The Taproom • 9:00 PM</span>`;
+  }
+
+  appContainer.innerHTML = `
+    <div class="profile-screen fade-in">
+      <header class="profile-header">
+        <button class="back-btn-small" onclick="navigateTo(screens.BUNDLE_CUSTOMIZE, '${id}')"><i class="fa-solid fa-arrow-left"></i></button>
+        <h2>Checkout</h2>
+      </header>
+
+      <div class="main-content" style="padding: 16px var(--spacing-md);">
+          
+          <div class="checkout-summary-card glass">
+             <h3>Booking Details</h3>
+             
+             <div class="checkout-item-row" style="margin-top: 16px;">
+                <div class="checkout-dot"></div>
+                <div class="checkout-item-text">${experience1}</div>
+             </div>
+             <div class="checkout-item-row" style="margin-top: 16px;">
+                <div class="checkout-dot"></div>
+                <div class="checkout-item-text">${experience2}</div>
+             </div>
+             
+             ${window.currentBundleData.addons.length > 0 ? `
+             <div class="checkout-item-row" style="margin-top: 16px;">
+                <div class="checkout-dot"></div>
+                <div class="checkout-item-text">Add-ons<br><span style="color:var(--text-secondary); font-size:0.85rem; font-weight:400;">${window.currentBundleData.addons.join(', ')}</span></div>
+             </div>
+             ` : ''}
+          </div>
+
+          <div class="checkout-summary-card glass" style="margin-top: 24px;">
+             <h3>Price Summary</h3>
+             <div class="price-breakdown-container" style="margin-top: 16px;">
+               <div class="price-row">
+                 <span>Court booking</span>
+                 <span>₹${baseCourt}</span>
+               </div>
+               <div class="price-row">
+                 <span>F&B reservation</span>
+                 <span>₹${baseFnb}</span>
+               </div>
+               ${window.currentBundleData.addons.length > 0 ? `
+               <div class="price-row">
+                 <span>Add-ons</span>
+                 <span>₹${addOnCost}</span>
+               </div>
+               ` : ''}
+               <div class="price-row highlight-green">
+                 <span>Bundle discount</span>
+                 <span>-₹${discount}</span>
+               </div>
+               <div class="price-divider"></div>
+               <div class="price-row total-row">
+                 <span>Total Price</span>
+                 <span>₹${total}</span>
+               </div>
+             </div>
+          </div>
+          
+          <div style="height: 120px;"></div>
+      </div>
+
+      <footer class="bundle-detail-footer detail-footer">
+          <button class="book-slots-btn" style="width: 100%;" onclick="navigateTo(screens.BUNDLE_CONFIRMATION, '${id}')">Pay Now</button>
+      </footer>
+    </div>
+  `;
+}
+
+window.renderBundleConfirmation = function(id) {
+  const bundle = eveningBundles.find(b => b.id === id);
+  if (!bundle) return;
+  
+  let recapHTML = '';
+  if (id === 'date-night') {
+      recapHTML = `
+        <div class="recap-row"><span>7:00 PM</span> <span>Pickleball</span></div>
+        <div class="recap-row"><span>8:30 PM</span> <span>Dinner</span></div>
+      `;
+  } else if (id === 'birthday') {
+      recapHTML = `
+        <div class="recap-row"><span>8:00 PM</span> <span>Football</span></div>
+        <div class="recap-row"><span>9:30 PM</span> <span>Drinks & Cake</span></div>
+      `;
+  } else {
+      recapHTML = `
+        <div class="recap-row"><span>7:30 PM</span> <span>Turf Football</span></div>
+        <div class="recap-row"><span>9:00 PM</span> <span>Sports Bar</span></div>
+      `;
+  }
+
+  appContainer.innerHTML = `
+    <div class="confirmation-screen fade-in">
+       <div class="conf-animation">
+          <i class="fa-solid fa-circle-check"></i>
+       </div>
+       <h2>You're all set 🎉</h2>
+       <p class="conf-subtitle">${bundle.title} booked</p>
+       
+       <div class="conf-card glass">
+          <h4 style="margin-bottom: 12px; font-size: 0.9rem; color: var(--text-secondary); text-align: center;">TIMELINE RECAP</h4>
+          ${recapHTML}
+       </div>
+       
+       <div class="conf-actions">
+          <button class="pill-btn conf-btn"><i class="fa-solid fa-share-nodes"></i> Share with Partner</button>
+          <button class="pill-btn conf-btn"><i class="fa-regular fa-calendar-plus"></i> Add to Calendar</button>
+          <button class="pill-btn conf-btn" onclick="navigateTo(screens.HOME)"><i class="fa-solid fa-house"></i> View Venues via Home</button>
+       </div>
+    </div>
+  `;
+}
 
 // Initial Navigation
 navigateTo(screens.HOME);

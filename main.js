@@ -22,14 +22,21 @@ const screens = {
 };
 
 let currentScreen = screens.HOME;
-window.hasCompletedOnboarding = false;
-window.onboardingData = {
+window.hasCompletedOnboarding = localStorage.getItem('district_onboarding_done') === 'true';
+
+const savedData = localStorage.getItem('district_onboarding_data');
+window.onboardingData = savedData ? JSON.parse(savedData) : {
   archetype: '',
   traits: [],
   sports: [],
   vibes: '',
   interests: [],
   avatar: ''
+};
+
+window.saveOnboardingState = function() {
+  localStorage.setItem('district_onboarding_done', 'true');
+  localStorage.setItem('district_onboarding_data', JSON.stringify(window.onboardingData));
 };
 
 const appContainer = document.querySelector('#screen-container');
@@ -1761,6 +1768,7 @@ window.renderOnboardingReveal = function() {
 
       <button class="ob-primary-btn save-card-btn fade-in-up" style="margin-top: 40px; width: 80%; animation-delay: 1.5s;" onclick="
          window.hasCompletedOnboarding = true; 
+         saveOnboardingState();
          navigateTo(screens.PROFILE);
       ">Save My Card</button>
 
@@ -1778,84 +1786,140 @@ window.renderProfileHub = function() {
   const topSport = d.sports && d.sports.length ? d.sports[0] : 'Pickleball';
   
   appContainer.innerHTML = `
-    <div class="profile-screen hub-screen fade-in" style="background: #000; min-height: 100vh;">
-      <header class="app-header" style="justify-content: flex-start; gap: 16px; padding: 20px var(--spacing-md); background: transparent; border: none;">
-        <button class="back-btn-small" onclick="navigateTo(screens.PROFILE)" style="width: 32px; height: 32px; border-radius: 50%; background: rgba(255,255,255,0.1); border: none; color: white; display: flex; align-items: center; justify-content: center;"><i class="fa-solid fa-arrow-left"></i></button>
-        <h2 style="font-size: 1.5rem; font-weight: 800; letter-spacing: 0.5px;">Identity Hub</h2>
+    <style>
+      .hub-page { background: #000; min-height: 100vh; color: #fff; padding-bottom: 40px; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; }
+      .hub-top-nav { display: flex; align-items: center; gap: 16px; padding: 20px 16px; }
+      .hub-back-btn { width: 36px; height: 36px; border-radius: 50%; background: rgba(255,255,255,0.1); border: none; color: white; display: flex; align-items: center; justify-content: center; cursor: pointer; }
+      .hub-title { font-size: 1.5rem; font-weight: 800; letter-spacing: -0.5px; margin: 0; }
+      
+      .hub-hero-section { display: flex; gap: 24px; align-items: center; padding: 10px 16px 32px; }
+      .hub-player-card { 
+         width: 120px; height: 170px; border-radius: 12px; border: 2px solid #bc13fe; 
+         background: linear-gradient(135deg, #18052e 0%, #0d001a 100%); 
+         display: flex; flex-direction: column; align-items: center; justify-content: center; 
+         position: relative; box-shadow: 0 8px 32px rgba(188, 19, 254, 0.4); 
+      }
+      .card-rating { position: absolute; top: 12px; left: 14px; font-weight: 900; font-size: 1.3rem; font-style: italic; text-shadow: 0 0 10px rgba(255,255,255,0.5); }
+      .card-position { position: absolute; top: 16px; right: 14px; font-weight: 800; font-size: 0.7rem; color: rgba(255,255,255,0.8); }
+      .card-avatar { font-size: 3.5rem; margin-top: 10px; color: #fff; drop-shadow(0 0 10px rgba(255,255,255,0.5)); }
+      .card-name { margin-top: auto; margin-bottom: 12px; font-weight: 900; font-size: 1rem; letter-spacing: 2px; text-transform: uppercase; }
+
+      .hub-user-info h1 { font-size: 2.5rem; font-weight: 900; margin: 0 0 4px 0; letter-spacing: -1px; }
+      .hub-user-level { color: #bc13fe; font-weight: 800; font-size: 0.95rem; text-shadow: 0 0 15px rgba(188, 19, 254, 0.6); }
+
+      .hub-section { padding: 0 16px 36px; }
+      .section-header-box { border-left: 4px solid #bc13fe; padding-left: 14px; margin-bottom: 24px; }
+      .section-header-box h3 { font-size: 1.15rem; font-weight: 900; letter-spacing: 1.5px; text-transform: uppercase; margin: 0; }
+      
+      .stats-container { display: flex; gap: 14px; overflow-x: auto; padding-bottom: 12px; scrollbar-width: none; }
+      .stat-box { 
+         padding: 24px 16px; background: rgba(255,255,255,0.03); border-radius: 16px; 
+         border: 1px solid rgba(255,255,255,0.08); text-align: center; flex: 1; min-width: 110px;
+         transition: transform 0.2s; 
+      }
+      .stat-box:active { transform: scale(0.96); }
+      .stat-number { font-size: 1.8rem; font-weight: 900; margin-bottom: 8px; }
+      .stat-label { font-size: 0.7rem; font-weight: 800; color: #888; letter-spacing: 1.5px; text-transform: uppercase; }
+
+      .achievements-row { display: flex; gap: 32px; padding-left: 10px; }
+      .badge-col { display: flex; flex-direction: column; align-items: center; gap: 12px; }
+      .badge-icon-wrap { 
+          width: 64px; height: 64px; border-radius: 50%; background: rgba(255,255,255,0.03); 
+          display: flex; align-items: center; justify-content: center; 
+          border: 1px solid rgba(255,255,255,0.1); font-size: 2rem; 
+      }
+      .founder-icon { color: #ffbc00; filter: drop-shadow(0 0 10px rgba(255,188,0,0.5)); }
+      .streak-icon { color: #ff4757; filter: drop-shadow(0 0 10px rgba(255,71,87,0.5)); }
+      .mvp-icon { color: #1e90ff; filter: drop-shadow(0 0 10px rgba(30,144,255,0.5)); }
+      .badge-label { font-size: 0.8rem; font-weight: 800; color: #ccc; }
+
+      .rival-box { 
+         background: rgba(255,255,255,0.03); border-radius: 16px; padding: 20px; 
+         display: flex; align-items: center; justify-content: space-between; 
+         border: 1px solid rgba(255,255,255,0.08);
+      }
+      .rival-left { display: flex; align-items: center; gap: 16px; }
+      .rival-avatar { width: 50px; height: 50px; border-radius: 50%; background: #222; display: flex; align-items: center; justify-content: center; font-size: 1.5rem; border: 2px solid #444; }
+      .rival-name { font-size: 1.1rem; font-weight: 800; margin: 0 0 6px 0; }
+      .rival-record { font-size: 0.8rem; color: #888; font-weight: 600; margin: 0; }
+      .challenge-btn { background: #fff; color: #000; border: none; padding: 10px 20px; border-radius: 20px; font-weight: 800; font-size: 0.9rem; transition: transform 0.2s; cursor: pointer; }
+      .challenge-btn:active { transform: scale(0.95); }
+    </style>
+
+    <div class="profile-screen fade-in hub-page">
+      <header class="hub-top-nav">
+        <button class="hub-back-btn" onclick="navigateTo(screens.PROFILE)"><i class="fa-solid fa-arrow-left"></i></button>
+        <h2 class="hub-title">Identity Hub</h2>
       </header>
       
-      <div style="display: flex; gap: 20px; align-items: center; padding: 10px var(--spacing-md) 30px;">
-         <div style="width: 110px; height: 160px; border-radius: 12px; border: 1px solid #bc13fe; background: #131217; display: flex; flex-direction: column; align-items: center; justify-content: center; position: relative; padding: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.5);">
-             <div style="position: absolute; top: 10px; left: 12px; font-weight: 900; font-size: 1.2rem; font-style: italic;">99</div>
-             <div style="position: absolute; top: 14px; right: 12px; font-weight: 800; font-size: 0.65rem;">PRO</div>
-             <i class="fa-solid ${d.avatar || 'fa-user-secret'}" style="font-size: 3rem; margin-top: 15px; color: #fff;"></i>
-             <div style="margin-top: auto; font-weight: 900; font-size: 0.9rem; letter-spacing: 1px;">ASHISH</div>
+      <div class="hub-hero-section">
+         <div class="hub-player-card">
+             <div class="card-rating">99</div>
+             <div class="card-position">PRO</div>
+             <i class="fa-solid ${d.avatar || 'fa-user-secret'} card-avatar"></i>
+             <div class="card-name">ASHISH</div>
          </div>
-         <div>
-             <h1 style="font-size: 2.2rem; font-weight: 900; margin-bottom: 6px; letter-spacing: -0.5px;">Ashish</h1>
-             <p style="color: #bc13fe; font-weight: 800; font-size: 0.85rem;">Level 12 • ${d.archetype || 'The Weekend Warrior'}</p>
+         <div class="hub-user-info">
+             <h1>Ashish</h1>
+             <p class="hub-user-level">Level 12 • ${d.archetype || 'The Weekend Warrior'}</p>
          </div>
       </div>
 
-      <section style="padding: 10px var(--spacing-md) 30px;">
-         <div style="border-left: 4px solid #bc13fe; padding-left: 12px; margin-bottom: 20px;">
-             <h3 style="font-size: 1.1rem; font-weight: 900; letter-spacing: 1px; text-transform: uppercase;">PLAYER STATS</h3>
+      <section class="hub-section">
+         <div class="section-header-box">
+             <h3>PLAYER STATS</h3>
          </div>
-         <div style="display: flex; gap: 12px; overflow-x: auto; padding-bottom: 8px; scrollbar-width: none;">
-             <div style="min-width: 100px; padding: 20px 12px; background: #0c0b0f; border-radius: 16px; border: 1px solid rgba(255,255,255,0.05); text-align: center; flex: 1;">
-                  <div style="font-size: 1.6rem; font-weight: 900; margin-bottom: 4px;">24</div>
-                  <div style="font-size: 0.65rem; font-weight: 800; color: #888; letter-spacing: 1px;">SESSIONS</div>
+         <div class="stats-container">
+             <div class="stat-box">
+                  <div class="stat-number">24</div>
+                  <div class="stat-label">SESSIONS</div>
              </div>
-             <div style="min-width: 120px; padding: 20px 12px; background: #0c0b0f; border-radius: 16px; border: 1px solid rgba(255,255,255,0.05); text-align: center; flex: 1;">
-                  <div style="font-size: 1.3rem; font-weight: 800; margin-bottom: 4px; white-space: nowrap;">${topSport}</div>
-                  <div style="font-size: 0.65rem; font-weight: 800; color: #888; letter-spacing: 1px;">TOP SPORT</div>
+             <div class="stat-box">
+                  <div class="stat-number" style="font-size: 1.4rem; padding-top: 4px; padding-bottom: 4px;">${topSport}</div>
+                  <div class="stat-label">TOP SPORT</div>
              </div>
-             <div style="min-width: 100px; padding: 20px 12px; background: #0c0b0f; border-radius: 16px; border: 1px solid rgba(255,255,255,0.05); text-align: center; flex: 1;">
-                  <div style="font-size: 1.6rem; font-weight: 900; margin-bottom: 4px; color: #ff4757;">3🔥</div>
-                  <div style="font-size: 0.65rem; font-weight: 800; color: #888; letter-spacing: 1px;">WIN STREAK</div>
-             </div>
-         </div>
-      </section>
-
-      <section style="padding: 0 var(--spacing-md) 30px;">
-         <div style="border-left: 4px solid #bc13fe; padding-left: 12px; margin-bottom: 24px;">
-             <h3 style="font-size: 1.1rem; font-weight: 900; letter-spacing: 1px; text-transform: uppercase;">ACHIEVEMENTS</h3>
-         </div>
-         <div style="display: flex; gap: 32px; padding-left: 8px;">
-             <div style="display: flex; flex-direction: column; align-items: center; justify-content: flex-end; height: 80px;">
-                 <i class="fa-solid fa-crown" style="font-size: 2.2rem; margin-bottom: auto; color: #fff;"></i>
-                 <div style="font-size: 0.75rem; font-weight: 800;">Founder</div>
-             </div>
-             <div style="display: flex; flex-direction: column; align-items: center; justify-content: flex-end; height: 80px;">
-                 <i class="fa-solid fa-fire" style="font-size: 2.5rem; margin-bottom: auto; color: #ff4757;"></i>
-                 <div style="font-size: 0.75rem; font-weight: 800;">Hot Streak</div>
-             </div>
-             <div style="display: flex; flex-direction: column; align-items: center; justify-content: flex-end; height: 80px;">
-                 <i class="fa-solid fa-star" style="font-size: 2.5rem; margin-bottom: auto; color: #1e90ff;"></i>
-                 <div style="font-size: 0.75rem; font-weight: 800;">MVP</div>
+             <div class="stat-box">
+                  <div class="stat-number" style="color: #ff4757;">3🔥</div>
+                  <div class="stat-label">WIN STREAK</div>
              </div>
          </div>
       </section>
 
-      <section style="padding: 0 var(--spacing-md) 40px;">
-         <div style="border-left: 4px solid #bc13fe; padding-left: 12px; margin-bottom: 20px;">
-             <h3 style="font-size: 1.1rem; font-weight: 900; letter-spacing: 1px; text-transform: uppercase;">RIVALRIES</h3>
+      <section class="hub-section">
+         <div class="section-header-box">
+             <h3>ACHIEVEMENTS</h3>
          </div>
-         <div style="background: #0c0b0f; border-radius: 16px; padding: 16px; display: flex; align-items: center; justify-content: space-between; border: 1px solid rgba(255,255,255,0.05);">
-             <div style="display: flex; align-items: center; gap: 14px;">
-                 <div style="width: 44px; height: 44px; border-radius: 50%; background: #222; display: flex; align-items: center; justify-content: center; font-size: 1.4rem;">
-                     <i class="fa-solid fa-user-ninja"></i>
-                 </div>
+         <div class="achievements-row">
+             <div class="badge-col">
+                 <div class="badge-icon-wrap"><i class="fa-solid fa-medal founder-icon"></i></div>
+                 <div class="badge-label">Founder</div>
+             </div>
+             <div class="badge-col">
+                 <div class="badge-icon-wrap"><i class="fa-solid fa-fire streak-icon"></i></div>
+                 <div class="badge-label">Hot Streak</div>
+             </div>
+             <div class="badge-col">
+                 <div class="badge-icon-wrap"><i class="fa-solid fa-star mvp-icon"></i></div>
+                 <div class="badge-label">MVP</div>
+             </div>
+         </div>
+      </section>
+
+      <section class="hub-section">
+         <div class="section-header-box">
+             <h3>RIVALRIES</h3>
+         </div>
+         <div class="rival-box">
+             <div class="rival-left">
+                 <div class="rival-avatar"><i class="fa-solid fa-user-ninja"></i></div>
                  <div>
-                     <h4 style="font-size: 1rem; font-weight: 800; margin-bottom: 4px;">Rahul M.</h4>
-                     <p style="font-size: 0.75rem; color: #888; font-weight: 600;">Played 5 times • Tied 2-2</p>
+                     <h4 class="rival-name">Rahul M.</h4>
+                     <p class="rival-record">Played 5 times • Tied 2-2</p>
                  </div>
              </div>
-             <button style="background: #222; color: #fff; border: 1px solid rgba(255,255,255,0.1); padding: 8px 16px; border-radius: 20px; font-weight: 700; font-size: 0.8rem;">Challenge</button>
+             <button class="challenge-btn">Challenge</button>
          </div>
       </section>
-
-      <div style="height: 40px;"></div>
     </div>
   `;
 };

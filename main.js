@@ -122,7 +122,7 @@ const exclusiveGames = [
     venue: 'Elite Arena',
     players: 12,
     maxPlayers: 16,
-    image: 'public/neon_badminton.png',
+    image: '/neon_badminton.png',
     color: '#ffffff',
     tag: 'District Exclusive'
   },
@@ -133,7 +133,7 @@ const exclusiveGames = [
     venue: 'Sky Courts',
     players: 8,
     maxPlayers: 12,
-    image: 'public/glow_pickleball.png',
+    image: '/glow_pickleball.png',
     color: '#ffffff',
     tag: 'Premium'
   },
@@ -144,7 +144,7 @@ const exclusiveGames = [
     venue: 'Urban Turf',
     players: 10,
     maxPlayers: 14,
-    image: 'public/neon_football.png',
+    image: '/neon_football.png',
     color: '#ffffff',
     tag: 'Selling Fast'
   }

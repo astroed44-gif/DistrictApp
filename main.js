@@ -1786,12 +1786,12 @@ window.renderProfileHub = function() {
   const topSport = d.sports && d.sports.length ? d.sports[0] : 'Pickleball';
   
   appContainer.innerHTML = `
-    <div class="profile-screen fade-in" style="background: #000; min-height: 100vh; color: #fff; padding-bottom: 40px;">
-      <header class="flex items-center p-6">
-        <button class="bg-zinc-800 p-2 rounded-full mr-4 border-none text-white cursor-pointer" onclick="navigateTo(screens.PROFILE)">
-          <i class="fa-solid fa-arrow-left"></i>
+    <div class="profile-screen fade-in" style="background: #000; min-height: 100vh; color: #fff; padding-bottom: 40px; font-family: 'Outfit', sans-serif;">
+      <header class="flex items-center" style="padding: 24px 20px 10px;">
+        <button class="bg-zinc-800 rounded-full border-none text-white cursor-pointer flex items-center justify-center" style="width: 36px; height: 36px; margin-right: 16px;" onclick="navigateTo(screens.PROFILE)">
+          <i class="fa-solid fa-arrow-left" style="font-size: 1.1rem;"></i>
         </button>
-        <h1 class="text-2xl font-bold tracking-tight m-0">Identity Hub</h1>
+        <h1 class="text-2xl font-bold tracking-tight m-0" style="font-size: 1.8rem;">Identity Hub</h1>
       </header>
       
       <main class="px-6">
@@ -1823,7 +1823,7 @@ window.renderProfileHub = function() {
 
         <!-- Player Stats Section -->
         <section class="mb-10">
-          <h3 class="section-divider-purple text-xl font-black uppercase tracking-wider mb-6 m-0">Player Stats</h3>
+          <h3 class="section-divider-purple text-xl font-black uppercase tracking-wider mb-6 m-0" style="font-style: italic; font-size: 1.2rem;">Player Stats</h3>
           <div class="grid grid-cols-3 gap-3" style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px;">
             <div class="hub-stat-item">
                <div class="hub-stat-value">
@@ -1832,10 +1832,10 @@ window.renderProfileHub = function() {
                </div>
                <p class="hub-stat-label">Sessions</p>
             </div>
-            <div class="hub-stat-item">
+            <div class="hub-stat-item" style="min-width: 0;">
                <div class="hub-stat-value">
-                 <i class="fa-solid fa-trophy text-yellow-500" style="font-size: 1.2rem;"></i>
-                 <span class="truncate" style="max-width: 60px; font-size: 1rem;">${topSport}</span>
+                 <i class="fa-solid fa-trophy text-yellow-500" style="font-size: 1.1rem;"></i>
+                 <span style="font-size: 0.9rem; white-space: nowrap;">${topSport}</span>
                </div>
                <p class="hub-stat-label">Top Sport</p>
             </div>
@@ -1851,7 +1851,7 @@ window.renderProfileHub = function() {
 
         <!-- Achievements Section -->
         <section class="mb-10">
-          <h3 class="section-divider-purple text-xl font-black uppercase tracking-wider mb-6 m-0">Achievements</h3>
+          <h3 class="section-divider-purple text-xl font-black uppercase tracking-wider mb-6 m-0" style="font-style: italic; font-size: 1.2rem;">Achievements</h3>
           <div class="flex gap-8 overflow-x-auto pb-2 no-scrollbar" style="display: flex; gap: 32px; overflow-x: auto;">
              <div class="flex flex-col items-center gap-2" style="display: flex; flex-direction: column; align-items: center; gap: 8px;">
                  <div class="achievement-icon-card" style="border-color: rgba(212, 175, 55, 0.5);">🏅</div>
@@ -1870,7 +1870,7 @@ window.renderProfileHub = function() {
 
         <!-- Rivalries Section -->
         <section class="mb-6">
-          <h3 class="section-divider-purple text-xl font-black uppercase tracking-wider mb-6 m-0">Rivalries</h3>
+          <h3 class="section-divider-purple text-xl font-black uppercase tracking-wider mb-6 m-0" style="font-style: italic; font-size: 1.2rem;">Rivalries</h3>
           <div class="bg-card-bg p-4 rounded-2xl border border-zinc-800 flex items-center justify-between" style="display: flex; align-items: center; justify-content: space-between; background: #121212; border: 1px solid #333; padding: 16px; border-radius: 16px;">
             <div class="flex items-center gap-4" style="display: flex; align-items: center; gap: 16px;">
               <div class="w-12 h-12 bg-zinc-800 rounded-full flex items-center justify-center" style="width: 48px; height: 48px; background: #27272a; border-radius: 50%; display: flex; align-items: center; justify-content: center;">

@@ -1049,8 +1049,15 @@ function renderBooking(id) {
   }
 }
 
-function navigateTo(screen, id = null) {
+function navigateTo(screen, id = null, fromPopState = false) {
   currentScreen = screen;
+  
+  // Update browser history for back button support (unless we came from a popstate)
+  if (!fromPopState) {
+    const historyState = { screen, id };
+    history.pushState(historyState, "", `#${screen}${id ? '-' + id : ''}`);
+  }
+
   if (screen === screens.HOME) {
     renderHome();
   } else if (screen === screens.PLAY) {
@@ -2449,3 +2456,20 @@ window.renderChallengeConfirm = function() {
 
 // Initial Navigation
 navigateTo(screens.HOME);
+
+// Handle Back Button & Swipe Gestures (Mobile Browser Navigation)
+window.addEventListener('popstate', (event) => {
+  if (event.state) {
+    const { screen, id } = event.state;
+    navigateTo(screen, id, true);
+  } else {
+    // Fallback for initial page load state
+    navigateTo(screens.HOME, null, true);
+  }
+});
+
+// Setup initial history state so first back press works
+(function() {
+  const initialState = { screen: screens.HOME, id: null };
+  history.replaceState(initialState, "", "#home");
+})();

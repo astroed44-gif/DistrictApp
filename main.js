@@ -585,18 +585,93 @@ function renderProfile() {
   let nudgeHTML = '';
   if (window.hasCompletedOnboarding) {
       nudgeHTML = `
-      <div class="onboarding-nudge glass fade-in" onclick="navigateTo(screens.PROFILE_HUB)" style="cursor: pointer; display: flex; justify-content: space-between; align-items: center; border-left: 4px solid #bc13fe; padding: 16px;">
-        <div style="display: flex; align-items: center; gap: 16px;">
-            <div class="mini-card-banner" style="width: 48px; height: 64px; background: #111; border-radius: 8px; border: 1px solid #bc13fe; display: flex; align-items: center; justify-content: center; position: relative;">
-                 <i class="fa-solid ${window.onboardingData.avatar || 'fa-user'}" style="color: #fff; font-size: 1.5rem;"></i>
-                 <div style="position: absolute; top: 4px; left: 4px; font-weight: 800; font-size: 0.5rem; color: #fff;">99</div>
+      <style>
+      @keyframes cardFloat {
+        0%, 100% { transform: translateY(0) rotate(0); }
+        50% { transform: translateY(-3px) rotate(1deg); }
+      }
+      @keyframes glowPulse {
+        0%, 100% { box-shadow: 0 0 5px rgba(188, 19, 254, 0.4), inset 0 0 5px rgba(188, 19, 254, 0.2); border-color: rgba(188, 19, 254, 0.6); }
+        50% { box-shadow: 0 0 15px rgba(188, 19, 254, 0.8), inset 0 0 10px rgba(188, 19, 254, 0.4); border-color: rgba(188, 19, 254, 1); }
+      }
+      @keyframes textShimmer {
+        0% { background-position: -100px; }
+        100% { background-position: 100px; }
+      }
+      @keyframes particleFloat {
+        0% { transform: translateY(0) scale(1); opacity: 0; }
+        50% { opacity: 0.8; }
+        100% { transform: translateY(-40px) scale(0.5); opacity: 0; }
+      }
+      @keyframes cardShine {
+        0% { transform: translateX(-150%) skewX(-20deg); }
+        20%, 100% { transform: translateX(150%) skewX(-20deg); }
+      }
+      @keyframes circleRotate {
+        0% { transform: rotate(0deg); }
+        100% { transform: rotate(360deg); }
+      }
+      .mini-card-container {
+        position: relative; width: 60px; height: 80px; transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        animation: cardFloat 4s infinite ease-in-out;
+      }
+      .mini-card-container:active { transform: scale(1.1); }
+      .mini-card-shine {
+        position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+        background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
+        animation: cardShine 4s infinite linear; pointer-events: none; z-index: 2;
+      }
+      .particle {
+        position: absolute; width: 2px; height: 2px; background: #bc13fe; border-radius: 50%; pointer-events: none;
+        animation: particleFloat 3s infinite linear;
+      }
+      .level-badge-glow {
+        background: linear-gradient(90deg, #fff 0%, #bc13fe 50%, #fff 100%);
+        background-size: 200% auto; -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+        animation: textShimmer 2s infinite linear;
+      }
+      .progress-ring-mini {
+        position: absolute; top: -5px; left: -5px; width: 70px; height: 90px;
+        border: 2px solid transparent; border-top: 2px solid #bc13fe; border-right: 2px solid rgba(188, 19, 254, 0.3);
+        border-radius: 12px; animation: circleRotate 10s infinite linear; z-index: 0;
+      }
+      .mini-archetype-icon {
+        animation: bounceIcon 2s infinite ease-in-out;
+        font-size: 8px; color: #bc13fe; margin-left: 4px;
+      }
+      @keyframes bounceIcon {
+        0%, 100% { transform: translateY(0); opacity: 0.7; }
+        50% { transform: translateY(-2px); opacity: 1; }
+      }
+      </style>
+      <div class="onboarding-nudge glass fade-in" id="identity-hub-card" onclick="this.style.transform='scale(0.98)'; setTimeout(()=>navigateTo(screens.PROFILE_HUB), 100)" style="cursor: pointer; display: flex; justify-content: space-between; align-items: center; padding: 20px; margin: 16px; margin-bottom: 24px; border: 1px solid rgba(188, 19, 254, 0.2); background: linear-gradient(135deg, rgba(30, 30, 40, 0.9), rgba(15, 15, 20, 0.99)) !important; transition: all 0.3s ease;">
+        <div style="display: flex; align-items: center; gap: 20px;">
+            <div class="mini-card-container">
+                <div class="progress-ring-mini"></div>
+                <div class="mini-card-shine"></div>
+                ${[...Array(5)].map((_, i) => `<div class="particle" style="left: ${Math.random()*100}%; bottom: 0; animation-delay: ${Math.random()*3}s;"></div>`).join('')}
+                <div class="mini-card-banner" style="width: 100%; height: 100%; background: #0a0a0a; border-radius: 10px; border: 2px solid #bc13fe; display: flex; flex-direction: column; align-items: center; justify-content: center; position: relative; overflow: hidden; animation: glowPulse 3s infinite ease-in-out; z-index: 1;">
+                     <div style="position: absolute; top: 6px; left: 6px; font-weight: 900; font-size: 0.6rem; color: #bc13fe; opacity: 0.8;">99</div>
+                     <span style="font-size: 2.2rem; filter: drop-shadow(0 4px 8px rgba(0,0,0,0.8)); transition: transform 0.3s ease;">${window.onboardingData.avatar || '🥷'}</span>
+                     <div style="margin-top: 4px; font-weight: 900; font-size: 0.45rem; color: #fff; text-transform: uppercase; letter-spacing: 1px; opacity: 0.7;">${window.onboardingData.archetype ? window.onboardingData.archetype.split(' ')[0] : 'PRO'}</div>
+                </div>
             </div>
             <div>
-               <h3 style="margin-bottom: 4px; font-weight: 800; font-size: 1.2rem;">Identity Hub</h3>
-               <p style="font-size: 0.85rem; color: #bc13fe; font-weight: 700;">Level 12 • ${window.onboardingData.archetype || 'Player'}</p>
+               <div style="font-size: 0.65rem; color: #888; text-transform: uppercase; letter-spacing: 1.5px; margin-bottom: 2px; font-weight: 800;">Your District Card</div>
+               <h3 style="margin-bottom: 2px; font-weight: 900; font-size: 1.35rem; color: #fff; letter-spacing: -0.5px;">Identity Hub</h3>
+               <div style="display: flex; align-items: center;">
+                 <p style="font-size: 0.85rem; color: #fff; font-weight: 700; margin: 0;">
+                   <span class="level-badge-glow">Level 12</span> 
+                   <span style="color: #444; margin: 0 6px;">•</span> 
+                   <span style="color: #bc13fe;">${window.onboardingData.archetype || 'The Social Player'}</span>
+                 </p>
+                 <i class="fa-solid fa-bolt mini-archetype-icon"></i>
+               </div>
             </div>
         </div>
-        <i class="fa-solid fa-chevron-right" style="color: var(--text-secondary); font-size: 1.2rem;"></i>
+        <div style="width: 40px; height: 40px; border-radius: 50%; background: rgba(255,255,255,0.05); display: flex; align-items: center; justify-content: center;">
+          <i class="fa-solid fa-chevron-right" style="color: #fff; font-size: 1rem; opacity: 0.5;"></i>
+        </div>
       </div>
       `;
   } else {

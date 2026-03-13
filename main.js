@@ -22,10 +22,9 @@ const screens = {
 };
 
 let currentScreen = screens.HOME;
-window.hasCompletedOnboarding = localStorage.getItem('district_onboarding_done') === 'true';
+window.hasCompletedOnboarding = false;
 
-const savedData = localStorage.getItem('district_onboarding_data');
-window.onboardingData = savedData ? JSON.parse(savedData) : {
+window.onboardingData = {
   archetype: '',
   traits: [],
   sports: [],
@@ -35,8 +34,7 @@ window.onboardingData = savedData ? JSON.parse(savedData) : {
 };
 
 window.saveOnboardingState = function() {
-  localStorage.setItem('district_onboarding_done', 'true');
-  localStorage.setItem('district_onboarding_data', JSON.stringify(window.onboardingData));
+  // Persistence removed per request to restart from scratch
 };
 
 const appContainer = document.querySelector('#screen-container');
@@ -1787,36 +1785,32 @@ window.renderProfileHub = function() {
   
   appContainer.innerHTML = `
     <div class="profile-screen fade-in" style="background: #000; min-height: 100vh; color: #fff; padding-bottom: 40px; font-family: 'Outfit', sans-serif;">
-      <header class="flex items-center" style="padding: 24px 20px 10px;">
-        <button class="bg-zinc-800 rounded-full border-none text-white cursor-pointer flex items-center justify-center" style="width: 36px; height: 36px; margin-right: 16px;" onclick="navigateTo(screens.PROFILE)">
-          <i class="fa-solid fa-arrow-left" style="font-size: 1.1rem;"></i>
+      <header class="flex items-center" style="padding: 24px 24px 16px;">
+        <button class="rounded-full border-none text-white cursor-pointer flex items-center justify-center" style="width: 32px; height: 32px; margin-right: 12px; background: rgba(255,255,255,0.1);" onclick="navigateTo(screens.PROFILE)">
+          <i class="fa-solid fa-arrow-left" style="font-size: 1rem;"></i>
         </button>
-        <h1 class="text-2xl font-bold tracking-tight m-0" style="font-size: 1.8rem;">Identity Hub</h1>
+        <h1 class="font-black tracking-tight m-0" style="font-size: 1.6rem;">Identity Hub</h1>
       </header>
       
       <main class="px-6">
         <!-- Profile Hero Section -->
-        <section class="flex flex-row items-center gap-6 mt-4 mb-10">
+        <section class="flex flex-row items-center gap-6 mt-2 mb-10">
           <!-- Golden Personality Card -->
-          <div class="metallic-gold w-32 h-44 rounded-2xl flex flex-col items-center justify-between p-3 relative overflow-hidden">
-            <div class="flex flex-col items-center mt-2">
-              <span class="text-[10px] font-black text-black opacity-60 absolute top-2 left-2">99 PRO</span>
-              <div class="w-16 h-16 bg-black rounded-full flex items-center justify-center mt-4 border-2 border-white/30">
-                <i class="fa-solid ${d.avatar || 'fa-user-secret'} text-gold-light text-2xl"></i>
-              </div>
+          <div class="metallic-gold w-32 h-44 rounded-2xl flex flex-col items-center justify-between p-3 relative overflow-hidden" style="box-shadow: 0 0 30px rgba(212, 175, 55, 0.4);">
+            <span class="font-black text-white opacity-90 absolute top-3 left-3" style="font-size: 0.65rem;">99 PRO</span>
+            <div class="flex-1 flex items-center justify-center w-full mt-4">
+               <i class="fa-solid ${d.avatar || 'fa-user-ninja'}" style="font-size: 3.5rem; color: rgba(255,255,255,0.9); text-shadow: 0px 4px 10px rgba(0,0,0,0.3);"></i>
             </div>
-            <div class="text-center">
-              <p class="text-black font-black text-xs tracking-widest uppercase m-0">${(d.playerName || 'ASHISH').toUpperCase()}</p>
-            </div>
+            <p class="text-white font-black tracking-widest uppercase m-0" style="font-size: 0.75rem; text-shadow: 0px 2px 4px rgba(0,0,0,0.5);">${(d.playerName || 'ASHISH').toUpperCase()}</p>
           </div>
           
           <!-- Name and Level -->
           <div>
-            <h2 class="text-5xl font-black mb-1 m-0">${d.playerName || 'Ashish'}</h2>
-            <div class="flex items-center gap-2">
-              <span class="text-purple-accent font-bold text-lg">Level 12</span>
+            <h2 class="font-black mb-1 m-0" style="font-size: 2.4rem; letter-spacing: -0.5px;">${d.playerName || 'Ashish'}</h2>
+            <div class="flex items-center gap-2" style="font-size: 0.95rem; margin-top: 4px;">
+              <span class="font-bold" style="color: #bc13fe;">Level 12</span>
               <span class="text-zinc-500">•</span>
-              <span class="text-purple-accent/80 font-medium">${d.archetype || 'The Social Player'}</span>
+              <span class="font-medium text-white">${d.archetype || 'The Competitor'}</span>
             </div>
           </div>
         </section>

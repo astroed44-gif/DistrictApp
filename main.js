@@ -618,8 +618,8 @@ function renderProfile() {
       .mini-card-container:active { transform: scale(1.1); }
       .mini-card-shine {
         position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-        background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
-        animation: cardShine 4s infinite linear; pointer-events: none; z-index: 2;
+        background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+        animation: cardShine 4s infinite linear; pointer-events: none; z-index: 5;
       }
       .particle {
         position: absolute; width: 2px; height: 2px; background: #bc13fe; border-radius: 50%; pointer-events: none;
@@ -644,13 +644,13 @@ function renderProfile() {
         50% { transform: translateY(-2px); opacity: 1; }
       }
       </style>
-      <div class="onboarding-nudge glass fade-in" id="identity-hub-card" onclick="this.style.transform='scale(0.98)'; setTimeout(()=>navigateTo(screens.PROFILE_HUB), 100)" style="cursor: pointer; display: flex; justify-content: space-between; align-items: center; padding: 20px; margin: 16px; margin-bottom: 24px; border: 1px solid rgba(188, 19, 254, 0.2); background: linear-gradient(135deg, rgba(30, 30, 40, 0.9), rgba(15, 15, 20, 0.99)) !important; transition: all 0.3s ease;">
+      <div class="onboarding-nudge glass fade-in" id="identity-hub-card" onclick="this.style.transform='scale(0.98)'; setTimeout(()=>navigateTo(screens.PROFILE_HUB), 100)" style="cursor: pointer; display: flex; justify-content: space-between; align-items: center; padding: 20px; margin: 16px; margin-bottom: 24px; border: 1px solid rgba(188, 19, 254, 0.2); background: linear-gradient(135deg, rgba(30, 30, 40, 0.9), rgba(15, 15, 20, 0.99)) !important; transition: all 0.3s ease; position: relative; z-index: 10;">
         <div style="display: flex; align-items: center; gap: 20px;">
             <div class="mini-card-container">
                 <div class="progress-ring-mini"></div>
                 <div class="mini-card-shine"></div>
                 ${[...Array(5)].map((_, i) => `<div class="particle" style="left: ${Math.random()*100}%; bottom: 0; animation-delay: ${Math.random()*3}s;"></div>`).join('')}
-                <div class="mini-card-banner" style="width: 100%; height: 100%; background: #0a0a0a; border-radius: 10px; border: 2px solid #bc13fe; display: flex; flex-direction: column; align-items: center; justify-content: center; position: relative; overflow: hidden; animation: glowPulse 3s infinite ease-in-out; z-index: 1;">
+                <div class="mini-card-banner" style="width: 100%; height: 100%; background: #0a0a0a; border-radius: 10px; border: 2px solid #bc13fe; display: flex; flex-direction: column; align-items: center; justify-content: center; position: relative; animation: glowPulse 3s infinite ease-in-out; z-index: 1;">
                      <div style="position: absolute; top: 6px; left: 6px; font-weight: 900; font-size: 0.6rem; color: #bc13fe; opacity: 0.8;">99</div>
                      <span style="font-size: 2.2rem; filter: drop-shadow(0 4px 8px rgba(0,0,0,0.8)); transition: transform 0.3s ease;">${window.onboardingData.avatar || '🥷'}</span>
                      <div style="margin-top: 4px; font-weight: 900; font-size: 0.45rem; color: #fff; text-transform: uppercase; letter-spacing: 1px; opacity: 0.7;">${window.onboardingData.archetype ? window.onboardingData.archetype.split(' ')[0] : 'PRO'}</div>

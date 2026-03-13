@@ -122,8 +122,8 @@ const exclusiveGames = [
     venue: 'Elite Arena',
     players: 12,
     maxPlayers: 16,
-    image: 'https://images.unsplash.com/photo-1626224583764-f87db24ac4ea?w=600&auto=format&fit=crop',
-    color: '#bc13fe',
+    image: 'public/neon_badminton.png',
+    color: '#ffffff',
     tag: 'District Exclusive'
   },
   {
@@ -133,8 +133,8 @@ const exclusiveGames = [
     venue: 'Sky Courts',
     players: 8,
     maxPlayers: 12,
-    image: 'https://images.unsplash.com/photo-1599474924187-334a4ae5bd3c?w=600&auto=format&fit=crop',
-    color: '#39FF14',
+    image: 'public/glow_pickleball.png',
+    color: '#ffffff',
     tag: 'Premium'
   },
   {
@@ -144,8 +144,8 @@ const exclusiveGames = [
     venue: 'Urban Turf',
     players: 10,
     maxPlayers: 14,
-    image: 'https://images.unsplash.com/photo-1574629810360-7efbbe195018?w=600&auto=format&fit=crop',
-    color: '#4cc9f0',
+    image: 'public/neon_football.png',
+    color: '#ffffff',
     tag: 'Selling Fast'
   }
 ];
@@ -438,7 +438,7 @@ function renderPlay() {
               <h3 class="section-title" style="margin:0; text-align: left; background: none; -webkit-text-fill-color: #fff; text-fill-color: #fff; font-size: 1.2rem; font-weight: 800;">Exclusive Games</h3>
               <p style="margin: 4px 0 0 0; color: #888; font-size: 0.85rem;">Play sports like you've never seen before</p>
             </div>
-            <button style="background: rgba(188, 19, 254, 0.1); border: 1px solid rgba(188, 19, 254, 0.3); color: #bc13fe; padding: 6px 12px; border-radius: 20px; font-size: 0.75rem; font-weight: bold; cursor: pointer;" onclick="navigateTo(screens.EXCLUSIVE_HUB)">
+            <button style="background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.1); color: #fff; padding: 6px 16px; border-radius: 20px; font-size: 0.75rem; font-weight: bold; cursor: pointer;" onclick="navigateTo(screens.EXCLUSIVE_HUB)">
                View All
             </button>
         </div>
@@ -448,14 +448,14 @@ function renderPlay() {
                <div style="width: 100%; height: 100%; position: absolute; top:0; left:0; background: linear-gradient(to top, #080808 30%, transparent 100%); z-index: 1;"></div>
                <img src="${game.image}" style="width: 100%; height: 100%; object-fit: cover; position: absolute; top:0; left:0; opacity: 0.6;">
                
-               <div style="position: absolute; top: 16px; right: 16px; background: ${game.color}; color: #000; padding: 4px 12px; border-radius: 20px; font-size: 0.7rem; font-weight: 900; z-index: 2; text-transform: uppercase;">✨ EXCLUSIVE</div>
+               <div style="position: absolute; top: 16px; right: 16px; background: #fff; color: #000; padding: 4px 12px; border-radius: 20px; font-size: 0.7rem; font-weight: 900; z-index: 2; text-transform: uppercase;">✨ EXCLUSIVE</div>
                
                <div style="position: absolute; bottom: 0; left: 0; right: 0; padding: 24px; z-index: 2;">
                   <h4 style="font-size: 1.4rem; font-weight: 900; color: #fff; margin-bottom: 8px; line-height: 1.2;">${game.title}</h4>
                   <div style="display: flex; flex-direction: column; gap: 4px; margin-bottom: 20px; color: #ccc; font-size: 0.85rem;">
-                     <span><i class="fa-regular fa-calendar" style="width: 20px; color: ${game.color};"></i> ${game.time}</span>
-                     <span><i class="fa-solid fa-location-dot" style="width: 20px; color: ${game.color};"></i> ${game.venue}</span>
-                     <span><i class="fa-solid fa-users" style="width: 20px; color: ${game.color};"></i> ${game.players} joining</span>
+                     <span><i class="fa-regular fa-calendar" style="width: 20px; color: #fff;"></i> ${game.time}</span>
+                     <span><i class="fa-solid fa-location-dot" style="width: 20px; color: #fff;"></i> ${game.venue}</span>
+                     <span><i class="fa-solid fa-users" style="width: 20px; color: #fff;"></i> ${game.players} joining</span>
                   </div>
                   <button class="join-game-btn" style="width: 100%; background: #fff; color: #000; border: none; padding: 14px; border-radius: 12px; font-weight: 800; font-size: 1rem;">Join Game</button>
                </div>
@@ -1134,8 +1134,8 @@ function renderExclusiveGamesHub() {
          <img src="https://images.unsplash.com/photo-1626224583764-f87db24ac4ea?w=1000&auto=format&fit=crop" style="width: 100%; height: 100%; object-fit: cover;">
          <div style="position: absolute; inset: 0; background: linear-gradient(to top, #000 10%, transparent 60%);"></div>
          <div style="position: absolute; bottom: 24px; left: 24px;">
-            <div style="background: #bc13fe; color: #fff; padding: 4px 10px; border-radius: 4px; font-size: 0.7rem; font-weight: 900; display: inline-block; margin-bottom: 8px;">DISTRICT NEON NIGHTS</div>
-            <h1 style="font-size: 2rem; font-weight: 900; margin: 0;">Sports After Dark</h1>
+            <div style="background: #fff; color: #000; padding: 4px 10px; border-radius: 4px; font-size: 0.7rem; font-weight: 900; display: inline-block; margin-bottom: 8px;">DISTRICT NEON NIGHTS</div>
+            <h1 style="font-size: 2rem; font-weight: 900; margin: 0; opacity: 0.9;">Sports After Dark</h1>
          </div>
       </div>
       
@@ -1149,11 +1149,11 @@ function renderExclusiveGamesHub() {
                <div style="padding: 20px; flex: 1;">
                   <h4 style="font-size: 1.1rem; font-weight: 800; margin-bottom: 12px;">${game.title}</h4>
                   <div style="display: flex; flex-direction: column; gap: 4px; font-size: 0.8rem; color: #888; margin-bottom: 16px;">
-                     <span><i class="fa-regular fa-calendar-days" style="width: 18px; color: ${game.color};"></i> ${game.time}</span>
-                     <span><i class="fa-solid fa-location-dot" style="width: 18px; color: ${game.color};"></i> ${game.venue}</span>
-                     <span><i class="fa-solid fa-users" style="width: 18px; color: ${game.color};"></i> ${game.players} players joined</span>
+                     <span><i class="fa-regular fa-calendar-days" style="width: 18px; color: #fff;"></i> ${game.time}</span>
+                     <span><i class="fa-solid fa-location-dot" style="width: 18px; color: #fff;"></i> ${game.venue}</span>
+                     <span><i class="fa-solid fa-users" style="width: 18px; color: #fff;"></i> ${game.players} players joined</span>
                   </div>
-                  <button style="background: ${game.color}; color: #000; border: none; padding: 8px 16px; border-radius: 8px; font-weight: 800; font-size: 0.8rem;">View Event</button>
+                  <button style="background: #fff; color: #000; border: none; padding: 8px 16px; border-radius: 8px; font-weight: 800; font-size: 0.8rem;">View Event</button>
                </div>
             </div>
          `).join('')}
@@ -1176,7 +1176,7 @@ function renderEventDetail(id) {
           <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 8px;">
              <h1 style="font-size: 2.2rem; font-weight: 900; letter-spacing: -1px; margin: 0;">${game.title}</h1>
           </div>
-          <div style="color: #bc13fe; font-weight: 800; font-size: 0.95rem; margin-bottom: 24px; text-transform: uppercase;">✨ District Exclusive Experience</div>
+          <div style="color: #fff; font-weight: 800; font-size: 0.95rem; margin-bottom: 24px; text-transform: uppercase; letter-spacing: 1px;">✨ District Exclusive Experience</div>
           
           <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 32px;">
              <div style="background: #111; padding: 16px; border-radius: 16px;">
@@ -1185,17 +1185,17 @@ function renderEventDetail(id) {
              </div>
              <div style="background: #111; padding: 16px; border-radius: 16px;">
                 <span style="color: #666; font-size: 0.75rem; font-weight: 800; text-transform: uppercase;">Time</span>
-                <p style="margin: 4px 0 0 0; font-weight: 700; color: #bc13fe;">${game.time}</p>
+                <p style="margin: 4px 0 0 0; font-weight: 700; color: #fff;">${game.time}</p>
              </div>
           </div>
           
           <div style="margin-bottom: 32px;">
              <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
                 <h3 style="font-size: 1rem; font-weight: 800;">Players Joined</h3>
-                <span style="color: #bc13fe; font-weight: bold;">${game.players}/${game.maxPlayers}</span>
+                <span style="color: #fff; font-weight: bold;">${game.players}/${game.maxPlayers}</span>
              </div>
              <div style="width: 100%; height: 8px; background: #222; border-radius: 10px; overflow: hidden; margin-bottom: 20px;">
-                <div style="width: ${(game.players/game.maxPlayers)*100}%; height: 100%; background: linear-gradient(90deg, #bc13fe, #4cc9f0); border-radius: 10px;"></div>
+                <div style="width: ${(game.players/game.maxPlayers)*100}%; height: 100%; background: #fff; border-radius: 10px;"></div>
              </div>
              
              <div style="background: #111; padding: 20px; border-radius: 20px; border: 1px solid rgba(255,255,255,0.05);">
@@ -1208,16 +1208,16 @@ function renderEventDetail(id) {
           <h3 style="font-size: 1rem; font-weight: 800; margin-bottom: 16px;">What's Included</h3>
           <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
              <div style="display: flex; align-items: center; gap: 10px; font-size: 0.85rem; font-weight: 600; color: #ccc;">
-                <span style="width: 32px; height:32px; background: rgba(188,19,254,0.1); border-radius: 8px; display: flex; align-items: center; justify-content: center; color: #bc13fe;"><i class="fa-solid fa-moon"></i></span> Glow Shuttlecocks
+                <span style="width: 32px; height:32px; background: rgba(255,255,255,0.05); border-radius: 8px; display: flex; align-items: center; justify-content: center; color: #fff;"><i class="fa-solid fa-moon"></i></span> Glow Shuttlecocks
              </div>
              <div style="display: flex; align-items: center; gap: 10px; font-size: 0.85rem; font-weight: 600; color: #ccc;">
-                <span style="width: 32px; height:32px; background: rgba(188,19,254,0.1); border-radius: 8px; display: flex; align-items: center; justify-content: center; color: #bc13fe;"><i class="fa-solid fa-music"></i></span> Live DJ Set
+                <span style="width: 32px; height:32px; background: rgba(255,255,255,0.05); border-radius: 8px; display: flex; align-items: center; justify-content: center; color: #fff;"><i class="fa-solid fa-music"></i></span> Live DJ Set
              </div>
              <div style="display: flex; align-items: center; gap: 10px; font-size: 0.85rem; font-weight: 600; color: #ccc;">
-                <span style="width: 32px; height:32px; background: rgba(188,19,254,0.1); border-radius: 8px; display: flex; align-items: center; justify-content: center; color: #bc13fe;"><i class="fa-solid fa-video"></i></span> Highlight Reel
+                <span style="width: 32px; height:32px; background: rgba(255,255,255,0.05); border-radius: 8px; display: flex; align-items: center; justify-content: center; color: #fff;"><i class="fa-solid fa-video"></i></span> Highlight Reel
              </div>
              <div style="display: flex; align-items: center; gap: 10px; font-size: 0.85rem; font-weight: 600; color: #ccc;">
-                <span style="width: 32px; height:32px; background: rgba(188,19,254,0.1); border-radius: 8px; display: flex; align-items: center; justify-content: center; color: #bc13fe;"><i class="fa-solid fa-martini-glass"></i></span> Post-game Drinks
+                <span style="width: 32px; height:32px; background: rgba(255,255,255,0.05); border-radius: 8px; display: flex; align-items: center; justify-content: center; color: #fff;"><i class="fa-solid fa-martini-glass"></i></span> Post-game Drinks
              </div>
           </div>
        </div>
@@ -1229,7 +1229,7 @@ function renderEventDetail(id) {
           </div>
           <div style="display: flex; gap: 12px; flex: 1;">
              <button onclick="navigateTo(screens.GROUP_BOOKING, '${id}')" style="flex: 1; padding: 14px; border-radius: 12px; background: rgba(255,255,255,0.1); color: #fff; border: 1px solid #333; font-weight: 800; font-size: 0.9rem;">With Squad</button>
-             <button onclick="navigateTo(screens.JOIN_EVENT, '${id}')" style="flex: 1.5; padding: 14px; border-radius: 12px; background: #bc13fe; color: #fff; border: none; font-weight: 900; font-size: 1rem; box-shadow: 0 0 20px rgba(188,19,254,0.4);">Join Game</button>
+             <button onclick="navigateTo(screens.JOIN_EVENT, '${id}')" style="flex: 1.5; padding: 14px; border-radius: 12px; background: #fff; color: #000; border: none; font-weight: 900; font-size: 1rem; box-shadow: 0 0 20px rgba(255,255,255,0.2);">Join Game</button>
           </div>
        </div>
     </div>
@@ -1283,7 +1283,7 @@ function renderJoinEvent(id) {
           </div>
        </div>
        
-       <button onclick="navigateTo(screens.EVENT_CONFIRMATION, '${id}')" style="position: fixed; bottom: 20px; left: 20px; right: 20px; background: #bc13fe; border: none; padding: 18px; border-radius: 16px; font-weight: 900; font-size: 1.1rem; color: #fff; box-shadow: 0 0 30px rgba(188,19,254,0.5);">Confirm Spot</button>
+       <button onclick="navigateTo(screens.EVENT_CONFIRMATION, '${id}')" style="position: fixed; bottom: 20px; left: 20px; right: 20px; background: #fff; border: none; padding: 18px; border-radius: 16px; font-weight: 900; font-size: 1.1rem; color: #000; box-shadow: 0 0 30px rgba(255,255,255,0.2);">Confirm Spot</button>
     </div>
   `;
 }
@@ -1331,10 +1331,10 @@ function renderEventConfirmation(id) {
   appContainer.innerHTML = `
     <div class="event-confirm-page fade-in" style="background: #000; min-height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; padding: 24px;">
        <div style="font-size: 5rem; margin-bottom: 24px; animation: scaleIn 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);">✨</div>
-       <h1 style="font-size: 3rem; font-weight: 900; margin: 0; background: linear-gradient(to bottom, #fff, #bc13fe); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">You're In!</h1>
-       <p style="color: #888; font-size: 1.1rem; margin: 8px 0 40px 0;">Get ready for the neon showdown.</p>
+       <h1 style="font-size: 3rem; font-weight: 900; margin: 0; background: linear-gradient(to bottom, #fff, #888); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">You're In!</h1>
+       <p style="color: #888; font-size: 1.1rem; margin: 8px 0 40px 0; font-weight: 600;">Get ready for the neon showdown.</p>
        
-       <div style="background: #111; border: 1px solid rgba(188,19,254,0.3); border-radius: 20px; padding: 30px; width: 100%; position: relative; overflow: hidden;">
+       <div style="background: #111; border: 1px solid rgba(255,255,255,0.1); border-radius: 20px; padding: 30px; width: 100%; position: relative; overflow: hidden;">
           <h2 style="font-size: 1.2rem; font-weight: 800; margin-bottom: 20px; color: #fff;">${game.title}</h2>
           <div style="text-align: left; display: flex; flex-direction: column; gap: 16px; font-weight: 700;">
              <div style="display: flex; justify-content: space-between;">
@@ -1343,7 +1343,7 @@ function renderEventConfirmation(id) {
              </div>
              <div style="display: flex; justify-content: space-between;">
                 <span style="color: #666;">Time</span>
-                <span style="color: #bc13fe;">${game.time}</span>
+                <span style="color: #fff;">${game.time}</span>
              </div>
              <div style="display: flex; justify-content: space-between;">
                 <span style="color: #666;">Entry Code</span>

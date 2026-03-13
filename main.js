@@ -1134,9 +1134,9 @@ window.renderBundleDetail = function(id) {
         <div style="height: 100px;"></div>
       </div>
 
-      <footer class="bundle-detail-footer detail-footer">
-          <button class="secondary-btn" id="customize-btn">Customize Evening</button>
-          <button class="book-slots-btn" id="book-bundle-btn">Book This Evening</button>
+      <footer class="bundle-detail-footer detail-footer" style="display: flex; gap: 12px; padding: 16px; background: #000; border-top: 1px solid #222;">
+          <button class="secondary-btn" id="customize-btn" style="background: transparent; color: #fff; border: 1px solid #555; padding: 16px; border-radius: 12px; font-weight: 800; cursor: pointer; flex: 1; text-align: center; font-size: 1rem;">Customize Evening</button>
+          <button class="book-slots-btn" id="book-bundle-btn" style="background: #fff; color: #000; border: none; padding: 16px; border-radius: 12px; font-weight: 900; cursor: pointer; flex: 1.5; text-align: center; font-size: 1rem;">Book This Evening</button>
       </footer>
     </div>
   `;
@@ -1951,7 +1951,7 @@ window.renderProfileHub = function() {
                 <p class="text-xs text-zinc-500 m-0">Played 5 times • Tied 2-2</p>
               </div>
             </div>
-            <button style="background: #fff; color: #000; font-weight: 900; padding: 8px 20px; border-radius: 30px; font-size: 0.85rem; border: none; cursor: pointer;">
+            <button onclick="navigateTo(screens.CHALLENGE_CREATE, 'rahul')" style="background: #fff; color: #000; font-weight: 900; padding: 8px 20px; border-radius: 30px; font-size: 0.85rem; border: none; cursor: pointer;">
               Challenge
             </button>
           </div>
@@ -1962,52 +1962,66 @@ window.renderProfileHub = function() {
 };
 
 // RIVAL DISCOVERY FLOW
+window.swipeRivalList = [
+  { id: 'rohan', name: 'Rohan', title: 'The Competitor', emoji: '🥷', traits: 'Strategic • Friendly Rival', sports: 'Padel • Badminton', dist: '1.2 km away', sessions: 45, level: 15 },
+  { id: 'priya', name: 'Priya', title: 'The Casual Pro', emoji: '👩', traits: 'Chill • Good Vibes Only', sports: 'Badminton', dist: '3.4 km away', sessions: 12, level: 7 },
+  { id: 'dev', name: 'Dev', title: 'The Tactician', emoji: '👨‍🎤', traits: 'Competitive • Fast Paced', sports: 'Pickleball', dist: '5.1 km away', sessions: 80, level: 22 },
+  { id: 'meera', name: 'Meera', title: 'The Marathon', emoji: '👱‍♀️', traits: 'Relentless • Friendly', sports: 'Tennis • Padel', dist: '2.0 km away', sessions: 33, level: 11 },
+  { id: 'kabir', name: 'Kabir', title: 'The Powerhouse', emoji: '🏋️', traits: 'Aggressive • Quick Match', sports: 'Football', dist: '7.8 km away', sessions: 50, level: 18 }
+];
+window.currentSwipeIndex = 0;
+window.nextSwipeRival = function() {
+  window.currentSwipeIndex = (window.currentSwipeIndex + 1) % window.swipeRivalList.length;
+  renderSwipeRivals();
+};
+
 window.renderSwipeRivals = function() {
+  const rival = window.swipeRivalList[window.currentSwipeIndex];
   appContainer.innerHTML = `
     <div class="profile-screen fade-in" style="background: #000; min-height: 100vh; display: flex; flex-direction: column;">
       <header class="flex items-center" style="padding: 24px 20px 10px; display: flex; align-items: center;">
-        <button style="background: none; border: none; color: #fff; cursor: pointer; padding: 0; margin-right: 16px; display: flex;" onclick="navigateTo(screens.PLAY)">
-          <i class="fa-solid fa-arrow-left" style="font-size: 1.4rem;"></i>
+        <button class="rounded-full border-none text-white cursor-pointer flex items-center justify-center" style="width: 36px; height: 36px; margin-right: 12px; background: rgba(255,255,255,0.1);" onclick="navigateTo(screens.PLAY)">
+          <i class="fa-solid fa-arrow-left" style="font-size: 1.1rem;"></i>
         </button>
-        <h1 class="text-2xl font-bold tracking-tight m-0" style="font-size: 1.5rem; text-align: center; flex: 1; margin-right: 36px;">Find Your Next Rival</h1>
+        <h1 class="text-2xl font-bold tracking-tight m-0" style="font-size: 1.5rem; text-align: center; flex: 1; margin-right: 48px;">Find Your Next Rival</h1>
       </header>
       
       <main style="flex: 1; display: flex; flex-direction: column; justify-content: center; align-items: center; padding: 20px; position: relative; overflow: hidden;">
         
         <div class="swipe-card" id="swipe-card" style="width: 100%; max-width: 340px; background: #121212; border-radius: 20px; border: 1px solid rgba(255,255,255,0.1); box-shadow: 0 10px 30px rgba(0,0,0,0.8); overflow: hidden; position: relative;">
           
-          <div style="background: linear-gradient(160deg, #1a1525 0%, #0d0a14 100%); padding: 30px 20px; display: flex; flex-direction: column; align-items: center; border-bottom: 1px solid rgba(255,255,255,0.05); cursor: pointer;" onclick="navigateTo(screens.RIVAL_PROFILE, 'rohan')">
-             <span style="font-size: 5rem; line-height: 1; filter: drop-shadow(0 10px 20px rgba(0,0,0,0.8)); margin-bottom: 20px;">🥷</span>
-             <h2 style="font-size: 2.2rem; font-weight: 900; margin: 0; color: #fff;">Rohan</h2>
-             <span style="color: #bc13fe; font-weight: bold; font-size: 1rem; margin-top: 4px;">The Competitor</span>
+          <div style="background: linear-gradient(160deg, #1a1525 0%, #0d0a14 100%); padding: 30px 20px; display: flex; flex-direction: column; align-items: center; border-bottom: 1px solid rgba(255,255,255,0.05); cursor: pointer;" onclick="navigateTo(screens.RIVAL_PROFILE, '${rival.id}')">
+             <span style="font-size: 5rem; line-height: 1; filter: drop-shadow(0 10px 20px rgba(0,0,0,0.8)); margin-bottom: 20px;">${rival.emoji}</span>
+             <h2 style="font-size: 2.2rem; font-weight: 900; margin: 0; color: #fff;">${rival.name}</h2>
+             <span style="color: #bc13fe; font-weight: bold; font-size: 1rem; margin-top: 4px;">${rival.title}</span>
           </div>
           
           <div style="padding: 24px;">
              <div style="margin-bottom: 16px;">
                 <p style="margin: 0 0 6px 0; color: #888; font-size: 0.8rem; font-weight: bold; text-transform: uppercase;">Traits</p>
-                <div style="color: #fff; font-size: 0.95rem; font-weight: 500;">Strategic • Friendly Rival</div>
+                <div style="color: #fff; font-size: 0.95rem; font-weight: 500;">${rival.traits}</div>
              </div>
              <div style="margin-bottom: 16px;">
                 <p style="margin: 0 0 6px 0; color: #888; font-size: 0.8rem; font-weight: bold; text-transform: uppercase;">Sports</p>
-                <div style="color: #fff; font-size: 0.95rem; font-weight: 500;">Padel • Badminton</div>
+                <div style="color: #fff; font-size: 0.95rem; font-weight: 500;">${rival.sports}</div>
              </div>
              
              <div style="display: flex; justify-content: space-between; margin-top: 24px; border-top: 1px solid #222; padding-top: 16px;">
                 <div style="display: flex; align-items: center; gap: 8px; color: #aaa; font-size: 0.9rem;">
-                   <i class="fa-solid fa-location-dot" style="color: #bc13fe;"></i> 1.2 km away
+                   <i class="fa-solid fa-location-dot" style="color: #bc13fe;"></i> ${rival.dist}
                 </div>
                 <div style="display: flex; align-items: center; gap: 8px; color: #aaa; font-size: 0.9rem;">
-                   <i class="fa-regular fa-clock" style="color: #48dbfb;"></i> 45 Sessions
+                   <i class="fa-regular fa-clock" style="color: #48dbfb;"></i> ${rival.sessions} Sessions
                 </div>
              </div>
           </div>
         </div>
         
         <div style="display: flex; gap: 30px; margin-top: 40px;">
-           <button style="width: 64px; height: 64px; border-radius: 50%; background: rgba(255,255,255,0.05); border: 2px solid rgba(255,255,255,0.1); color: #aaa; font-size: 1.5rem; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: all 0.2s;" onmousedown="this.style.transform='scale(0.9)';" onmouseup="this.style.transform='scale(1)';" onclick="navigateTo(screens.PLAY)">
+           <button style="width: 64px; height: 64px; border-radius: 50%; background: rgba(255,255,255,0.05); border: 2px solid rgba(255,255,255,0.1); color: #aaa; font-size: 1.5rem; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: all 0.2s;" onmousedown="this.style.transform='scale(0.9)';" onmouseup="this.style.transform='scale(1)';" onclick="window.nextSwipeRival()">
               <i class="fa-solid fa-xmark"></i>
            </button>
-           <button style="width: 64px; height: 64px; border-radius: 50%; background: #fff; border: none; color: #000; font-size: 1.5rem; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: all 0.2s;" onmousedown="this.style.transform='scale(0.9)';" onmouseup="this.style.transform='scale(1)';" onclick="navigateTo(screens.CHALLENGE_CREATE, 'rohan')">
+           <button style="width: 64px; height: 64px; border-radius: 50%; background: #fff; border: none; color: #000; font-size: 1.5rem; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: all 0.2s;" onmousedown="this.style.transform='scale(0.9)';" onmouseup="this.style.transform='scale(1)';" onclick="navigateTo(screens.CHALLENGE_CREATE, '${rival.id}')">
               <i class="fa-solid fa-bolt"></i>
            </button>
         </div>
@@ -2017,11 +2031,12 @@ window.renderSwipeRivals = function() {
 };
 
 window.renderRivalProfile = function(id) {
+  const rival = window.swipeRivalList.find(r => r.id === id) || window.swipeRivalList[0];
   appContainer.innerHTML = `
     <div class="profile-screen fade-in" style="background: #000; min-height: 100vh; color: #fff; padding-bottom: 40px;">
       <header class="flex items-center" style="padding: 24px 20px 10px; display: flex; align-items: center;">
-        <button style="background: none; border: none; color: #fff; cursor: pointer; padding: 0; margin-right: 16px; display: flex;" onclick="navigateTo(screens.SWIPE_RIVALS)">
-          <i class="fa-solid fa-arrow-left" style="font-size: 1.4rem;"></i>
+        <button class="rounded-full border-none text-white cursor-pointer flex items-center justify-center" style="width: 36px; height: 36px; margin-right: 12px; background: rgba(255,255,255,0.1);" onclick="navigateTo(screens.SWIPE_RIVALS)">
+          <i class="fa-solid fa-arrow-left" style="font-size: 1.1rem;"></i>
         </button>
       </header>
       
@@ -2030,20 +2045,20 @@ window.renderRivalProfile = function(id) {
           <div class="metallic-gold" style="width: 128px; height: 176px; border-radius: 16px; display: flex; flex-direction: column; align-items: center; justify-content: space-between; padding: 12px; position: relative; background: linear-gradient(135deg, #BF953F 0%, #FCF6BA 45%, #B38728 50%, #FBF5B7 55%, #AA771C 100%);">
             <span style="font-weight: 900; color: #000; opacity: 0.6; position: absolute; top: 8px; left: 8px; font-size: 0.65rem;">99 PRO</span>
             <div style="flex: 1; display: flex; align-items: center; justify-content: center; width: 100%; margin-top: 16px;">
-               <span style="font-size: 3.5rem; text-shadow: 0px 4px 10px rgba(0,0,0,0.3); line-height: 1;">🥷</span>
+               <span style="font-size: 3.5rem; text-shadow: 0px 4px 10px rgba(0,0,0,0.3); line-height: 1;">${rival.emoji}</span>
             </div>
-            <p style="color: #000; font-weight: 900; letter-spacing: 2px; text-transform: uppercase; margin: 0; font-size: 0.75rem;">ROHAN</p>
+            <p style="color: #000; font-weight: 900; letter-spacing: 2px; text-transform: uppercase; margin: 0; font-size: 0.75rem;">${rival.name}</p>
           </div>
           
           <div>
-            <h2 style="font-size: 2.5rem; font-weight: 900; margin: 0 0 4px 0; letter-spacing: -0.5px;">Rohan</h2>
+            <h2 style="font-size: 2.5rem; font-weight: 900; margin: 0 0 4px 0; letter-spacing: -0.5px;">${rival.name}</h2>
             <div style="display: flex; align-items: center; gap: 8px;">
-              <span style="color: #bc13fe; font-weight: bold;">Level 15</span>
+              <span style="color: #bc13fe; font-weight: bold;">Level ${rival.level}</span>
               <span style="color: #666;">•</span>
-              <span style="color: #fff; font-weight: 500;">The Competitor</span>
+              <span style="color: #fff; font-weight: 500;">${rival.title}</span>
             </div>
             <div style="margin-top: 12px; font-size: 0.85rem; color: #aaa;">
-               Strategic • Friendly Rival
+               ${rival.traits}
             </div>
           </div>
         </section>
@@ -2054,14 +2069,14 @@ window.renderRivalProfile = function(id) {
             <div style="background: #111; border: 1px solid #333; border-radius: 12px; padding: 16px; display: flex; flex-direction: column; align-items: center; justify-content: center;">
                <div style="font-weight: 900; font-size: 1.3rem; display: flex; align-items: center; gap: 6px; margin-bottom: 4px;">
                  <i class="fa-regular fa-clock" style="color: #48dbfb;"></i>
-                 <span>45</span>
+                 <span>${rival.sessions}</span>
                </div>
                <p style="font-size: 0.7rem; color: #888; text-transform: uppercase; font-weight: 800; margin: 0;">Sessions</p>
             </div>
             <div style="background: #111; border: 1px solid #333; border-radius: 12px; padding: 16px; display: flex; flex-direction: column; align-items: center; justify-content: center;">
-               <div style="font-weight: 900; font-size: 1.1rem; display: flex; align-items: center; gap: 6px; margin-bottom: 4px;">
+               <div style="font-weight: 900; font-size: 1.1rem; display: flex; align-items: center; gap: 6px; margin-bottom: 4px; text-align: center; line-height: 1.2;">
                  <i class="fa-solid fa-trophy" style="color: #feca57;"></i>
-                 <span>Padel</span>
+                 <span>${rival.sports.split(' ')[0]}</span>
                </div>
                <p style="font-size: 0.7rem; color: #888; text-transform: uppercase; font-weight: 800; margin: 0;">Top Sport</p>
             </div>
@@ -2089,7 +2104,7 @@ window.renderRivalProfile = function(id) {
           </div>
         </section>
 
-        <button onclick="navigateTo(screens.CHALLENGE_CREATE, 'rohan')" style="width: 100%; padding: 18px; border-radius: 16px; background: #fff; color: #000; border: none; font-size: 1.1rem; font-weight: 900; cursor: pointer; display: flex; justify-content: center; align-items: center; gap: 10px; box-shadow: 0 4px 14px rgba(255,255,255,0.2);">
+        <button onclick="navigateTo(screens.CHALLENGE_CREATE, '${rival.id}')" style="width: 100%; padding: 18px; border-radius: 16px; background: #fff; color: #000; border: none; font-size: 1.1rem; font-weight: 900; cursor: pointer; display: flex; justify-content: center; align-items: center; gap: 10px; box-shadow: 0 4px 14px rgba(255,255,255,0.2);">
            <i class="fa-solid fa-bolt"></i> Challenge Player
         </button>
 
@@ -2106,14 +2121,15 @@ window.updateChallengeVenue = function(v) { window.challengeState.venue = v; ren
 
 window.renderChallengeCreate = function(id) {
   const s = window.challengeState;
+  const rival = window.swipeRivalList.find(r => r.id === id) || window.swipeRivalList[0];
   
   appContainer.innerHTML = `
     <div class="profile-screen fade-in" style="background: #000; min-height: 100vh; color: #fff; padding-bottom: 40px;">
       <header class="flex items-center" style="padding: 24px 20px 10px; display: flex; align-items: center;">
-        <button style="background: none; border: none; color: #fff; cursor: pointer; padding: 0; margin-right: 16px; display: flex;" onclick="navigateTo(screens.SWIPE_RIVALS)">
-          <i class="fa-solid fa-arrow-left" style="font-size: 1.4rem;"></i>
+        <button class="rounded-full border-none text-white cursor-pointer flex items-center justify-center" style="width: 36px; height: 36px; margin-right: 12px; background: rgba(255,255,255,0.1);" onclick="navigateTo(screens.SWIPE_RIVALS)">
+          <i class="fa-solid fa-arrow-left" style="font-size: 1.1rem;"></i>
         </button>
-        <h1 class="font-black tracking-tight m-0" style="font-size: 1.5rem; text-align: center; flex: 1; margin-right: 36px;">Challenge Rohan</h1>
+        <h1 class="font-black tracking-tight m-0" style="font-size: 1.5rem; text-align: center; flex: 1; margin-right: 48px;">Challenge ${rival.name}</h1>
       </header>
       
       <main class="px-6" style="padding: 0 24px; margin-top: 20px;">
@@ -2223,8 +2239,8 @@ window.renderChallengeVenue = function() {
   appContainer.innerHTML = `
     <div class="profile-screen fade-in" style="background: #000; min-height: 100vh; color: #fff; padding-bottom: 40px;">
       <header class="flex items-center" style="padding: 24px 20px 10px; display: flex; align-items: center; justify-content: space-between;">
-        <button style="background: none; border: none; color: #fff; cursor: pointer; padding: 0; display: flex; flex: 1;" onclick="navigateTo(screens.CHALLENGE_NOTIFICATION)">
-          <i class="fa-solid fa-arrow-left" style="font-size: 1.4rem;"></i>
+        <button class="rounded-full border-none text-white cursor-pointer flex items-center justify-center" style="width: 36px; height: 36px; background: rgba(255,255,255,0.1);" onclick="navigateTo(screens.CHALLENGE_NOTIFICATION)">
+          <i class="fa-solid fa-arrow-left" style="font-size: 1.1rem;"></i>
         </button>
         <h1 class="font-black tracking-tight m-0" style="font-size: 1.3rem;">Choose a Venue</h1>
         <div style="width: 36px;"></div>

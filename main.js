@@ -29,8 +29,48 @@ const screens = {
   EVENT_DETAIL: 'event_detail',
   JOIN_EVENT: 'join_event',
   GROUP_BOOKING: 'group_booking',
-  EVENT_CONFIRMATION: 'event_confirmation'
+  EVENT_CONFIRMATION: 'event_confirmation',
+  MATCH_HISTORY: 'match_history',
+  STORY_RECAP: 'story_recap'
 };
+
+const pastMatches = [
+  {
+    id: 'match-1',
+    sport: 'Neon Badminton',
+    players: 'Ashish vs Rohan',
+    score: '11–9',
+    venue: 'Elite Arena',
+    time: 'Today, 9:30 PM',
+    type: '1v1',
+    winner: 'Ashish',
+    highlights: true,
+    nudge: 'Close Game ⚡'
+  },
+  {
+    id: 'match-2',
+    sport: 'Glow Pickleball',
+    players: 'Ashish vs Kunal',
+    score: '8–11',
+    venue: 'Sky Courts',
+    time: 'Yesterday',
+    type: '1v1',
+    winner: 'Kunal',
+    highlights: false
+  },
+  {
+    id: 'match-3',
+    sport: 'Neon Football',
+    players: 'Team Smashers vs Team Thunder',
+    score: '3–2',
+    venue: 'Urban Turf',
+    time: 'Last Week',
+    type: 'Squad',
+    winner: 'Team Smashers',
+    highlights: true,
+    nudge: 'Match Winner 🔥'
+  }
+];
 
 let currentScreen = screens.HOME;
 window.hasCompletedOnboarding = false;
@@ -363,59 +403,6 @@ function renderPlay() {
         </div>
       </div>
       
-      ${window.hasCompletedOnboarding ? `
-      <section class="rival-section" style="margin-top: 16px;">
-        <div class="section-header" style="justify-content: space-between; align-items: flex-end; display: flex; padding-right: 16px;">
-            <div>
-              <h3 class="section-title" style="margin:0; text-align: left; background: none; -webkit-text-fill-color: #fff; text-fill-color: #fff; font-size: 1.2rem; font-weight: 800;">Find Your Next Rival</h3>
-              <p style="margin: 4px 0 0 0; color: #888; font-size: 0.85rem; text-transform: none; letter-spacing: normal;">Swipe players near you</p>
-            </div>
-            <button style="background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); color: #fff; padding: 6px 12px; border-radius: 20px; font-size: 0.75rem; font-weight: bold; cursor: pointer;" onclick="navigateTo(screens.SWIPE_RIVALS)">
-               Start Swiping
-            </button>
-        </div>
-        <div class="rival-cards-scroll" style="display: flex; gap: 16px; overflow-x: auto; padding: 16px 0 16px 20px; scroll-snap-type: x mandatory;">
-            <div class="mini-rival-card" onclick="navigateTo(screens.RIVAL_PROFILE, 'rohan')" style="min-width: 240px; background: #121212; border: 1px solid rgba(255,255,255,0.1); border-radius: 16px; padding: 16px; scroll-snap-align: start; cursor: pointer; display: flex; flex-direction: column; gap: 12px; position: relative; overflow: hidden;">
-                <div style="display: flex; gap: 12px; align-items: center;">
-                    <span style="font-size: 2.5rem; text-shadow: 0px 4px 10px rgba(0,0,0,0.5);">🥷</span>
-                    <div>
-                        <h4 style="margin: 0; font-weight: 800; font-size: 1.1rem; color: #fff;">Rohan</h4>
-                        <p style="margin: 2px 0 0 0; font-size: 0.8rem; color: #bc13fe; font-weight: bold;">The Competitor</p>
-                    </div>
-                </div>
-                <div style="font-size: 0.8rem; color: #aaa;">
-                    <span style="color: #fff; font-weight: bold;">Traits:</span> Strategic • Friendly Rival
-                </div>
-                <div style="font-size: 0.8rem; color: #aaa;">
-                    <span style="color: #fff; font-weight: bold;">Sports:</span> Padel • Badminton
-                </div>
-                <div style="font-size: 0.8rem; color: #bc13fe; font-weight: 600;">
-                    <i class="fa-solid fa-location-dot"></i> 1.2 km away
-                </div>
-            </div>
-            
-            <div class="mini-rival-card" onclick="navigateTo(screens.RIVAL_PROFILE, 'kavita')" style="min-width: 240px; background: #121212; border: 1px solid rgba(255,255,255,0.1); border-radius: 16px; padding: 16px; scroll-snap-align: start; cursor: pointer; display: flex; flex-direction: column; gap: 12px; position: relative; overflow: hidden;">
-                <div style="display: flex; gap: 12px; align-items: center;">
-                    <span style="font-size: 2.5rem; text-shadow: 0px 4px 10px rgba(0,0,0,0.5);">🧑‍🚀</span>
-                    <div>
-                        <h4 style="margin: 0; font-weight: 800; font-size: 1.1rem; color: #fff;">Kavita</h4>
-                        <p style="margin: 2px 0 0 0; font-size: 0.8rem; color: #48dbfb; font-weight: bold;">The Weekend Warrior</p>
-                    </div>
-                </div>
-                <div style="font-size: 0.8rem; color: #aaa;">
-                    <span style="color: #fff; font-weight: bold;">Traits:</span> Relentless • Energetic
-                </div>
-                <div style="font-size: 0.8rem; color: #aaa;">
-                    <span style="color: #fff; font-weight: bold;">Sports:</span> Pickleball
-                </div>
-                <div style="font-size: 0.8rem; color: #48dbfb; font-weight: 600;">
-                    <i class="fa-solid fa-location-dot"></i> 2.5 km away
-                </div>
-            </div>
-        </div>
-      </section>
-      ` : ''}
-
       <section class="sport-grid-section">
         <div class="section-header">
           <span class="line"></span>
@@ -432,10 +419,10 @@ function renderPlay() {
         </div>
       </section>
 
-      <section class="exclusive-games-section" style="margin-top: 24px;">
+      <section class="exclusive-games-section" style="margin-top: 32px;">
         <div class="section-header" style="justify-content: space-between; align-items: flex-end; display: flex; padding-right: 16px;">
             <div>
-              <h3 class="section-title" style="margin:0; text-align: left; background: none; -webkit-text-fill-color: #fff; text-fill-color: #fff; font-size: 1.2rem; font-weight: 800;">Exclusive Games</h3>
+              <h3 class="section-title" style="margin:0; text-align: left; background: none; -webkit-text-fill-color: #fff; text-fill-color: #fff; font-size: 1.25rem; font-weight: 900;">Exclusive Games</h3>
               <p style="margin: 4px 0 0 0; color: #888; font-size: 0.85rem;">Play sports like you've never seen before</p>
             </div>
             <button style="background: rgba(255, 255, 255, 0.08); border: 1px solid rgba(255, 255, 255, 0.15); color: #fff; padding: 8px 18px; border-radius: 24px; font-size: 0.75rem; font-weight: 800; cursor: pointer; backdrop-filter: blur(5px);" onclick="navigateTo(screens.EXCLUSIVE_HUB)">
@@ -471,8 +458,94 @@ function renderPlay() {
         </div>
       </section>
 
+      ${window.hasCompletedOnboarding ? `
+      <section class="rival-section" style="margin-top: 32px;">
+        <div class="section-header" style="justify-content: space-between; align-items: flex-end; display: flex; padding-right: 16px;">
+            <div>
+              <h3 class="section-title" style="margin:0; text-align: left; background: none; -webkit-text-fill-color: #fff; text-fill-color: #fff; font-size: 1.25rem; font-weight: 900;">Find Your Next Rival</h3>
+              <p style="margin: 4px 0 0 0; color: #888; font-size: 0.85rem; text-transform: none; letter-spacing: normal;">Swipe players near you</p>
+            </div>
+            <button style="background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); color: #fff; padding: 8px 16px; border-radius: 20px; font-size: 0.75rem; font-weight: 800; cursor: pointer;" onclick="navigateTo(screens.SWIPE_RIVALS)">
+               Start Swiping
+            </button>
+        </div>
+        <div class="rival-cards-scroll" style="display: flex; gap: 16px; overflow-x: auto; padding: 16px 0 16px 20px; scroll-snap-type: x mandatory;">
+            <div class="mini-rival-card" onclick="navigateTo(screens.RIVAL_PROFILE, 'rohan')" style="min-width: 240px; background: #121212; border: 1px solid rgba(255,255,255,0.1); border-radius: 16px; padding: 16px; scroll-snap-align: start; cursor: pointer; display: flex; flex-direction: column; gap: 12px; position: relative; overflow: hidden;">
+                <div style="display: flex; gap: 12px; align-items: center;">
+                    <span style="font-size: 2.5rem; text-shadow: 0px 4px 10px rgba(0,0,0,0.5);">🥷</span>
+                    <div>
+                        <h4 style="margin: 0; font-weight: 800; font-size: 1.1rem; color: #fff;">Rohan</h4>
+                        <p style="margin: 2px 0 0 0; font-size: 0.8rem; color: #fff; font-weight: bold;">The Competitor</p>
+                    </div>
+                </div>
+                <div style="font-size: 0.8rem; color: #aaa;">
+                    <span style="color: #fff; font-weight: bold;">Traits:</span> Strategic • Friendly Rival
+                </div>
+                <div style="font-size: 0.8rem; color: #aaa;">
+                    <span style="color: #fff; font-weight: bold;">Sports:</span> Padel • Badminton
+                </div>
+                <div style="font-size: 0.8rem; color: #fff; font-weight: 600;">
+                    <i class="fa-solid fa-location-dot"></i> 1.2 km away
+                </div>
+            </div>
+            
+            <div class="mini-rival-card" onclick="navigateTo(screens.RIVAL_PROFILE, 'kavita')" style="min-width: 240px; background: #121212; border: 1px solid rgba(255,255,255,0.1); border-radius: 16px; padding: 16px; scroll-snap-align: start; cursor: pointer; display: flex; flex-direction: column; gap: 12px; position: relative; overflow: hidden;">
+                <div style="display: flex; gap: 12px; align-items: center;">
+                    <span style="font-size: 2.5rem; text-shadow: 0px 4px 10px rgba(0,0,0,0.5);">🧑‍🚀</span>
+                    <div>
+                        <h4 style="margin: 0; font-weight: 800; font-size: 1.1rem; color: #fff;">Kavita</h4>
+                        <p style="margin: 2px 0 0 0; font-size: 0.8rem; color: #fff; font-weight: bold;">The Weekend Warrior</p>
+                    </div>
+                </div>
+                <div style="font-size: 0.8rem; color: #aaa;">
+                    <span style="color: #fff; font-weight: bold;">Traits:</span> Relentless • Energetic
+                </div>
+                <div style="font-size: 0.8rem; color: #aaa;">
+                    <span style="color: #fff; font-weight: bold;">Sports:</span> Pickleball
+                </div>
+                <div style="font-size: 0.8rem; color: #fff; font-weight: 600;">
+                    <i class="fa-solid fa-location-dot"></i> 2.5 km away
+                </div>
+            </div>
+        </div>
+      </section>
+      ` : ''}
+
+      <section class="matches-section" style="margin-top: 32px;">
+        <div class="section-header" style="justify-content: space-between; align-items: flex-end; display: flex; padding-right: 16px;">
+            <div>
+              <h3 class="section-title" style="margin:0; text-align: left; background: none; -webkit-text-fill-color: #fff; text-fill-color: #fff; font-size: 1.25rem; font-weight: 900;">Your Matches</h3>
+              <p style="margin: 4px 0 0 0; color: #888; font-size: 0.85rem;">Capture and share your sports glory</p>
+            </div>
+            <button style="background: rgba(255, 255, 255, 0.08); border: 1px solid rgba(255, 255, 255, 0.15); color: #fff; padding: 8px 18px; border-radius: 24px; font-size: 0.75rem; font-weight: 800; cursor: pointer; backdrop-filter: blur(5px);" onclick="navigateTo(screens.MATCH_HISTORY)">
+               View Feed
+            </button>
+        </div>
+        <div class="matches-scroll" style="display: flex; gap: 20px; overflow-x: auto; padding: 24px 20px; scroll-snap-type: x mandatory; -ms-overflow-style: none; scrollbar-width: none;">
+          ${pastMatches.map(match => `
+            <div class="match-card-mini" style="min-width: 280px; background: #111; border: 1px solid rgba(255,255,255,0.05); border-radius: 24px; padding: 20px; position: relative; scroll-snap-align: center;">
+               <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 16px;">
+                  <span style="font-size: 0.65rem; font-weight: 900; color: #FFD700; text-transform: uppercase; letter-spacing: 1px;">${match.sport}</span>
+                  ${match.nudge ? `<span style="background: rgba(255,215,0,0.1); color: #FFD700; padding: 4px 8px; border-radius: 6px; font-size: 0.6rem; font-weight: 900;">${match.nudge}</span>` : ''}
+               </div>
+               <div style="text-align: center; margin-bottom: 16px;">
+                  <div style="font-size: 1rem; font-weight: 800; color: #fff; margin-bottom: 4px;">${match.players}</div>
+                  <div style="font-size: 1.8rem; font-weight: 900; color: #fff; letter-spacing: 2px;">${match.score}</div>
+               </div>
+               <div style="font-size: 0.75rem; color: #666; font-weight: 600; text-align: center; margin-bottom: 20px;">
+                  <i class="fa-solid fa-location-dot"></i> ${match.venue} • ${match.time}
+               </div>
+               <div style="display: flex; gap: 8px;">
+                  <button onclick="navigateTo(screens.STORY_RECAP, '${match.id}')" style="flex: 1; background: #fff; color: #000; border: none; padding: 10px; border-radius: 12px; font-weight: 900; font-size: 0.75rem;">Share Story</button>
+                  <button style="flex: 1; background: rgba(255,255,255,0.05); color: #fff; border: 1px solid rgba(255,255,255,0.1); padding: 10px; border-radius: 12px; font-weight: 800; font-size: 0.75rem;">Rematch</button>
+               </div>
+            </div>
+          `).join('')}
+        </div>
+      </section>
+
       <section class="plan-evening-section">
-        <div class="section-header" style="margin-top: 24px;">
+        <div class="section-header" style="margin-top: 32px;">
           <span class="line"></span>
           <h3 class="section-title">PLAN YOUR EVENING</h3>
           <span class="line"></span>
@@ -506,6 +579,13 @@ function renderPlay() {
   document.querySelector('.profile-icon').addEventListener('click', () => {
     navigateTo(screens.PROFILE);
   });
+
+  // Smart Nudge Trigger (Simulated for demo)
+  setTimeout(() => {
+    const nudgeTypes = ['score', 'rivalry', 'share'];
+    const randomNudge = nudgeTypes[Math.floor(Math.random() * nudgeTypes.length)];
+    showNudge(randomNudge);
+  }, 2000);
 }
 
 function renderSportItem(name, icon) {
@@ -1333,39 +1413,155 @@ function renderGroupBooking(id) {
   `;
 }
 
-function renderEventConfirmation(id) {
-  const game = exclusiveGames.find(g => g.id === id) || exclusiveGames[0];
+function renderMatchHistory() {
   appContainer.innerHTML = `
-    <div class="event-confirm-page fade-in" style="background: #000; min-height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; padding: 24px;">
-       <div style="font-size: 5rem; margin-bottom: 24px; animation: scaleIn 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);">✨</div>
-       <h1 style="font-size: 3rem; font-weight: 900; margin: 0; background: linear-gradient(to bottom, #fff, #888); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">You're In!</h1>
-       <p style="color: #888; font-size: 1.1rem; margin: 8px 0 40px 0; font-weight: 600;">Get ready for the neon showdown.</p>
-       
-       <div style="background: #111; border: 1px solid rgba(255,255,255,0.1); border-radius: 20px; padding: 30px; width: 100%; position: relative; overflow: hidden;">
-          <h2 style="font-size: 1.2rem; font-weight: 800; margin-bottom: 20px; color: #fff;">${game.title}</h2>
-          <div style="text-align: left; display: flex; flex-direction: column; gap: 16px; font-weight: 700;">
-             <div style="display: flex; justify-content: space-between;">
-                <span style="color: #666;">Venue</span>
-                <span>${game.venue}</span>
-             </div>
-             <div style="display: flex; justify-content: space-between;">
-                <span style="color: #666;">Time</span>
-                <span style="color: #fff;">${game.time}</span>
-             </div>
-             <div style="display: flex; justify-content: space-between;">
-                <span style="color: #666;">Entry Code</span>
-                <span style="font-family: monospace; font-size: 1.2rem; letter-spacing: 2px;">DX-552</span>
-             </div>
-          </div>
-       </div>
-       
-       <div style="margin-top: 40px; display: flex; flex-direction: column; gap: 16px; width: 100%;">
-          <button onclick="navigateTo(screens.HOME)" style="width: 100%; padding: 18px; border-radius: 16px; background: #fff; color: #000; border: none; font-size: 1rem; font-weight: 900;">Add to Calendar</button>
-          <div style="display: flex; gap: 12px;">
-             <button style="flex: 1; padding: 14px; border-radius: 12px; background: rgba(255,255,255,0.05); color: #fff; border: 1px solid #333; font-weight: 800; font-size: 0.9rem;">Invite Friends</button>
-             <button onclick="navigateTo(screens.EVENT_DETAIL, '${id}')" style="flex: 1; padding: 14px; border-radius: 12px; background: rgba(255,255,255,0.05); color: #fff; border: 1px solid #333; font-weight: 800; font-size: 0.9rem;">View Event</button>
-          </div>
-       </div>
+    <div class="match-history-page fade-in" style="background: #000; min-height: 100vh; padding-bottom: 100px;">
+      <header style="padding: 24px 20px; display: flex; align-items: center; gap: 16px; position: sticky; top: 0; background: rgba(0,0,0,0.8); backdrop-filter: blur(10px); z-index: 10;">
+        <button class="back-btn-small" onclick="navigateTo(screens.PLAY)"><i class="fa-solid fa-arrow-left"></i></button>
+        <h2 style="font-size: 1.4rem; font-weight: 950; letter-spacing: -0.5px;">Your Matches</h2>
+      </header>
+
+      <div style="padding: 0 20px;">
+        <div style="margin-bottom: 32px;">
+          <h3 style="font-size: 0.75rem; font-weight: 900; color: #666; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 20px;">Match Timeline</h3>
+          
+          ${pastMatches.map((match, index) => `
+            <div class="match-card-full" style="background: #111; border: 1px solid rgba(255,255,255,0.05); border-radius: 28px; padding: 24px; margin-bottom: 24px; position: relative; overflow: hidden; box-shadow: 0 20px 40px rgba(0,0,0,0.4);">
+              <!-- Glow Effect -->
+              <div style="position: absolute; top: -50px; right: -50px; width: 150px; height: 150px; background: radial-gradient(circle, rgba(255,215,0,0.05) 0%, transparent 70%);"></div>
+              
+              <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 20px;">
+                <div>
+                  <span style="font-size: 0.7rem; font-weight: 900; color: #FFD700; text-transform: uppercase; letter-spacing: 1.5px; display: block; margin-bottom: 4px;">${match.sport}</span>
+                  <p style="margin: 0; font-size: 0.8rem; color: #666; font-weight: 600;">${match.time} • ${match.venue}</p>
+                </div>
+                ${match.nudge ? `<span style="background: rgba(255,215,0,0.1); color: #FFD700; padding: 6px 12px; border-radius: 10px; font-size: 0.65rem; font-weight: 900; border: 1px solid rgba(255,215,0,0.2);">${match.nudge}</span>` : ''}
+              </div>
+
+              <div style="display: flex; align-items: center; justify-content: center; gap: 32px; margin-bottom: 28px; padding: 10px 0;">
+                <div style="text-align: center; flex: 1;">
+                   <div style="font-size: 1.1rem; font-weight: 900; color: #fff; margin-bottom: 4px;">Ashish</div>
+                   <div style="font-size: 0.7rem; color: #888; font-weight: 700;">PLAYER 1</div>
+                </div>
+                <div style="font-size: 2.2rem; font-weight: 950; color: #fff; letter-spacing: 4px; font-family: 'Outfit', sans-serif;">${match.score}</div>
+                <div style="text-align: center; flex: 1;">
+                   <div style="font-size: 1.1rem; font-weight: 900; color: #fff; margin-bottom: 4px;">${match.players.split(' vs ')[1]}</div>
+                   <div style="font-size: 0.7rem; color: #888; font-weight: 700;">PLAYER 2</div>
+                </div>
+              </div>
+
+              <div style="display: flex; gap: 12px;">
+                <button onclick="navigateTo(screens.STORY_RECAP, '${match.id}')" style="flex: 1.2; background: #fff; color: #000; border: none; padding: 14px; border-radius: 16px; font-weight: 950; font-size: 0.85rem; display: flex; align-items: center; justify-content: center; gap: 8px;">
+                   <i class="fa-solid fa-share-nodes"></i> Share Story
+                </button>
+                <button style="flex: 1; background: rgba(255,255,255,0.05); color: #fff; border: 1px solid rgba(255,255,255,0.1); padding: 14px; border-radius: 16px; font-weight: 800; font-size: 0.85rem;">
+                   Rematch
+                </button>
+              </div>
+              
+              ${match.highlights ? `
+                <div style="margin-top: 16px; padding-top: 16px; border-top: 1px solid rgba(255,255,255,0.05); display: flex; align-items: center; justify-content: center; gap: 8px; color: #bc13fe; font-size: 0.75rem; font-weight: 800; cursor: pointer;">
+                   <i class="fa-solid fa-play"></i> View Highlights
+                </div>
+              ` : ''}
+            </div>
+          `).join('')}
+        </div>
+      </div>
+    </div>
+  `;
+}
+
+function renderStoryRecap(matchId) {
+  const match = pastMatches.find(m => m.id === matchId) || pastMatches[0];
+  appContainer.innerHTML = `
+    <div class="story-recap-page story-container-premium fade-in" style="min-height: 100vh; position: relative; display: flex; flex-direction: column;">
+      
+      <!-- Top Close Button -->
+      <div style="position: absolute; top: 40px; right: 20px; z-index: 100;">
+         <button onclick="navigateTo(screens.MATCH_HISTORY)" style="background: rgba(255,255,255,0.08); width: 44px; height: 44px; border-radius: 50%; border: 1px solid rgba(255,255,255,0.15); color: #fff; display: flex; align-items: center; justify-content: center; backdrop-filter: blur(20px); cursor: pointer;">
+            <i class="fa-solid fa-xmark"></i>
+         </button>
+      </div>
+
+      <!-- Poster Background Container -->
+      <div style="flex: 1; position: relative; padding: 40px 24px; display: flex; align-items: center; justify-content: center; z-index: 2;">
+         
+         <!-- Volumetric Lighting Blobs -->
+         <div style="position: absolute; top: 20%; left: 10%; width: 250px; height: 250px; background: rgba(188,19,254,0.12); filter: blur(100px); border-radius: 50%;"></div>
+         <div style="position: absolute; bottom: 20%; right: 10%; width: 300px; height: 300px; background: rgba(57,255,20,0.08); filter: blur(120px); border-radius: 50%;"></div>
+
+         <!-- The Anti-Gravity Card (Floating) -->
+         <div id="capture-card" class="anti-gravity-card" style="width: 100%; aspect-ratio: 9/16; max-height: 75vh;">
+            
+            <!-- Internal Design Elements -->
+            <div class="light-swipe"></div>
+            
+            <div style="position: absolute; top: 48px; left: 0; right: 0; text-align: center;">
+               <div style="font-size: 0.7rem; font-weight: 950; color: #bc13fe; text-transform: uppercase; letter-spacing: 5px; margin-bottom: 12px; opacity: 0.9; animation: slideDown 0.8s ease;">MATCH RECAP</div>
+               <div style="display: flex; align-items: center; justify-content: center; gap: 16px;">
+                  <span style="height: 1px; width: 32px; background: linear-gradient(to right, transparent, rgba(255,255,255,0.3));"></span>
+                  <div style="font-size: 1.1rem; font-weight: 900; color: #fff; letter-spacing: 1.5px; text-transform: uppercase;">${match.sport}</div>
+                  <span style="height: 1px; width: 32px; background: linear-gradient(to left, transparent, rgba(255,255,255,0.3));"></span>
+               </div>
+            </div>
+
+            <!-- VS Section -->
+            <div style="position: absolute; top: 50%; left: 0; right: 0; transform: translateY(-50%); text-align: center; padding: 0 32px;">
+               <div style="margin-bottom: 24px;">
+                  <div style="font-size: 2.4rem; font-weight: 950; color: #fff; line-height: 1; text-shadow: 0 15px 30px rgba(0,0,0,0.4); letter-spacing: -1.2px;">${match.players.split(' vs ')[0]}</div>
+                  <div style="font-size: 0.85rem; font-weight: 900; color: #bc13fe; margin: 16px 0; letter-spacing: 4px; display: flex; align-items: center; justify-content: center; gap: 12px; opacity: 0.8;">
+                     <span style="height: 1px; width: 20px; background: #bc13fe; opacity: 0.3;"></span>
+                     VS
+                     <span style="height: 1px; width: 20px; background: #bc13fe; opacity: 0.3;"></span>
+                  </div>
+                  <div style="font-size: 2.4rem; font-weight: 950; color: #fff; line-height: 1; text-shadow: 0 15px 30px rgba(0,0,0,0.4); letter-spacing: -1.2px;">${match.players.split(' vs ')[1]}</div>
+               </div>
+               
+               <div style="display: flex; flex-direction: column; align-items: center; gap: 8px; margin-top: 50px;">
+                  <div style="font-size: 0.65rem; font-weight: 950; color: #bc13fe; letter-spacing: 3px; opacity: 0.7;">FINAL SCORE</div>
+                  <div class="score-metallic" style="font-size: 5.2rem; font-family: 'Outfit', sans-serif;">${match.score}</div>
+               </div>
+            </div>
+
+            <!-- Bottom Branding -->
+            <div style="position: absolute; bottom: 44px; left: 0; right: 0; padding: 0 40px;">
+               <div style="display: flex; justify-content: space-between; align-items: flex-end;">
+                  <div style="text-align: left;">
+                     <div style="font-size: 0.85rem; font-weight: 800; color: #fff; margin-bottom: 2px;">${match.venue}</div>
+                     <div style="font-size: 0.65rem; color: rgba(255,255,255,0.4); font-weight: 700; text-transform: uppercase; letter-spacing: 1px;">ELITE MATCHES ONLY</div>
+                  </div>
+                  <div style="text-align: right;">
+                     <div style="font-size: 1.2rem; font-weight: 950; color: #fff; letter-spacing: -1px; line-height: 1;">District <span style="color:#bc13fe">Play</span></div>
+                     <div style="font-size: 0.6rem; color: #bc13fe; font-weight: 900; text-transform: uppercase; letter-spacing: 0.5px; margin-top: 4px;">BUILD YOUR LEGACY</div>
+                  </div>
+               </div>
+            </div>
+         </div>
+      </div>
+
+      <!-- Professional Sharing Interface -->
+      <div style="background: rgba(10,10,10,0.8); padding: 32px 24px 50px 24px; border-top: 1px solid rgba(255,255,255,0.06); backdrop-filter: blur(30px); border-radius: 40px 40px 0 0; z-index: 3;">
+         <h3 style="font-size: 0.95rem; font-weight: 900; color: #fff; margin: 0 0 24px 0; text-align: center; letter-spacing: 0.5px; opacity: 0.8;">SHARE YOUR GLORY</h3>
+         <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px;">
+            <div style="display: flex; flex-direction: column; align-items: center; gap: 10px; cursor: pointer;">
+               <div style="width: 56px; height: 56px; border-radius: 18px; background: linear-gradient(45deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%); display: flex; align-items: center; justify-content: center; color: #fff; font-size: 1.6rem; box-shadow: 0 10px 20px rgba(220,39,67,0.3);"><i class="fa-brands fa-instagram"></i></div>
+               <span style="font-size: 0.7rem; font-weight: 800; color: #999;">Story</span>
+            </div>
+            <div style="display: flex; flex-direction: column; align-items: center; gap: 10px; cursor: pointer;">
+               <div style="width: 56px; height: 56px; border-radius: 18px; background: #25D366; display: flex; align-items: center; justify-content: center; color: #fff; font-size: 1.6rem; box-shadow: 0 10px 20px rgba(37,211,102,0.2);"><i class="fa-brands fa-whatsapp"></i></div>
+               <span style="font-size: 0.7rem; font-weight: 800; color: #999;">WhatsApp</span>
+            </div>
+            <div style="display: flex; flex-direction: column; align-items: center; gap: 10px; cursor: pointer;">
+               <div style="width: 56px; height: 56px; border-radius: 18px; background: #bc13fe; display: flex; align-items: center; justify-content: center; color: #fff; font-size: 1.6rem; box-shadow: 0 10px 20px rgba(188,19,254,0.3);"><i class="fa-solid fa-users"></i></div>
+               <span style="font-size: 0.7rem; font-weight: 800; color: #999;">Squad Chat</span>
+            </div>
+            <div style="display: flex; flex-direction: column; align-items: center; gap: 10px; cursor: pointer;">
+               <div style="width: 56px; height: 56px; border-radius: 18px; background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.1); display: flex; align-items: center; justify-content: center; color: #fff; font-size: 1.6rem;"><i class="fa-solid fa-download"></i></div>
+               <span style="font-size: 0.7rem; font-weight: 800; color: #999;">Download</span>
+            </div>
+         </div>
+      </div>
     </div>
   `;
 }
@@ -1373,8 +1569,39 @@ function renderEventConfirmation(id) {
 function navigateTo(screen, id = null, fromPopState = false) {
   currentScreen = screen;
 
-  
-  // Update browser history for back button support (unless we came from a popstate)
+  // Render the appropriate screen
+  if (screen === screens.HOME) renderHome();
+  else if (screen === screens.PLAY) renderPlay();
+  else if (screen === screens.DETAIL) renderDetail(id);
+  else if (screen === screens.BOOKING) renderBooking(id);
+  else if (screen === screens.PROFILE) renderProfile();
+  else if (screen === screens.BUNDLE_DETAIL) renderBundleDetail(id);
+  else if (screen === screens.BUNDLE_CUSTOMIZE) renderBundleCustomize(id);
+  else if (screen === screens.BUNDLE_CHECKOUT) renderBundleCheckout(id);
+  else if (screen === screens.BUNDLE_CONFIRMATION) renderBundleConfirmation(id);
+  else if (screen === screens.PAYMENT_METHOD) renderPaymentMethod();
+  else if (screen === screens.ONBOARDING_INTRO) renderOnboardingIntro();
+  else if (screen === screens.ONBOARDING_ARCHETYPE) renderOnboardingArchetype();
+  else if (screen === screens.ONBOARDING_TRAITS) renderOnboardingTraits();
+  else if (screen === screens.ONBOARDING_SPORTS) renderOnboardingSports();
+  else if (screen === screens.ONBOARDING_VIBES) renderOnboardingVibes();
+  else if (screen === screens.ONBOARDING_INTERESTS) renderOnboardingInterests();
+  else if (screen === screens.ONBOARDING_AVATAR) renderOnboardingAvatar();
+  else if (screen === screens.ONBOARDING_REVEAL) renderOnboardingReveal();
+  else if (screen === screens.PROFILE_HUB) renderProfileHub();
+  else if (screen === screens.SWIPE_RIVALS) renderSwipeRivals();
+  else if (screen === screens.RIVAL_PROFILE) renderRivalProfile(id);
+  else if (screen === screens.CHALLENGE_CREATE) renderChallengeCreate(id);
+  else if (screen === screens.CHALLENGE_NOTIFICATION) renderChallengeNotification(id);
+  else if (screen === screens.CHALLENGE_VENUE) renderChallengeVenue(id);
+  else if (screen === screens.CHALLENGE_CONFIRM) renderChallengeConfirm(id);
+  else if (screen === screens.EXCLUSIVE_HUB) renderExclusiveGamesHub();
+  else if (screen === screens.EVENT_DETAIL) renderEventDetail(id);
+  else if (screen === screens.JOIN_EVENT) renderJoinEvent(id);
+  else if (screen === screens.GROUP_BOOKING) renderGroupBooking(id);
+  else if (screen === screens.EVENT_CONFIRMATION) renderEventConfirmation(id);
+  else if (screen === screens.MATCH_HISTORY) renderMatchHistory();
+  else if (screen === screens.STORY_RECAP) renderStoryRecap(id);
   if (!fromPopState) {
     const historyState = { screen, id };
     history.pushState(historyState, "", `#${screen}${id ? '-' + id : ''}`);
@@ -2785,6 +3012,77 @@ window.renderChallengeConfirm = function() {
     </div>
   `;
 };
+
+function showNudge(type, data = {}) {
+  const existingNudge = document.querySelector('.district-nudge');
+  if (existingNudge) existingNudge.remove();
+
+  let nudgeHTML = '';
+  
+  if (type === 'score') {
+     nudgeHTML = `
+        <div class="district-nudge score-nudge fade-in-up" style="position: fixed; bottom: 100px; left: 16px; right: 16px; background: #111; border: 1px solid #bc13fe; border-radius: 24px; padding: 20px; z-index: 1000; box-shadow: 0 20px 40px rgba(188,19,254,0.2); display: flex; align-items: center; gap: 16px;">
+           <div style="width: 48px; height: 48px; background: rgba(188,19,254,0.1); border-radius: 14px; display: flex; align-items: center; justify-content: center; color: #bc13fe; font-size: 1.5rem;"><i class="fa-solid fa-trophy"></i></div>
+           <div style="flex: 1;">
+              <h4 style="margin: 0; font-size: 0.95rem; font-weight: 800; color: #fff;">Did you play?</h4>
+              <p style="margin: 2px 0 0 0; font-size: 0.75rem; color: #888; font-weight: 600;">Enter your score for Ashish vs Rohan.</p>
+           </div>
+           <button onclick="this.parentElement.remove()" style="background: #fff; color: #000; border: none; padding: 8px 16px; border-radius: 12px; font-weight: 900; font-size: 0.75rem;">Enter</button>
+        </div>
+     `;
+  } else if (type === 'rivalry') {
+     nudgeHTML = `
+        <div class="district-nudge rivalry-nudge fade-in-up" style="position: fixed; bottom: 100px; left: 16px; right: 16px; background: #111; border: 1px solid #ff3b30; border-radius: 24px; padding: 20px; z-index: 1000; box-shadow: 0 20px 40px rgba(255,59,48,0.2); display: flex; align-items: center; gap: 16px;">
+           <div style="width: 48px; height: 48px; background: rgba(255,59,48,0.1); border-radius: 14px; display: flex; align-items: center; justify-content: center; color: #ff3b30; font-size: 1.5rem;"><i class="fa-solid fa-fire"></i></div>
+           <div style="flex: 1;">
+              <h4 style="margin: 0; font-size: 0.95rem; font-weight: 800; color: #fff;">Rohan is on fire!</h4>
+              <p style="margin: 2px 0 0 0; font-size: 0.75rem; color: #888; font-weight: 600;">He's on a 3-match winning streak. Rematch?</p>
+           </div>
+           <button onclick="this.parentElement.remove()" style="background: #ff3b30; color: #fff; border: none; padding: 8px 16px; border-radius: 12px; font-weight: 900; font-size: 0.75rem;">Challenge</button>
+        </div>
+     `;
+  } else if (type === 'share') {
+     nudgeHTML = `
+        <div class="district-nudge share-nudge fade-in-up" style="position: fixed; bottom: 100px; left: 16px; right: 16px; background: #111; border: 1px solid #39FF14; border-radius: 24px; padding: 20px; z-index: 1000; box-shadow: 0 20px 40px rgba(57,255,20,0.2); display: flex; align-items: center; gap: 16px;">
+           <div style="width: 48px; height: 48px; background: rgba(57,255,20,0.1); border-radius: 14px; display: flex; align-items: center; justify-content: center; color: #39FF14; font-size: 1.5rem;"><i class="fa-solid fa-camera-retro"></i></div>
+           <div style="flex: 1;">
+              <h4 style="margin: 0; font-size: 0.95rem; font-weight: 800; color: #fff;">Poster Ready!</h4>
+              <p style="margin: 2px 0 0 0; font-size: 0.75rem; color: #888; font-weight: 600;">That was a close game! Share your match story.</p>
+           </div>
+           <button onclick="navigateTo(screens.STORY_RECAP, 'match2'); this.parentElement.remove()" style="background: #39FF14; color: #000; border: none; padding: 8px 16px; border-radius: 12px; font-weight: 900; font-size: 0.75rem;">Share</button>
+        </div>
+     `;
+  }
+
+  document.body.insertAdjacentHTML('beforeend', nudgeHTML);
+  
+  // Auto remove after 8 seconds
+  const currentNudge = document.querySelector('.district-nudge');
+  setTimeout(() => {
+    if (currentNudge && currentNudge.parentElement) {
+       currentNudge.classList.add('fade-out-down');
+       setTimeout(() => currentNudge.remove(), 500);
+    }
+  }, 8000);
+}
+
+function handleNavigation() {
+  const hash = window.location.hash.substring(1);
+  if (!hash) {
+    navigateTo(screens.HOME, null, true);
+    return;
+  }
+
+  const parts = hash.split('-');
+  const screen = parts[0];
+  const id = parts[1] || null;
+
+  if (Object.values(screens).includes(screen)) {
+    navigateTo(screen, id, true);
+  } else {
+    navigateTo(screens.HOME, null, true);
+  }
+}
 
 // Initial Navigation
 navigateTo(screens.HOME);

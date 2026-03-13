@@ -1786,140 +1786,107 @@ window.renderProfileHub = function() {
   const topSport = d.sports && d.sports.length ? d.sports[0] : 'Pickleball';
   
   appContainer.innerHTML = `
-    <style>
-      .hub-page { background: #000; min-height: 100vh; color: #fff; padding-bottom: 40px; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; }
-      .hub-top-nav { display: flex; align-items: center; gap: 16px; padding: 20px 16px; }
-      .hub-back-btn { width: 36px; height: 36px; border-radius: 50%; background: rgba(255,255,255,0.1); border: none; color: white; display: flex; align-items: center; justify-content: center; cursor: pointer; }
-      .hub-title { font-size: 1.5rem; font-weight: 800; letter-spacing: -0.5px; margin: 0; }
-      
-      .hub-hero-section { display: flex; gap: 24px; align-items: center; padding: 10px 16px 32px; }
-      .hub-player-card { 
-         width: 120px; height: 170px; border-radius: 12px; border: 2px solid #bc13fe; 
-         background: linear-gradient(135deg, #18052e 0%, #0d001a 100%); 
-         display: flex; flex-direction: column; align-items: center; justify-content: center; 
-         position: relative; box-shadow: 0 8px 32px rgba(188, 19, 254, 0.4); 
-      }
-      .card-rating { position: absolute; top: 12px; left: 14px; font-weight: 900; font-size: 1.3rem; font-style: italic; text-shadow: 0 0 10px rgba(255,255,255,0.5); }
-      .card-position { position: absolute; top: 16px; right: 14px; font-weight: 800; font-size: 0.7rem; color: rgba(255,255,255,0.8); }
-      .card-avatar { font-size: 3.5rem; margin-top: 10px; color: #fff; drop-shadow(0 0 10px rgba(255,255,255,0.5)); }
-      .card-name { margin-top: auto; margin-bottom: 12px; font-weight: 900; font-size: 1rem; letter-spacing: 2px; text-transform: uppercase; }
-
-      .hub-user-info h1 { font-size: 2.5rem; font-weight: 900; margin: 0 0 4px 0; letter-spacing: -1px; }
-      .hub-user-level { color: #bc13fe; font-weight: 800; font-size: 0.95rem; text-shadow: 0 0 15px rgba(188, 19, 254, 0.6); }
-
-      .hub-section { padding: 0 16px 36px; }
-      .section-header-box { border-left: 4px solid #bc13fe; padding-left: 14px; margin-bottom: 24px; }
-      .section-header-box h3 { font-size: 1.15rem; font-weight: 900; letter-spacing: 1.5px; text-transform: uppercase; margin: 0; }
-      
-      .stats-container { display: flex; gap: 14px; overflow-x: auto; padding-bottom: 12px; scrollbar-width: none; }
-      .stat-box { 
-         padding: 24px 16px; background: rgba(255,255,255,0.03); border-radius: 16px; 
-         border: 1px solid rgba(255,255,255,0.08); text-align: center; flex: 1; min-width: 110px;
-         transition: transform 0.2s; 
-      }
-      .stat-box:active { transform: scale(0.96); }
-      .stat-number { font-size: 1.8rem; font-weight: 900; margin-bottom: 8px; }
-      .stat-label { font-size: 0.7rem; font-weight: 800; color: #888; letter-spacing: 1.5px; text-transform: uppercase; }
-
-      .achievements-row { display: flex; gap: 32px; padding-left: 10px; }
-      .badge-col { display: flex; flex-direction: column; align-items: center; gap: 12px; }
-      .badge-icon-wrap { 
-          width: 64px; height: 64px; border-radius: 50%; background: rgba(255,255,255,0.03); 
-          display: flex; align-items: center; justify-content: center; 
-          border: 1px solid rgba(255,255,255,0.1); font-size: 2rem; 
-      }
-      .founder-icon { color: #ffbc00; filter: drop-shadow(0 0 10px rgba(255,188,0,0.5)); }
-      .streak-icon { color: #ff4757; filter: drop-shadow(0 0 10px rgba(255,71,87,0.5)); }
-      .mvp-icon { color: #1e90ff; filter: drop-shadow(0 0 10px rgba(30,144,255,0.5)); }
-      .badge-label { font-size: 0.8rem; font-weight: 800; color: #ccc; }
-
-      .rival-box { 
-         background: rgba(255,255,255,0.03); border-radius: 16px; padding: 20px; 
-         display: flex; align-items: center; justify-content: space-between; 
-         border: 1px solid rgba(255,255,255,0.08);
-      }
-      .rival-left { display: flex; align-items: center; gap: 16px; }
-      .rival-avatar { width: 50px; height: 50px; border-radius: 50%; background: #222; display: flex; align-items: center; justify-content: center; font-size: 1.5rem; border: 2px solid #444; }
-      .rival-name { font-size: 1.1rem; font-weight: 800; margin: 0 0 6px 0; }
-      .rival-record { font-size: 0.8rem; color: #888; font-weight: 600; margin: 0; }
-      .challenge-btn { background: #fff; color: #000; border: none; padding: 10px 20px; border-radius: 20px; font-weight: 800; font-size: 0.9rem; transition: transform 0.2s; cursor: pointer; }
-      .challenge-btn:active { transform: scale(0.95); }
-    </style>
-
-    <div class="profile-screen fade-in hub-page">
-      <header class="hub-top-nav">
-        <button class="hub-back-btn" onclick="navigateTo(screens.PROFILE)"><i class="fa-solid fa-arrow-left"></i></button>
-        <h2 class="hub-title">Identity Hub</h2>
+    <div class="profile-screen fade-in" style="background: #000; min-height: 100vh; color: #fff; padding-bottom: 40px;">
+      <header class="flex items-center p-6">
+        <button class="bg-zinc-800 p-2 rounded-full mr-4 border-none text-white cursor-pointer" onclick="navigateTo(screens.PROFILE)">
+          <i class="fa-solid fa-arrow-left"></i>
+        </button>
+        <h1 class="text-2xl font-bold tracking-tight m-0">Identity Hub</h1>
       </header>
       
-      <div class="hub-hero-section">
-         <div class="hub-player-card">
-             <div class="card-rating">99</div>
-             <div class="card-position">PRO</div>
-             <i class="fa-solid ${d.avatar || 'fa-user-secret'} card-avatar"></i>
-             <div class="card-name">ASHISH</div>
-         </div>
-         <div class="hub-user-info">
-             <h1>Ashish</h1>
-             <p class="hub-user-level">Level 12 • ${d.archetype || 'The Weekend Warrior'}</p>
-         </div>
-      </div>
+      <main class="px-6">
+        <!-- Profile Hero Section -->
+        <section class="flex flex-row items-center gap-6 mt-4 mb-10">
+          <!-- Golden Personality Card -->
+          <div class="metallic-gold w-32 h-44 rounded-2xl flex flex-col items-center justify-between p-3 relative overflow-hidden">
+            <div class="flex flex-col items-center mt-2">
+              <span class="text-[10px] font-black text-black opacity-60 absolute top-2 left-2">99 PRO</span>
+              <div class="w-16 h-16 bg-black rounded-full flex items-center justify-center mt-4 border-2 border-white/30">
+                <i class="fa-solid ${d.avatar || 'fa-user-secret'} text-gold-light text-2xl"></i>
+              </div>
+            </div>
+            <div class="text-center">
+              <p class="text-black font-black text-xs tracking-widest uppercase m-0">${(d.playerName || 'ASHISH').toUpperCase()}</p>
+            </div>
+          </div>
+          
+          <!-- Name and Level -->
+          <div>
+            <h2 class="text-5xl font-black mb-1 m-0">${d.playerName || 'Ashish'}</h2>
+            <div class="flex items-center gap-2">
+              <span class="text-purple-accent font-bold text-lg">Level 12</span>
+              <span class="text-zinc-500">•</span>
+              <span class="text-purple-accent/80 font-medium">${d.archetype || 'The Social Player'}</span>
+            </div>
+          </div>
+        </section>
 
-      <section class="hub-section">
-         <div class="section-header-box">
-             <h3>PLAYER STATS</h3>
-         </div>
-         <div class="stats-container">
-             <div class="stat-box">
-                  <div class="stat-number">24</div>
-                  <div class="stat-label">SESSIONS</div>
-             </div>
-             <div class="stat-box">
-                  <div class="stat-number" style="font-size: 1.4rem; padding-top: 4px; padding-bottom: 4px;">${topSport}</div>
-                  <div class="stat-label">TOP SPORT</div>
-             </div>
-             <div class="stat-box">
-                  <div class="stat-number" style="color: #ff4757;">3🔥</div>
-                  <div class="stat-label">WIN STREAK</div>
-             </div>
-         </div>
-      </section>
+        <!-- Player Stats Section -->
+        <section class="mb-10">
+          <h3 class="section-divider-purple text-xl font-black uppercase tracking-wider mb-6 m-0">Player Stats</h3>
+          <div class="grid grid-cols-3 gap-3" style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px;">
+            <div class="hub-stat-item">
+               <div class="hub-stat-value">
+                 <i class="fa-regular fa-clock text-blue-400"></i>
+                 <span>24</span>
+               </div>
+               <p class="hub-stat-label">Sessions</p>
+            </div>
+            <div class="hub-stat-item">
+               <div class="hub-stat-value">
+                 <i class="fa-solid fa-trophy text-yellow-500" style="font-size: 1.2rem;"></i>
+                 <span class="truncate" style="max-width: 60px; font-size: 1rem;">${topSport}</span>
+               </div>
+               <p class="hub-stat-label">Top Sport</p>
+            </div>
+            <div class="hub-stat-item">
+               <div class="hub-stat-value">
+                 <span class="text-orange-500">3</span>
+                 <span>🔥</span>
+               </div>
+               <p class="hub-stat-label">Win Streak</p>
+            </div>
+          </div>
+        </section>
 
-      <section class="hub-section">
-         <div class="section-header-box">
-             <h3>ACHIEVEMENTS</h3>
-         </div>
-         <div class="achievements-row">
-             <div class="badge-col">
-                 <div class="badge-icon-wrap"><i class="fa-solid fa-medal founder-icon"></i></div>
-                 <div class="badge-label">Founder</div>
+        <!-- Achievements Section -->
+        <section class="mb-10">
+          <h3 class="section-divider-purple text-xl font-black uppercase tracking-wider mb-6 m-0">Achievements</h3>
+          <div class="flex gap-8 overflow-x-auto pb-2 no-scrollbar" style="display: flex; gap: 32px; overflow-x: auto;">
+             <div class="flex flex-col items-center gap-2" style="display: flex; flex-direction: column; align-items: center; gap: 8px;">
+                 <div class="achievement-icon-card" style="border-color: rgba(212, 175, 55, 0.5);">🏅</div>
+                 <span class="text-[11px] font-bold text-zinc-400">Founder</span>
              </div>
-             <div class="badge-col">
-                 <div class="badge-icon-wrap"><i class="fa-solid fa-fire streak-icon"></i></div>
-                 <div class="badge-label">Hot Streak</div>
+             <div class="flex flex-col items-center gap-2" style="display: flex; flex-direction: column; align-items: center; gap: 8px;">
+                 <div class="achievement-icon-card" style="border-color: rgba(239, 68, 68, 0.5);">🔥</div>
+                 <span class="text-[11px] font-bold text-zinc-400">Hot Streak</span>
              </div>
-             <div class="badge-col">
-                 <div class="badge-icon-wrap"><i class="fa-solid fa-star mvp-icon"></i></div>
-                 <div class="badge-label">MVP</div>
+             <div class="flex flex-col items-center gap-2" style="display: flex; flex-direction: column; align-items: center; gap: 8px;">
+                 <div class="achievement-icon-card" style="border-color: rgba(59, 130, 246, 0.5);">⭐</div>
+                 <span class="text-[11px] font-bold text-zinc-400">MVP</span>
              </div>
-         </div>
-      </section>
+          </div>
+        </section>
 
-      <section class="hub-section">
-         <div class="section-header-box">
-             <h3>RIVALRIES</h3>
-         </div>
-         <div class="rival-box">
-             <div class="rival-left">
-                 <div class="rival-avatar"><i class="fa-solid fa-user-ninja"></i></div>
-                 <div>
-                     <h4 class="rival-name">Rahul M.</h4>
-                     <p class="rival-record">Played 5 times • Tied 2-2</p>
-                 </div>
-             </div>
-             <button class="challenge-btn">Challenge</button>
-         </div>
-      </section>
+        <!-- Rivalries Section -->
+        <section class="mb-6">
+          <h3 class="section-divider-purple text-xl font-black uppercase tracking-wider mb-6 m-0">Rivalries</h3>
+          <div class="bg-card-bg p-4 rounded-2xl border border-zinc-800 flex items-center justify-between" style="display: flex; align-items: center; justify-content: space-between; background: #121212; border: 1px solid #333; padding: 16px; border-radius: 16px;">
+            <div class="flex items-center gap-4" style="display: flex; align-items: center; gap: 16px;">
+              <div class="w-12 h-12 bg-zinc-800 rounded-full flex items-center justify-center" style="width: 48px; height: 48px; background: #27272a; border-radius: 50%; display: flex; align-items: center; justify-content: center;">
+                <i class="fa-solid fa-user-ninja text-zinc-400"></i>
+              </div>
+              <div>
+                <h4 class="font-bold text-lg leading-tight m-0">Rahul M.</h4>
+                <p class="text-xs text-zinc-500 m-0">Played 5 times • Tied 2-2</p>
+              </div>
+            </div>
+            <button class="bg-white text-black font-black px-5 py-2 rounded-full text-sm hover:bg-zinc-200 transition-colors border-none cursor-pointer">
+              Challenge
+            </button>
+          </div>
+        </section>
+      </main>
     </div>
   `;
 };

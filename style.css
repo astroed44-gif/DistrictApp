@@ -2271,3 +2271,109 @@ h1.ob-title { font-size: 2.2rem; font-weight: 800; margin: 24px 0 8px; text-tran
 .rival-info p { font-size: 0.8rem; color: var(--text-secondary); }
 .challenge-btn { background: rgba(255,255,255,0.1); color: #fff; border: 1px solid rgba(255,255,255,0.2); padding: 8px 16px; border-radius: 12px; font-weight: 700; font-size: 0.8rem; cursor: pointer; transition: all 0.2s; }
 .challenge-btn:hover { background: linear-gradient(90deg, #5e17eb, #bc13fe); border-color: transparent; box-shadow: 0 0 15px rgba(188,19,254,0.4); transform: scale(1.05); }
+
+/* Identity Hub - Mature Gamified Styles */
+.metallic-gold {
+    background: linear-gradient(135deg, #BF953F 0%, #FCF6BA 45%, #B38728 50%, #FBF5B7 55%, #AA771C 100%);
+    box-shadow: 0 0 20px rgba(212, 175, 55, 0.4), inset 0 0 10px rgba(255, 255, 255, 0.5);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+.section-divider-purple {
+    border-left: 4px solid #A855F7;
+    padding-left: 12px;
+}
+
+.achievement-icon-card {
+    background: radial-gradient(circle, #2a2a2a 0%, #121212 100%);
+    border: 1px solid #333;
+    width: 64px;
+    height: 64px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+}
+
+.hub-stat-item {
+    background: #121212;
+    border: 1px solid #333;
+    border-radius: 16px;
+    padding: 16px;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    height: 110px;
+}
+
+.hub-stat-value {
+    font-size: 1.5rem;
+    font-weight: 900;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+}
+
+.hub-stat-label {
+    font-size: 0.65rem;
+    color: #888;
+    text-transform: uppercase;
+    font-weight: 800;
+    margin-top: 4px;
+    letter-spacing: 1px;
+}
+
+/* Common Utilities */
+.flex { display: flex; }
+.flex-col { flex-direction: column; }
+.flex-row { flex-direction: row; }
+.items-center { align-items: center; }
+.justify-between { justify-content: space-between; }
+.justify-center { justify-content: center; }
+.gap-2 { gap: 8px; }
+.gap-3 { gap: 12px; }
+.gap-4 { gap: 16px; }
+.gap-6 { gap: 24px; }
+.gap-8 { gap: 32px; }
+.px-6 { padding-left: 24px; padding-right: 24px; }
+.mt-4 { margin-top: 16px; }
+.mb-1 { margin-bottom: 4px; }
+.mb-6 { margin-bottom: 24px; }
+.mb-10 { margin-bottom: 40px; }
+.m-0 { margin: 0; }
+.text-2xl { font-size: 1.5rem; }
+.text-5xl { font-size: 3rem; }
+.text-lg { font-size: 1.125rem; }
+.text-xs { font-size: 0.75rem; }
+.font-bold { font-weight: 700; }
+.font-black { font-weight: 900; }
+.tracking-tight { letter-spacing: -0.025em; }
+.tracking-wider { letter-spacing: 0.05em; }
+.tracking-widest { letter-spacing: 0.1em; }
+.uppercase { text-transform: uppercase; }
+.truncate { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.rounded-2xl { border-radius: 16px; }
+.rounded-full { border-radius: 9999px; }
+.w-32 { width: 128px; }
+.h-44 { height: 176px; }
+.w-16 { width: 64px; }
+.h-16 { height: 64px; }
+.w-12 { width: 48px; }
+.h-12 { height: 48px; }
+.p-2 { padding: 8px; }
+.p-3 { padding: 12px; }
+.p-4 { padding: 16px; }
+.p-6 { padding: 24px; }
+.bg-zinc-800 { background-color: #27272a; }
+.text-gold-light { color: #F9E79F; }
+.text-purple-accent { color: #A855F7; }
+.text-zinc-500 { color: #71717a; }
+.text-zinc-400 { color: #a1a1aa; }
+.text-orange-500 { color: #f97316; }
+.text-yellow-500 { color: #eab308; }
+.text-blue-400 { color: #60a5fa; }
+.border-none { border: none; }
+.cursor-pointer { cursor: pointer; }

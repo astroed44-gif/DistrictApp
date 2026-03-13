@@ -1613,36 +1613,22 @@ window.renderOnboardingVibes = function() {
       <div class="ob-content">
          <h2 class="ob-step-title">Who Do You Like Playing With?</h2>
          
-         <style>
-             @keyframes floatIcon {
-                 0%, 100% { transform: translateY(0); }
-                 50% { transform: translateY(-5px); }
-             }
-             .animated-vibe-icon {
-                 font-size: 2.5rem;
-                 animation: floatIcon 3s ease-in-out infinite;
-             }
-             .vibe-fire { color: #ff6b6b; filter: drop-shadow(0 0 10px rgba(255,107,107,0.8)); }
-             .vibe-ice { color: #48dbfb; filter: drop-shadow(0 0 10px rgba(72,219,251,0.8)); }
-             .vibe-social { color: #feca57; filter: drop-shadow(0 0 10px rgba(254,202,87,0.8)); }
-             .vibe-serious { color: #1dd1a1; filter: drop-shadow(0 0 10px rgba(29,209,161,0.8)); }
-         </style>
          <div class="vibes-grid">
-            <div class="vibe-card ${window.onboardingData.vibes === 'Competitive players' ? 'selected' : ''}" onclick="selectVibe('Competitive players')" style="align-items: center; justify-items: center; text-align: center;">
-               <h3 style="margin-bottom: 12px;">Competitive players</h3>
-               <i class="fa-solid fa-fire animated-vibe-icon vibe-fire"></i>
+            <div class="vibe-card ${window.onboardingData.vibes === 'Competitive players' ? 'selected' : ''}" onclick="selectVibe('Competitive players')">
+               <h3>Competitive players</h3>
+               <span style="font-size: 2.5rem; text-shadow: 0px 4px 10px rgba(0,0,0,0.5);">🔥</span>
             </div>
-            <div class="vibe-card ${window.onboardingData.vibes === 'Chill players' ? 'selected' : ''}" onclick="selectVibe('Chill players')" style="align-items: center; justify-items: center; text-align: center;">
-               <h3 style="margin-bottom: 12px;">Chill players</h3>
-               <i class="fa-regular fa-snowflake animated-vibe-icon vibe-ice"></i>
+            <div class="vibe-card ${window.onboardingData.vibes === 'Chill players' ? 'selected' : ''}" onclick="selectVibe('Chill players')">
+               <h3>Chill players</h3>
+               <span style="font-size: 2.5rem; text-shadow: 0px 4px 10px rgba(0,0,0,0.5);">❄️</span>
             </div>
-            <div class="vibe-card ${window.onboardingData.vibes === 'Social groups' ? 'selected' : ''}" onclick="selectVibe('Social groups')" style="align-items: center; justify-items: center; text-align: center;">
-               <h3 style="margin-bottom: 12px;">Social groups</h3>
-               <i class="fa-solid fa-people-group animated-vibe-icon vibe-social"></i>
+            <div class="vibe-card ${window.onboardingData.vibes === 'Social groups' ? 'selected' : ''}" onclick="selectVibe('Social groups')">
+               <h3>Social groups</h3>
+               <span style="font-size: 2.5rem; text-shadow: 0px 4px 10px rgba(0,0,0,0.5);">👥</span>
             </div>
-            <div class="vibe-card ${window.onboardingData.vibes === 'Serious athletes' ? 'selected' : ''}" onclick="selectVibe('Serious athletes')" style="align-items: center; justify-items: center; text-align: center;">
-               <h3 style="margin-bottom: 12px;">Serious athletes</h3>
-               <i class="fa-solid fa-medal animated-vibe-icon vibe-serious"></i>
+            <div class="vibe-card ${window.onboardingData.vibes === 'Serious athletes' ? 'selected' : ''}" onclick="selectVibe('Serious athletes')">
+               <h3>Serious athletes</h3>
+               <span style="font-size: 2.5rem; text-shadow: 0px 4px 10px rgba(0,0,0,0.5);">🏅</span>
             </div>
          </div>
       </div>
@@ -1722,34 +1708,18 @@ window.renderOnboardingAvatar = function() {
       <div class="ob-content">
          <h2 class="ob-step-title">Create Your Player Look</h2>
          
-         <style>
-             @keyframes pulseAvatar {
-                 0%, 100% { transform: scale(1); filter: brightness(1); }
-                 50% { transform: scale(1.08); filter: brightness(1.3); }
-             }
-             .animated-avatar-icon {
-                 animation: pulseAvatar 2.5s ease-in-out infinite;
-             }
-             /* Overriding specific avatar styles for a colorful gaming aesthetic */
-             .avatar-ninja { background: linear-gradient(135deg, #FF9A9E 0%, #FECFEF 100%); color: #D62828 !important; border: none; box-shadow: 0 10px 20px rgba(214,40,40,0.4); }
-             .avatar-astronaut { background: linear-gradient(135deg, #a18cd1 0%, #fbc2eb 100%); color: #4A0E4E !important; border: none; box-shadow: 0 10px 20px rgba(74,14,78,0.4); }
-             .avatar-secret { background: linear-gradient(135deg, #84fab0 0%, #8fd3f4 100%); color: #028090 !important; border: none; box-shadow: 0 10px 20px rgba(2,128,144,0.4); }
-             .avatar-tie { background: linear-gradient(135deg, #fccb90 0%, #d57eeb 100%); color: #6A0572 !important; border: none; box-shadow: 0 10px 20px rgba(106,5,114,0.4); }
-             
-             .avatar-option.selected { border: 4px solid #fff; transform: scale(1.05); }
-         </style>
-         <div class="avatar-creation-area" style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 24px;">
-            <div class="avatar-option avatar-ninja" onclick="selectAvatar('fa-user-ninja', this)" style="height: 130px; border-radius: 20px;">
-               <i class="fa-solid fa-user-ninja animated-avatar-icon" style="font-size: 3.5rem;"></i>
+         <div class="avatar-creation-area">
+            <div class="avatar-option ${window.onboardingData.avatar === '🥷' ? 'selected' : ''}" onclick="selectAvatar('🥷', this)">
+               <span style="font-size: 3.5rem; text-shadow: 0px 4px 10px rgba(0,0,0,0.5);">🥷</span>
             </div>
-            <div class="avatar-option avatar-astronaut" onclick="selectAvatar('fa-user-astronaut', this)" style="height: 130px; border-radius: 20px;">
-               <i class="fa-solid fa-user-astronaut animated-avatar-icon" style="font-size: 3.5rem;"></i>
+            <div class="avatar-option ${window.onboardingData.avatar === '🧑‍🚀' ? 'selected' : ''}" onclick="selectAvatar('🧑‍🚀', this)">
+               <span style="font-size: 3.5rem; text-shadow: 0px 4px 10px rgba(0,0,0,0.5);">🧑‍🚀</span>
             </div>
-            <div class="avatar-option avatar-secret" onclick="selectAvatar('fa-user-secret', this)" style="height: 130px; border-radius: 20px;">
-               <i class="fa-solid fa-user-secret animated-avatar-icon" style="font-size: 3.5rem;"></i>
+            <div class="avatar-option ${window.onboardingData.avatar === '🕵️' ? 'selected' : ''}" onclick="selectAvatar('🕵️', this)">
+               <span style="font-size: 3.5rem; text-shadow: 0px 4px 10px rgba(0,0,0,0.5);">🕵️</span>
             </div>
-            <div class="avatar-option avatar-tie" onclick="selectAvatar('fa-user-tie', this)" style="height: 130px; border-radius: 20px;">
-               <i class="fa-solid fa-user-tie animated-avatar-icon" style="font-size: 3.5rem;"></i>
+            <div class="avatar-option ${window.onboardingData.avatar === '🤵' ? 'selected' : ''}" onclick="selectAvatar('🤵', this)">
+               <span style="font-size: 3.5rem; text-shadow: 0px 4px 10px rgba(0,0,0,0.5);">🤵</span>
             </div>
          </div>
          
@@ -1777,8 +1747,8 @@ window.renderOnboardingReveal = function() {
             <div class="uc-rating">99</div>
             <div class="uc-position">PRO</div>
          </div>
-         <div class="uc-avatar">
-            <i class="fa-solid ${d.avatar || 'fa-user'}"></i>
+         <div class="uc-avatar" style="font-size: 4.5rem; margin-top: 16px;">
+            <span style="filter: drop-shadow(0 10px 15px rgba(0,0,0,0.5));">${d.avatar || '🥷'}</span>
          </div>
          <div class="uc-name">ASHISH</div>
          <div class="uc-archetype">${d.archetype || 'PLAYER'}</div>
@@ -1829,7 +1799,7 @@ window.renderProfileHub = function() {
           <div class="metallic-gold w-32 h-44 rounded-2xl flex flex-col items-center justify-between p-3 relative overflow-hidden" style="box-shadow: 0 0 30px rgba(212, 175, 55, 0.4);">
             <span class="font-black text-white opacity-90 absolute top-3 left-3" style="font-size: 0.65rem;">99 PRO</span>
             <div class="flex-1 flex items-center justify-center w-full mt-4">
-               <i class="fa-solid ${d.avatar || 'fa-user-ninja'}" style="font-size: 3.5rem; color: rgba(255,255,255,0.9); text-shadow: 0px 4px 10px rgba(0,0,0,0.3);"></i>
+               <span style="font-size: 3.5rem; text-shadow: 0px 4px 10px rgba(0,0,0,0.3); line-height: 1;">${d.avatar || '🥷'}</span>
             </div>
             <p class="text-white font-black tracking-widest uppercase m-0" style="font-size: 0.75rem; text-shadow: 0px 2px 4px rgba(0,0,0,0.5);">${(d.playerName || 'ASHISH').toUpperCase()}</p>
           </div>

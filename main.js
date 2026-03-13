@@ -114,6 +114,42 @@ window.currentBundleData = {
    addons: []
 };
 
+const exclusiveGames = [
+  {
+    id: 'neon-badminton',
+    title: 'Neon Badminton Night',
+    time: 'Friday 10 PM',
+    venue: 'Elite Arena',
+    players: 12,
+    maxPlayers: 16,
+    image: 'https://images.unsplash.com/photo-1626224583764-f87db24ac4ea?w=600&auto=format&fit=crop',
+    color: '#bc13fe',
+    tag: 'District Exclusive'
+  },
+  {
+    id: 'glow-pickleball',
+    title: 'Glow Pickleball Social',
+    time: 'Saturday 9 PM',
+    venue: 'Sky Courts',
+    players: 8,
+    maxPlayers: 12,
+    image: 'https://images.unsplash.com/photo-1599474924187-334a4ae5bd3c?w=600&auto=format&fit=crop',
+    color: '#39FF14',
+    tag: 'Premium'
+  },
+  {
+    id: 'neon-football',
+    title: 'Neon Turf Football',
+    time: 'Friday Midnight',
+    venue: 'Urban Turf',
+    players: 10,
+    maxPlayers: 14,
+    image: 'https://images.unsplash.com/photo-1574629810360-7efbbe195018?w=600&auto=format&fit=crop',
+    color: '#4cc9f0',
+    tag: 'Selling Fast'
+  }
+];
+
 function getHeaderAndTabsHTML(activeTab) {
   return `
     <header class="home-header">

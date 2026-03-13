@@ -601,15 +601,53 @@ function renderProfile() {
       `;
   } else {
       nudgeHTML = `
-      <div class="onboarding-nudge glass fade-in" id="profile-nudge">
+      <style>
+      @keyframes cardShuffleY {
+         0% { opacity: 0; transform: translateY(100%) scale(0.8); filter: blur(4px); }
+         4% { opacity: 1; transform: translateY(0) scale(1); filter: blur(0px); box-shadow: 0 0 10px rgba(188,19,254,0.4); }
+         13% { opacity: 1; transform: translateY(-5%) scale(1); filter: blur(0px); box-shadow: 0 0 15px rgba(0,255,255,0.3); }
+         17% { opacity: 0; transform: translateY(-100%) scale(0.8); filter: blur(4px); }
+         17.1%, 100% { opacity: 0; transform: translateY(100%); }
+      }
+      .shuffled-card-item {
+         position: absolute; top: 0; left: 0; right: 0; bottom: 0;
+         border-radius: 8px; background: linear-gradient(135deg, #180924 0%, #0d0414 100%);
+         border: 2px solid #bc13fe; display: flex; flex-direction: column;
+         align-items: center; justify-content: center; opacity: 0;
+         animation: cardShuffleY 9s infinite cubic-bezier(0.25, 1, 0.5, 1);
+         overflow: hidden; box-shadow: 0 0 15px rgba(188,19,254,0.3);
+      }
+      .shuffled-card-item::after {
+         content: ''; position: absolute; top: -50%; left: -50%; right: -50%; bottom: -50%;
+         background: linear-gradient(45deg, transparent 40%, rgba(255,255,255,0.2) 50%, transparent 60%);
+         transform: translateX(-100%); animation: particleShimmer 9s infinite;
+      }
+      @keyframes particleShimmer { 0%, 5% { transform: translateX(-100%); } 12%, 100% { transform: translateX(100%); } }
+      .c-comp { animation-delay: 0s; } .c-comp::after { animation-delay: 0s; }
+      .c-chill { animation-delay: 1.5s; } .c-chill::after { animation-delay: 1.5s; }
+      .c-strat { animation-delay: 3s; } .c-strat::after { animation-delay: 3s; }
+      .c-talk { animation-delay: 4.5s; } .c-talk::after { animation-delay: 4.5s; }
+      .c-capt { animation-delay: 6s; } .c-capt::after { animation-delay: 6s; }
+      .c-warrior { animation-delay: 7.5s; } .c-warrior::after { animation-delay: 7.5s; }
+      .shuffled-emoji { font-size: 1.6rem; filter: drop-shadow(0 2px 4px rgba(0,0,0,0.5)); margin-bottom: 4px; }
+      .shuffled-label { font-size: 0.5rem; font-weight: 900; text-transform: uppercase; text-align: center; color: #fff; line-height: 1.1; }
+      </style>
+      <div class="onboarding-nudge glass fade-in" id="profile-nudge" style="align-items: center; padding: 24px; margin: 16px; margin-bottom: 24px;">
         <button class="nudge-close" onclick="document.getElementById('profile-nudge').style.display='none';"><i class="fa-solid fa-xmark"></i></button>
-        <div class="nudge-visual">
-           <div class="nudge-card-outline neon-glow"></div>
+        <div class="nudge-visual" style="width: 70px; height: 95px; margin-right: 20px;">
+           <div style="position: relative; width: 100%; height: 100%;">
+              <div class="shuffled-card-item c-comp"><span class="shuffled-emoji">⚡</span><span class="shuffled-label">Competitive</span></div>
+              <div class="shuffled-card-item c-chill"><span class="shuffled-emoji">😎</span><span class="shuffled-label">Chill</span></div>
+              <div class="shuffled-card-item c-strat"><span class="shuffled-emoji">🧠</span><span class="shuffled-label">Strategic</span></div>
+              <div class="shuffled-card-item c-talk"><span class="shuffled-emoji">🎤</span><span class="shuffled-label">Trash Talker</span></div>
+              <div class="shuffled-card-item c-capt"><span class="shuffled-emoji">🏆</span><span class="shuffled-label">Captain</span></div>
+              <div class="shuffled-card-item c-warrior"><span class="shuffled-emoji">🏸</span><span class="shuffled-label">Warrior</span></div>
+           </div>
         </div>
         <div class="nudge-content">
-           <h3>Create Your Player</h3>
-           <p>Your District Card shows who you are on the court.</p>
-           <button class="nudge-start-btn" onclick="navigateTo(screens.ONBOARDING_INTRO)">Start</button>
+           <h3 style="font-size: 1.25rem; font-weight: 900; margin-bottom: 4px; letter-spacing: -0.5px;">Create Your Player</h3>
+           <p style="font-size: 0.85rem; color: #ccc; margin-bottom: 12px; line-height: 1.3;">Your District Card shows who you are on the court.</p>
+           <button class="nudge-start-btn" style="background: #bc13fe; border: none; border-radius: 30px; padding: 8px 24px; font-weight: 900; font-size: 1rem; color: #fff; cursor: pointer;" onclick="navigateTo(screens.ONBOARDING_INTRO)">Start</button>
         </div>
       </div>
       `;

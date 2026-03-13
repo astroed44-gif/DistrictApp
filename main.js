@@ -18,7 +18,13 @@ const screens = {
   ONBOARDING_INTERESTS: 'onboarding_interests',
   ONBOARDING_AVATAR: 'onboarding_avatar',
   ONBOARDING_REVEAL: 'onboarding_reveal',
-  PROFILE_HUB: 'profile_hub'
+  PROFILE_HUB: 'profile_hub',
+  SWIPE_RIVALS: 'swipe_rivals',
+  RIVAL_PROFILE: 'rival_profile',
+  CHALLENGE_CREATE: 'challenge_create',
+  CHALLENGE_NOTIFICATION: 'challenge_notification',
+  CHALLENGE_VENUE: 'challenge_venue',
+  CHALLENGE_CONFIRM: 'challenge_confirm'
 };
 
 let currentScreen = screens.HOME;
@@ -316,6 +322,59 @@ function renderPlay() {
             <i class="fa-solid fa-chevron-right"></i>
         </div>
       </div>
+      
+      ${window.hasCompletedOnboarding ? `
+      <section class="rival-section" style="margin-top: 16px;">
+        <div class="section-header" style="justify-content: space-between; align-items: flex-end; display: flex; padding-right: 16px;">
+            <div>
+              <h3 class="section-title" style="margin:0; text-align: left; background: none; -webkit-text-fill-color: #fff; text-fill-color: #fff; font-size: 1.2rem; font-weight: 800;">Find Your Next Rival</h3>
+              <p style="margin: 4px 0 0 0; color: #888; font-size: 0.85rem; text-transform: none; letter-spacing: normal;">Swipe players near you</p>
+            </div>
+            <button style="background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); color: #fff; padding: 6px 12px; border-radius: 20px; font-size: 0.75rem; font-weight: bold; cursor: pointer;" onclick="navigateTo(screens.SWIPE_RIVALS)">
+               Start Swiping
+            </button>
+        </div>
+        <div class="rival-cards-scroll" style="display: flex; gap: 16px; overflow-x: auto; padding: 16px 0 16px 20px; scroll-snap-type: x mandatory;">
+            <div class="mini-rival-card" onclick="navigateTo(screens.RIVAL_PROFILE, 'rohan')" style="min-width: 240px; background: #121212; border: 1px solid rgba(255,255,255,0.1); border-radius: 16px; padding: 16px; scroll-snap-align: start; cursor: pointer; display: flex; flex-direction: column; gap: 12px; position: relative; overflow: hidden;">
+                <div style="display: flex; gap: 12px; align-items: center;">
+                    <span style="font-size: 2.5rem; text-shadow: 0px 4px 10px rgba(0,0,0,0.5);">🥷</span>
+                    <div>
+                        <h4 style="margin: 0; font-weight: 800; font-size: 1.1rem; color: #fff;">Rohan</h4>
+                        <p style="margin: 2px 0 0 0; font-size: 0.8rem; color: #bc13fe; font-weight: bold;">The Competitor</p>
+                    </div>
+                </div>
+                <div style="font-size: 0.8rem; color: #aaa;">
+                    <span style="color: #fff; font-weight: bold;">Traits:</span> Strategic • Friendly Rival
+                </div>
+                <div style="font-size: 0.8rem; color: #aaa;">
+                    <span style="color: #fff; font-weight: bold;">Sports:</span> Padel • Badminton
+                </div>
+                <div style="font-size: 0.8rem; color: #bc13fe; font-weight: 600;">
+                    <i class="fa-solid fa-location-dot"></i> 1.2 km away
+                </div>
+            </div>
+            
+            <div class="mini-rival-card" onclick="navigateTo(screens.RIVAL_PROFILE, 'kavita')" style="min-width: 240px; background: #121212; border: 1px solid rgba(255,255,255,0.1); border-radius: 16px; padding: 16px; scroll-snap-align: start; cursor: pointer; display: flex; flex-direction: column; gap: 12px; position: relative; overflow: hidden;">
+                <div style="display: flex; gap: 12px; align-items: center;">
+                    <span style="font-size: 2.5rem; text-shadow: 0px 4px 10px rgba(0,0,0,0.5);">🧑‍🚀</span>
+                    <div>
+                        <h4 style="margin: 0; font-weight: 800; font-size: 1.1rem; color: #fff;">Kavita</h4>
+                        <p style="margin: 2px 0 0 0; font-size: 0.8rem; color: #48dbfb; font-weight: bold;">The Weekend Warrior</p>
+                    </div>
+                </div>
+                <div style="font-size: 0.8rem; color: #aaa;">
+                    <span style="color: #fff; font-weight: bold;">Traits:</span> Relentless • Energetic
+                </div>
+                <div style="font-size: 0.8rem; color: #aaa;">
+                    <span style="color: #fff; font-weight: bold;">Sports:</span> Pickleball
+                </div>
+                <div style="font-size: 0.8rem; color: #48dbfb; font-weight: 600;">
+                    <i class="fa-solid fa-location-dot"></i> 2.5 km away
+                </div>
+            </div>
+        </div>
+      </section>
+      ` : ''}
 
       <section class="sport-grid-section">
         <div class="section-header">
@@ -925,6 +984,18 @@ function navigateTo(screen, id = null) {
     renderOnboardingAvatar();
   } else if (screen === screens.ONBOARDING_REVEAL) {
     renderOnboardingReveal();
+  } else if (screen === screens.SWIPE_RIVALS) {
+    renderSwipeRivals();
+  } else if (screen === screens.RIVAL_PROFILE) {
+    renderRivalProfile(id);
+  } else if (screen === screens.CHALLENGE_CREATE) {
+    renderChallengeCreate(id);
+  } else if (screen === screens.CHALLENGE_NOTIFICATION) {
+    renderChallengeNotification(id);
+  } else if (screen === screens.CHALLENGE_VENUE) {
+    renderChallengeVenue(id);
+  } else if (screen === screens.CHALLENGE_CONFIRM) {
+    renderChallengeConfirm(id);
   }
 }
 
@@ -1815,6 +1886,11 @@ window.renderProfileHub = function() {
           </div>
         </section>
 
+        <!-- Find Rivals Action -->
+        <button onclick="navigateTo(screens.SWIPE_RIVALS)" style="width: 100%; background: #fff; color: #000; padding: 16px; border-radius: 16px; font-weight: 900; font-size: 1.1rem; border: none; cursor: pointer; margin-bottom: 32px; display: flex; align-items: center; justify-content: center; gap: 12px;">
+            <i class="fa-solid fa-fire"></i> Find Rivals
+        </button>
+
         <!-- Player Stats Section -->
         <section class="mb-10">
           <h3 class="section-divider-purple text-xl font-black uppercase tracking-wider mb-6" style="font-style: italic; font-size: 1.2rem; margin: 0 0 20px 0;">Player Stats</h3>
@@ -1881,6 +1957,370 @@ window.renderProfileHub = function() {
           </div>
         </section>
       </main>
+    </div>
+  `;
+};
+
+// RIVAL DISCOVERY FLOW
+window.renderSwipeRivals = function() {
+  appContainer.innerHTML = `
+    <div class="profile-screen fade-in" style="background: #000; min-height: 100vh; display: flex; flex-direction: column;">
+      <header class="flex items-center" style="padding: 24px 20px 10px; display: flex; align-items: center;">
+        <button style="background: none; border: none; color: #fff; cursor: pointer; padding: 0; margin-right: 16px; display: flex;" onclick="navigateTo(screens.PLAY)">
+          <i class="fa-solid fa-arrow-left" style="font-size: 1.4rem;"></i>
+        </button>
+        <h1 class="text-2xl font-bold tracking-tight m-0" style="font-size: 1.5rem; text-align: center; flex: 1; margin-right: 36px;">Find Your Next Rival</h1>
+      </header>
+      
+      <main style="flex: 1; display: flex; flex-direction: column; justify-content: center; align-items: center; padding: 20px; position: relative; overflow: hidden;">
+        
+        <div class="swipe-card" id="swipe-card" style="width: 100%; max-width: 340px; background: #121212; border-radius: 20px; border: 1px solid rgba(255,255,255,0.1); box-shadow: 0 10px 30px rgba(0,0,0,0.8); overflow: hidden; position: relative;">
+          
+          <div style="background: linear-gradient(160deg, #1a1525 0%, #0d0a14 100%); padding: 30px 20px; display: flex; flex-direction: column; align-items: center; border-bottom: 1px solid rgba(255,255,255,0.05); cursor: pointer;" onclick="navigateTo(screens.RIVAL_PROFILE, 'rohan')">
+             <span style="font-size: 5rem; line-height: 1; filter: drop-shadow(0 10px 20px rgba(0,0,0,0.8)); margin-bottom: 20px;">🥷</span>
+             <h2 style="font-size: 2.2rem; font-weight: 900; margin: 0; color: #fff;">Rohan</h2>
+             <span style="color: #bc13fe; font-weight: bold; font-size: 1rem; margin-top: 4px;">The Competitor</span>
+          </div>
+          
+          <div style="padding: 24px;">
+             <div style="margin-bottom: 16px;">
+                <p style="margin: 0 0 6px 0; color: #888; font-size: 0.8rem; font-weight: bold; text-transform: uppercase;">Traits</p>
+                <div style="color: #fff; font-size: 0.95rem; font-weight: 500;">Strategic • Friendly Rival</div>
+             </div>
+             <div style="margin-bottom: 16px;">
+                <p style="margin: 0 0 6px 0; color: #888; font-size: 0.8rem; font-weight: bold; text-transform: uppercase;">Sports</p>
+                <div style="color: #fff; font-size: 0.95rem; font-weight: 500;">Padel • Badminton</div>
+             </div>
+             
+             <div style="display: flex; justify-content: space-between; margin-top: 24px; border-top: 1px solid #222; padding-top: 16px;">
+                <div style="display: flex; align-items: center; gap: 8px; color: #aaa; font-size: 0.9rem;">
+                   <i class="fa-solid fa-location-dot" style="color: #bc13fe;"></i> 1.2 km away
+                </div>
+                <div style="display: flex; align-items: center; gap: 8px; color: #aaa; font-size: 0.9rem;">
+                   <i class="fa-regular fa-clock" style="color: #48dbfb;"></i> 45 Sessions
+                </div>
+             </div>
+          </div>
+        </div>
+        
+        <div style="display: flex; gap: 30px; margin-top: 40px;">
+           <button style="width: 64px; height: 64px; border-radius: 50%; background: rgba(255,255,255,0.05); border: 2px solid rgba(255,255,255,0.1); color: #aaa; font-size: 1.5rem; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: all 0.2s;" onmousedown="this.style.transform='scale(0.9)';" onmouseup="this.style.transform='scale(1)';" onclick="navigateTo(screens.PLAY)">
+              <i class="fa-solid fa-xmark"></i>
+           </button>
+           <button style="width: 64px; height: 64px; border-radius: 50%; background: #fff; border: none; color: #000; font-size: 1.5rem; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: all 0.2s;" onmousedown="this.style.transform='scale(0.9)';" onmouseup="this.style.transform='scale(1)';" onclick="navigateTo(screens.CHALLENGE_CREATE, 'rohan')">
+              <i class="fa-solid fa-bolt"></i>
+           </button>
+        </div>
+      </main>
+    </div>
+  `;
+};
+
+window.renderRivalProfile = function(id) {
+  appContainer.innerHTML = `
+    <div class="profile-screen fade-in" style="background: #000; min-height: 100vh; color: #fff; padding-bottom: 40px;">
+      <header class="flex items-center" style="padding: 24px 20px 10px; display: flex; align-items: center;">
+        <button style="background: none; border: none; color: #fff; cursor: pointer; padding: 0; margin-right: 16px; display: flex;" onclick="navigateTo(screens.SWIPE_RIVALS)">
+          <i class="fa-solid fa-arrow-left" style="font-size: 1.4rem;"></i>
+        </button>
+      </header>
+      
+      <main class="px-6" style="padding: 0 24px;">
+        <section class="flex flex-row items-center gap-6 mt-4 mb-10" style="display: flex; gap: 24px; align-items: center; margin-bottom: 40px; margin-top: 10px;">
+          <div class="metallic-gold" style="width: 128px; height: 176px; border-radius: 16px; display: flex; flex-direction: column; align-items: center; justify-content: space-between; padding: 12px; position: relative; background: linear-gradient(135deg, #BF953F 0%, #FCF6BA 45%, #B38728 50%, #FBF5B7 55%, #AA771C 100%);">
+            <span style="font-weight: 900; color: #000; opacity: 0.6; position: absolute; top: 8px; left: 8px; font-size: 0.65rem;">99 PRO</span>
+            <div style="flex: 1; display: flex; align-items: center; justify-content: center; width: 100%; margin-top: 16px;">
+               <span style="font-size: 3.5rem; text-shadow: 0px 4px 10px rgba(0,0,0,0.3); line-height: 1;">🥷</span>
+            </div>
+            <p style="color: #000; font-weight: 900; letter-spacing: 2px; text-transform: uppercase; margin: 0; font-size: 0.75rem;">ROHAN</p>
+          </div>
+          
+          <div>
+            <h2 style="font-size: 2.5rem; font-weight: 900; margin: 0 0 4px 0; letter-spacing: -0.5px;">Rohan</h2>
+            <div style="display: flex; align-items: center; gap: 8px;">
+              <span style="color: #bc13fe; font-weight: bold;">Level 15</span>
+              <span style="color: #666;">•</span>
+              <span style="color: #fff; font-weight: 500;">The Competitor</span>
+            </div>
+            <div style="margin-top: 12px; font-size: 0.85rem; color: #aaa;">
+               Strategic • Friendly Rival
+            </div>
+          </div>
+        </section>
+
+        <section style="margin-bottom: 40px;">
+          <h3 class="section-divider-purple" style="font-style: italic; font-size: 1.2rem; margin: 0 0 20px 0; font-weight: 900; text-transform: uppercase; border-left: 3px solid #bc13fe; padding-left: 10px;">Player Stats</h3>
+          <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px;">
+            <div style="background: #111; border: 1px solid #333; border-radius: 12px; padding: 16px; display: flex; flex-direction: column; align-items: center; justify-content: center;">
+               <div style="font-weight: 900; font-size: 1.3rem; display: flex; align-items: center; gap: 6px; margin-bottom: 4px;">
+                 <i class="fa-regular fa-clock" style="color: #48dbfb;"></i>
+                 <span>45</span>
+               </div>
+               <p style="font-size: 0.7rem; color: #888; text-transform: uppercase; font-weight: 800; margin: 0;">Sessions</p>
+            </div>
+            <div style="background: #111; border: 1px solid #333; border-radius: 12px; padding: 16px; display: flex; flex-direction: column; align-items: center; justify-content: center;">
+               <div style="font-weight: 900; font-size: 1.1rem; display: flex; align-items: center; gap: 6px; margin-bottom: 4px;">
+                 <i class="fa-solid fa-trophy" style="color: #feca57;"></i>
+                 <span>Padel</span>
+               </div>
+               <p style="font-size: 0.7rem; color: #888; text-transform: uppercase; font-weight: 800; margin: 0;">Top Sport</p>
+            </div>
+            <div style="background: #111; border: 1px solid #333; border-radius: 12px; padding: 16px; display: flex; flex-direction: column; align-items: center; justify-content: center;">
+               <div style="font-weight: 900; font-size: 1.3rem; display: flex; align-items: center; gap: 6px; margin-bottom: 4px;">
+                 <span style="color: #ff6b6b;">6</span>
+                 <span>🔥</span>
+               </div>
+               <p style="font-size: 0.7rem; color: #888; text-transform: uppercase; font-weight: 800; margin: 0;">Win Streak</p>
+            </div>
+          </div>
+        </section>
+
+        <section style="margin-bottom: 40px;">
+          <h3 class="section-divider-purple" style="font-style: italic; font-size: 1.2rem; margin: 0 0 20px 0; font-weight: 900; text-transform: uppercase; border-left: 3px solid #bc13fe; padding-left: 10px;">Achievements</h3>
+          <div style="display: flex; gap: 32px; overflow-x: auto; padding-bottom: 8px;">
+             <div style="display: flex; flex-direction: column; align-items: center; gap: 8px;">
+                 <div style="width: 56px; height: 56px; border-radius: 50%; background: #111; border: 2px solid rgba(239, 68, 68, 0.5); display: flex; align-items: center; justify-content: center; font-size: 1.5rem;">🔥</div>
+                 <span style="font-size: 11px; font-weight: bold; color: #aaa;">Hot Streak</span>
+             </div>
+             <div style="display: flex; flex-direction: column; align-items: center; gap: 8px;">
+                 <div style="width: 56px; height: 56px; border-radius: 50%; background: #111; border: 2px solid rgba(59, 130, 246, 0.5); display: flex; align-items: center; justify-content: center; font-size: 1.5rem;">⭐</div>
+                 <span style="font-size: 11px; font-weight: bold; color: #aaa;">MVP</span>
+             </div>
+          </div>
+        </section>
+
+        <button onclick="navigateTo(screens.CHALLENGE_CREATE, 'rohan')" style="width: 100%; padding: 18px; border-radius: 16px; background: #fff; color: #000; border: none; font-size: 1.1rem; font-weight: 900; cursor: pointer; display: flex; justify-content: center; align-items: center; gap: 10px; box-shadow: 0 4px 14px rgba(255,255,255,0.2);">
+           <i class="fa-solid fa-bolt"></i> Challenge Player
+        </button>
+
+      </main>
+    </div>
+  `;
+};
+
+window.challengeState = window.challengeState || { sport: 'Padel', time: 'Sat, 7:00 PM', venue: 'Elite Arena' };
+
+window.updateChallengeSport = function(s) { window.challengeState.sport = s; renderChallengeCreate(); };
+window.updateChallengeTime = function(t) { window.challengeState.time = t; renderChallengeCreate(); };
+window.updateChallengeVenue = function(v) { window.challengeState.venue = v; renderChallengeCreate(); };
+
+window.renderChallengeCreate = function(id) {
+  const s = window.challengeState;
+  
+  appContainer.innerHTML = `
+    <div class="profile-screen fade-in" style="background: #000; min-height: 100vh; color: #fff; padding-bottom: 40px;">
+      <header class="flex items-center" style="padding: 24px 20px 10px; display: flex; align-items: center;">
+        <button style="background: none; border: none; color: #fff; cursor: pointer; padding: 0; margin-right: 16px; display: flex;" onclick="navigateTo(screens.SWIPE_RIVALS)">
+          <i class="fa-solid fa-arrow-left" style="font-size: 1.4rem;"></i>
+        </button>
+        <h1 class="font-black tracking-tight m-0" style="font-size: 1.5rem; text-align: center; flex: 1; margin-right: 36px;">Challenge Rohan</h1>
+      </header>
+      
+      <main class="px-6" style="padding: 0 24px; margin-top: 20px;">
+        
+        <div style="margin-bottom: 32px;">
+           <h3 style="font-size: 1.1rem; font-weight: 800; margin-bottom: 16px;">Choose Sport</h3>
+           <div style="background: #111; border: 1px solid #333; border-radius: 16px; overflow: hidden;">
+              ${['Padel', 'Badminton', 'Football'].map((sport, idx) => `
+              <div onclick="updateChallengeSport('${sport}')" style="padding: 16px; border-bottom: ${idx < 2 ? '1px solid #222' : 'none'}; display: flex; justify-content: space-between; align-items: center; cursor: pointer; ${s.sport === sport ? 'background: rgba(255,255,255,0.05); color: #fff;' : 'color: #aaa;'}">
+                 <span style="font-weight: 700;">${sport}</span>
+                 ${s.sport === sport ? '<i class="fa-solid fa-circle-check" style="color: #fff; font-size: 1.2rem;"></i>' : '<i class="fa-regular fa-circle" style="font-size: 1.2rem;"></i>'}
+              </div>
+              `).join('')}
+           </div>
+        </div>
+
+        <div style="margin-bottom: 32px;">
+           <h3 style="font-size: 1.1rem; font-weight: 800; margin-bottom: 16px;">Suggested Time</h3>
+           <div style="display: flex; gap: 12px; overflow-x: auto; padding-bottom: 8px;">
+              ${['Sat, 7:00 PM', 'Sun, 8:00 AM', 'Custom Time'].map(time => `
+              <div onclick="updateChallengeTime('${time}')" style="padding: 12px 20px; border-radius: 12px; white-space: nowrap; cursor: pointer; font-weight: 800; transition: 0.2s; ${s.time === time ? 'background: #fff; color: #000; border: 1px solid #fff;' : 'background: #111; border: 1px solid #333; color: #fff;'}">
+                 ${time}
+              </div>
+              `).join('')}
+           </div>
+        </div>
+
+        <div style="margin-bottom: 40px;">
+           <h3 style="font-size: 1.1rem; font-weight: 800; margin-bottom: 16px;">Suggested Venue</h3>
+           ${[{name: 'Elite Arena', dist: '1.2 km away'}, {name: 'City Sports Club', dist: '2.5 km away'}].map(venue => `
+           <div onclick="updateChallengeVenue('${venue.name}')" style="background: #111; border: 1px solid #333; border-radius: 16px; padding: 16px; display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; cursor: pointer;">
+              <div>
+                 <h4 style="margin: 0 0 4px 0; font-weight: 800; ${s.venue === venue.name ? 'color: #fff;' : 'color: #aaa;'}">${venue.name}</h4>
+                 <p style="margin: 0; color: #aaa; font-size: 0.85rem;"><i class="fa-solid fa-location-dot"></i> ${venue.dist}</p>
+              </div>
+              ${s.venue === venue.name ? '<i class="fa-solid fa-circle-check" style="color: #fff; font-size: 1.2rem;"></i>' : '<i class="fa-regular fa-circle" style="font-size: 1.2rem; color: #555;"></i>'}
+           </div>
+           `).join('')}
+        </div>
+
+        <button onclick="navigateTo(screens.CHALLENGE_NOTIFICATION)" style="width: 100%; padding: 18px; border-radius: 16px; background: #fff; color: #000; border: none; font-size: 1.1rem; font-weight: 900; cursor: pointer; display: flex; justify-content: center; align-items: center; box-shadow: 0 4px 14px rgba(255,255,255,0.2);">
+           Send Challenge
+        </button>
+      </main>
+    </div>
+  `;
+};
+
+window.renderChallengeNotification = function(id) {
+  // Mocking the receiving side for demonstration
+  appContainer.innerHTML = `
+    <div class="profile-screen fade-in" style="background: #000; min-height: 100vh; color: #fff; padding: 40px 24px; display: flex; flex-direction: column; justify-content: center;">
+      
+      <div style="text-align: center; margin-bottom: 32px;">
+         <div style="width: 80px; height: 80px; background: #bc13fe; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 20px; box-shadow: 0 0 30px rgba(188, 19, 254, 0.5);">
+            <i class="fa-solid fa-bolt" style="font-size: 2.5rem; color: #fff;"></i>
+         </div>
+         <h1 style="font-weight: 900; font-size: 2rem; margin: 0 0 8px 0;">You've Been Challenged!</h1>
+         <p style="color: #aaa; font-size: 1.1rem; margin: 0;">Ashish challenged you to a match.</p>
+      </div>
+      
+      <div style="background: #121212; border: 1px solid #333; border-radius: 20px; padding: 24px; margin-bottom: 40px;">
+         <div style="display: flex; gap: 16px; align-items: center; margin-bottom: 24px; border-bottom: 1px solid #222; padding-bottom: 20px;">
+            <div style="width: 60px; height: 60px; border-radius: 50%; background: #222; display: flex; align-items: center; justify-content: center;">
+                <span style="font-size: 2rem; filter: drop-shadow(0 4px 6px rgba(0,0,0,0.5));">${window.onboardingData.avatar || '🥷'}</span>
+            </div>
+            <div>
+               <h3 style="margin: 0 0 4px 0; font-weight: 800; font-size: 1.2rem;">Ashish</h3>
+               <p style="margin: 0; color: #bc13fe; font-size: 0.85rem; font-weight: bold;">Level 12 • The Competitor</p>
+            </div>
+         </div>
+         
+         <div style="display: flex; flex-direction: column; gap: 16px;">
+            <div style="display: flex; justify-content: space-between;">
+               <span style="color: #888;">Sport</span>
+               <span style="font-weight: bold;">Padel</span>
+            </div>
+            <div style="display: flex; justify-content: space-between;">
+               <span style="color: #888;">Time</span>
+               <span style="font-weight: bold;">Sat, 7:00 PM</span>
+            </div>
+            <div style="display: flex; justify-content: space-between;">
+               <span style="color: #888;">Venue</span>
+               <span style="font-weight: bold;">Elite Arena</span>
+            </div>
+         </div>
+      </div>
+      
+      <div style="display: flex; flex-direction: column; gap: 16px;">
+         <button onclick="navigateTo(screens.CHALLENGE_VENUE)" style="width: 100%; padding: 18px; border-radius: 16px; background: #fff; color: #000; border: none; font-size: 1.1rem; font-weight: 900; cursor: pointer;">
+            Accept
+         </button>
+         <div style="display: flex; gap: 16px;">
+            <button onclick="navigateTo(screens.PLAY)" style="flex: 1; padding: 16px; border-radius: 16px; background: transparent; color: #fff; border: 1px solid #444; font-size: 1rem; font-weight: bold; cursor: pointer;">
+               Decline
+            </button>
+            <button onclick="navigateTo(screens.CHALLENGE_CREATE)" style="flex: 1; padding: 16px; border-radius: 16px; background: #222; color: #fff; border: none; font-size: 1rem; font-weight: bold; cursor: pointer;">
+               Counter
+            </button>
+         </div>
+      </div>
+    </div>
+  `;
+};
+
+window.renderChallengeVenue = function() {
+  appContainer.innerHTML = `
+    <div class="profile-screen fade-in" style="background: #000; min-height: 100vh; color: #fff; padding-bottom: 40px;">
+      <header class="flex items-center" style="padding: 24px 20px 10px; display: flex; align-items: center; justify-content: space-between;">
+        <button style="background: none; border: none; color: #fff; cursor: pointer; padding: 0; display: flex; flex: 1;" onclick="navigateTo(screens.CHALLENGE_NOTIFICATION)">
+          <i class="fa-solid fa-arrow-left" style="font-size: 1.4rem;"></i>
+        </button>
+        <h1 class="font-black tracking-tight m-0" style="font-size: 1.3rem;">Choose a Venue</h1>
+        <div style="width: 36px;"></div>
+      </header>
+      
+      <main class="px-6" style="padding: 0 20px; margin-top: 16px;">
+        <div style="background: #121212; border-radius: 20px; overflow: hidden; border: 1px solid #333; margin-bottom: 24px;">
+           <div style="height: 140px; background-image: url('https://images.unsplash.com/photo-1622279457486-62dcc4a631d6?w=800&q=80'); background-size: cover; background-position: center;"></div>
+           <div style="padding: 20px;">
+              <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 8px;">
+                 <h3 style="margin: 0; font-size: 1.3rem; font-weight: 800;">Elite Arena</h3>
+                 <span style="background: #bc13fe; color: #fff; padding: 4px 8px; border-radius: 8px; font-size: 0.8rem; font-weight: bold;">4.8 <i class="fa-solid fa-star" style="font-size: 0.7rem;"></i></span>
+              </div>
+              <p style="margin: 0 0 16px 0; color: #aaa; font-size: 0.9rem;">1.2 km away</p>
+              <div style="display: flex; gap: 12px; margin-bottom: 20px;">
+                 <div style="background: rgba(255,255,255,0.05); padding: 8px 12px; border-radius: 8px; font-size: 0.85rem; font-weight: bold;"><i class="fa-solid fa-check" style="color: #1dd1a1; margin-right: 4px;"></i> 2 Courts Available</div>
+              </div>
+              <button onclick="navigateTo(screens.CHALLENGE_CONFIRM)" style="width: 100%; padding: 14px; border-radius: 12px; background: #fff; color: #000; border: none; font-weight: 900; font-size: 1rem; cursor: pointer;">
+                 Book Court ₹800
+              </button>
+           </div>
+        </div>
+        
+        <div style="background: #121212; border-radius: 20px; overflow: hidden; border: 1px solid #333;">
+           <div style="height: 140px; background-image: url('https://images.unsplash.com/photo-1554068865-c3ce14f1412b?w=800&q=80'); background-size: cover; background-position: center;"></div>
+           <div style="padding: 20px;">
+              <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 8px;">
+                 <h3 style="margin: 0; font-size: 1.3rem; font-weight: 800;">City Sports Club</h3>
+                 <span style="background: #333; color: #fff; padding: 4px 8px; border-radius: 8px; font-size: 0.8rem; font-weight: bold;">4.2 <i class="fa-solid fa-star" style="font-size: 0.7rem;"></i></span>
+              </div>
+              <p style="margin: 0 0 16px 0; color: #aaa; font-size: 0.9rem;">2.5 km away</p>
+              <div style="display: flex; gap: 12px; margin-bottom: 20px;">
+                 <div style="background: rgba(255,255,255,0.05); padding: 8px 12px; border-radius: 8px; font-size: 0.85rem; font-weight: bold;"><i class="fa-solid fa-clock" style="color: #feca57; margin-right: 4px;"></i> Slots filling fast</div>
+              </div>
+              <button onclick="navigateTo(screens.CHALLENGE_CONFIRM)" style="width: 100%; padding: 14px; border-radius: 12px; background: rgba(255,255,255,0.1); color: #fff; border: none; font-weight: 900; font-size: 1rem; cursor: pointer;">
+                 View Availability
+              </button>
+           </div>
+        </div>
+      </main>
+    </div>
+  `;
+};
+
+window.renderChallengeConfirm = function() {
+  appContainer.innerHTML = `
+    <div class="profile-screen fade-in" style="background: #000; min-height: 100vh; color: #fff; padding: 60px 24px 40px; display: flex; flex-direction: column; align-items: center; text-align: center;">
+      
+      <div style="width: 100px; height: 100px; background: rgba(29, 209, 161, 0.2); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin-bottom: 24px; border: 2px solid #1dd1a1; box-shadow: 0 0 40px rgba(29, 209, 161, 0.4);">
+         <i class="fa-solid fa-check" style="font-size: 3rem; color: #1dd1a1;"></i>
+      </div>
+      
+      <h1 style="font-weight: 900; font-size: 2.5rem; margin: 0 0 12px 0;">Match Confirmed!</h1>
+      <p style="color: #aaa; font-size: 1.1rem; margin: 0 0 40px 0;">Get ready to dominate the court.</p>
+      
+      <div style="background: #111; border: 1px solid #333; border-radius: 20px; padding: 30px; width: 100%; max-width: 400px; position: relative;">
+         
+         <!-- Versus Header -->
+         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px;">
+            <div style="display: flex; flex-direction: column; align-items: center; gap: 8px;">
+               <span style="font-size: 2.5rem; filter: drop-shadow(0 4px 6px rgba(0,0,0,0.5));">${window.onboardingData.avatar || '🥷'}</span>
+               <span style="font-weight: 800; font-size: 1rem;">Ashish</span>
+            </div>
+            
+            <div style="font-weight: 900; font-size: 1.5rem; color: #bc13fe; font-style: italic;">VS</div>
+            
+            <div style="display: flex; flex-direction: column; align-items: center; gap: 8px;">
+               <span style="font-size: 2.5rem; filter: drop-shadow(0 4px 6px rgba(0,0,0,0.5));">🥷</span>
+               <span style="font-weight: 800; font-size: 1rem;">Rohan</span>
+            </div>
+         </div>
+         
+         <div style="text-align: left; padding-top: 20px; border-top: 1px solid #222;">
+            <div style="margin-bottom: 16px;">
+               <span style="color: #888; font-size: 0.8rem; text-transform: uppercase; font-weight: bold;">Sport</span>
+               <div style="font-size: 1.1rem; font-weight: 800;">Padel</div>
+            </div>
+            <div style="margin-bottom: 16px;">
+               <span style="color: #888; font-size: 0.8rem; text-transform: uppercase; font-weight: bold;">Venue</span>
+               <div style="font-size: 1.1rem; font-weight: 800;">Elite Arena</div>
+            </div>
+            <div>
+               <span style="color: #888; font-size: 0.8rem; text-transform: uppercase; font-weight: bold;">Time</span>
+               <div style="font-size: 1.1rem; font-weight: 800; color: #bc13fe;">Sat, 7:00 PM</div>
+            </div>
+         </div>
+      </div>
+      
+      <div style="margin-top: 40px; display: flex; flex-direction: column; gap: 16px; width: 100%; max-width: 400px;">
+         <button onclick="navigateTo(screens.HOME)" style="width: 100%; padding: 18px; border-radius: 16px; background: #fff; color: #000; border: none; font-size: 1.1rem; font-weight: 900; cursor: pointer; display: flex; justify-content: center; align-items: center; gap: 10px;">
+            <i class="fa-regular fa-calendar-plus"></i> Add to Calendar
+         </button>
+         <button onclick="navigateTo(screens.PROFILE_HUB)" style="width: 100%; padding: 18px; border-radius: 16px; background: rgba(255,255,255,0.1); color: #fff; border: none; font-size: 1.1rem; font-weight: bold; cursor: pointer; display: flex; justify-content: center; align-items: center; gap: 10px;">
+            <i class="fa-solid fa-arrow-up-right-from-square"></i> Share Match
+         </button>
+      </div>
     </div>
   `;
 };

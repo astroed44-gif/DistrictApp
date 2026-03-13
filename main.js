@@ -1613,22 +1613,36 @@ window.renderOnboardingVibes = function() {
       <div class="ob-content">
          <h2 class="ob-step-title">Who Do You Like Playing With?</h2>
          
+         <style>
+             @keyframes floatIcon {
+                 0%, 100% { transform: translateY(0); }
+                 50% { transform: translateY(-5px); }
+             }
+             .animated-vibe-icon {
+                 font-size: 2.5rem;
+                 animation: floatIcon 3s ease-in-out infinite;
+             }
+             .vibe-fire { color: #ff6b6b; filter: drop-shadow(0 0 10px rgba(255,107,107,0.8)); }
+             .vibe-ice { color: #48dbfb; filter: drop-shadow(0 0 10px rgba(72,219,251,0.8)); }
+             .vibe-social { color: #feca57; filter: drop-shadow(0 0 10px rgba(254,202,87,0.8)); }
+             .vibe-serious { color: #1dd1a1; filter: drop-shadow(0 0 10px rgba(29,209,161,0.8)); }
+         </style>
          <div class="vibes-grid">
-            <div class="vibe-card ${window.onboardingData.vibes === 'Competitive players' ? 'selected' : ''}" onclick="selectVibe('Competitive players')">
-               <h3>Competitive players</h3>
-               <i class="fa-solid fa-fire vibe-icon"></i>
+            <div class="vibe-card ${window.onboardingData.vibes === 'Competitive players' ? 'selected' : ''}" onclick="selectVibe('Competitive players')" style="align-items: center; justify-items: center; text-align: center;">
+               <h3 style="margin-bottom: 12px;">Competitive players</h3>
+               <i class="fa-solid fa-fire animated-vibe-icon vibe-fire"></i>
             </div>
-            <div class="vibe-card ${window.onboardingData.vibes === 'Chill players' ? 'selected' : ''}" onclick="selectVibe('Chill players')">
-               <h3>Chill players</h3>
-               <i class="fa-regular fa-snowflake vibe-icon"></i>
+            <div class="vibe-card ${window.onboardingData.vibes === 'Chill players' ? 'selected' : ''}" onclick="selectVibe('Chill players')" style="align-items: center; justify-items: center; text-align: center;">
+               <h3 style="margin-bottom: 12px;">Chill players</h3>
+               <i class="fa-regular fa-snowflake animated-vibe-icon vibe-ice"></i>
             </div>
-            <div class="vibe-card ${window.onboardingData.vibes === 'Social groups' ? 'selected' : ''}" onclick="selectVibe('Social groups')">
-               <h3>Social groups</h3>
-               <i class="fa-solid fa-people-group vibe-icon"></i>
+            <div class="vibe-card ${window.onboardingData.vibes === 'Social groups' ? 'selected' : ''}" onclick="selectVibe('Social groups')" style="align-items: center; justify-items: center; text-align: center;">
+               <h3 style="margin-bottom: 12px;">Social groups</h3>
+               <i class="fa-solid fa-people-group animated-vibe-icon vibe-social"></i>
             </div>
-            <div class="vibe-card ${window.onboardingData.vibes === 'Serious athletes' ? 'selected' : ''}" onclick="selectVibe('Serious athletes')">
-               <h3>Serious athletes</h3>
-               <i class="fa-solid fa-medal vibe-icon"></i>
+            <div class="vibe-card ${window.onboardingData.vibes === 'Serious athletes' ? 'selected' : ''}" onclick="selectVibe('Serious athletes')" style="align-items: center; justify-items: center; text-align: center;">
+               <h3 style="margin-bottom: 12px;">Serious athletes</h3>
+               <i class="fa-solid fa-medal animated-vibe-icon vibe-serious"></i>
             </div>
          </div>
       </div>
@@ -1708,18 +1722,34 @@ window.renderOnboardingAvatar = function() {
       <div class="ob-content">
          <h2 class="ob-step-title">Create Your Player Look</h2>
          
-         <div class="avatar-creation-area">
-            <div class="avatar-option" onclick="selectAvatar('fa-user-ninja', this)">
-               <i class="fa-solid fa-user-ninja"></i>
+         <style>
+             @keyframes pulseAvatar {
+                 0%, 100% { transform: scale(1); filter: brightness(1); }
+                 50% { transform: scale(1.08); filter: brightness(1.3); }
+             }
+             .animated-avatar-icon {
+                 animation: pulseAvatar 2.5s ease-in-out infinite;
+             }
+             /* Overriding specific avatar styles for a colorful gaming aesthetic */
+             .avatar-ninja { background: linear-gradient(135deg, #FF9A9E 0%, #FECFEF 100%); color: #D62828 !important; border: none; box-shadow: 0 10px 20px rgba(214,40,40,0.4); }
+             .avatar-astronaut { background: linear-gradient(135deg, #a18cd1 0%, #fbc2eb 100%); color: #4A0E4E !important; border: none; box-shadow: 0 10px 20px rgba(74,14,78,0.4); }
+             .avatar-secret { background: linear-gradient(135deg, #84fab0 0%, #8fd3f4 100%); color: #028090 !important; border: none; box-shadow: 0 10px 20px rgba(2,128,144,0.4); }
+             .avatar-tie { background: linear-gradient(135deg, #fccb90 0%, #d57eeb 100%); color: #6A0572 !important; border: none; box-shadow: 0 10px 20px rgba(106,5,114,0.4); }
+             
+             .avatar-option.selected { border: 4px solid #fff; transform: scale(1.05); }
+         </style>
+         <div class="avatar-creation-area" style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 24px;">
+            <div class="avatar-option avatar-ninja" onclick="selectAvatar('fa-user-ninja', this)" style="height: 130px; border-radius: 20px;">
+               <i class="fa-solid fa-user-ninja animated-avatar-icon" style="font-size: 3.5rem;"></i>
             </div>
-            <div class="avatar-option" onclick="selectAvatar('fa-user-astronaut', this)">
-               <i class="fa-solid fa-user-astronaut"></i>
+            <div class="avatar-option avatar-astronaut" onclick="selectAvatar('fa-user-astronaut', this)" style="height: 130px; border-radius: 20px;">
+               <i class="fa-solid fa-user-astronaut animated-avatar-icon" style="font-size: 3.5rem;"></i>
             </div>
-            <div class="avatar-option" onclick="selectAvatar('fa-user-secret', this)">
-               <i class="fa-solid fa-user-secret"></i>
+            <div class="avatar-option avatar-secret" onclick="selectAvatar('fa-user-secret', this)" style="height: 130px; border-radius: 20px;">
+               <i class="fa-solid fa-user-secret animated-avatar-icon" style="font-size: 3.5rem;"></i>
             </div>
-            <div class="avatar-option" onclick="selectAvatar('fa-user-tie', this)">
-               <i class="fa-solid fa-user-tie"></i>
+            <div class="avatar-option avatar-tie" onclick="selectAvatar('fa-user-tie', this)" style="height: 130px; border-radius: 20px;">
+               <i class="fa-solid fa-user-tie animated-avatar-icon" style="font-size: 3.5rem;"></i>
             </div>
          </div>
          

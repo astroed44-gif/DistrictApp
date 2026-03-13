@@ -2232,7 +2232,7 @@ window.renderChallengeVenue = function() {
       
       <main class="px-6" style="padding: 0 20px; margin-top: 16px;">
         <div style="background: #121212; border-radius: 20px; overflow: hidden; border: 1px solid #333; margin-bottom: 24px;">
-           <div style="height: 140px; background-image: url('https://images.unsplash.com/photo-1622279457486-62dcc4a631d6?w=800&q=80'); background-size: cover; background-position: center;"></div>
+           <div style="height: 140px; background-image: url('/images/elite_arena.png'); background-size: cover; background-position: center;"></div>
            <div style="padding: 20px;">
               <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 8px;">
                  <h3 style="margin: 0; font-size: 1.3rem; font-weight: 800;">Elite Arena</h3>
@@ -2249,7 +2249,7 @@ window.renderChallengeVenue = function() {
         </div>
         
         <div style="background: #121212; border-radius: 20px; overflow: hidden; border: 1px solid #333;">
-           <div style="height: 140px; background-image: url('https://images.unsplash.com/photo-1554068865-c3ce14f1412b?w=800&q=80'); background-size: cover; background-position: center;"></div>
+           <div style="height: 140px; background-image: url('/images/city_sports_club.png'); background-size: cover; background-position: center;"></div>
            <div style="padding: 20px;">
               <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 8px;">
                  <h3 style="margin: 0; font-size: 1.3rem; font-weight: 800;">City Sports Club</h3>

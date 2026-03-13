@@ -1817,7 +1817,7 @@ window.renderProfileHub = function() {
 
         <!-- Player Stats Section -->
         <section class="mb-10">
-          <h3 class="section-divider-purple text-xl font-black uppercase tracking-wider mb-6 m-0" style="font-style: italic; font-size: 1.2rem;">Player Stats</h3>
+          <h3 class="section-divider-purple text-xl font-black uppercase tracking-wider mb-6" style="font-style: italic; font-size: 1.2rem; margin: 0 0 20px 0;">Player Stats</h3>
           <div class="grid grid-cols-3 gap-3" style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px;">
             <div class="hub-stat-item">
                <div class="hub-stat-value">
@@ -1845,7 +1845,7 @@ window.renderProfileHub = function() {
 
         <!-- Achievements Section -->
         <section class="mb-10">
-          <h3 class="section-divider-purple text-xl font-black uppercase tracking-wider mb-6 m-0" style="font-style: italic; font-size: 1.2rem;">Achievements</h3>
+          <h3 class="section-divider-purple text-xl font-black uppercase tracking-wider mb-6" style="font-style: italic; font-size: 1.2rem; margin: 0 0 20px 0;">Achievements</h3>
           <div class="flex gap-8 overflow-x-auto pb-2 no-scrollbar" style="display: flex; gap: 32px; overflow-x: auto;">
              <div class="flex flex-col items-center gap-2" style="display: flex; flex-direction: column; align-items: center; gap: 8px;">
                  <div class="achievement-icon-card" style="border-color: rgba(212, 175, 55, 0.5);">🏅</div>
@@ -1864,7 +1864,7 @@ window.renderProfileHub = function() {
 
         <!-- Rivalries Section -->
         <section class="mb-6">
-          <h3 class="section-divider-purple text-xl font-black uppercase tracking-wider mb-6 m-0" style="font-style: italic; font-size: 1.2rem;">Rivalries</h3>
+          <h3 class="section-divider-purple text-xl font-black uppercase tracking-wider mb-6" style="font-style: italic; font-size: 1.2rem; margin: 0 0 20px 0;">Rivalries</h3>
           <div class="bg-card-bg p-4 rounded-2xl border border-zinc-800 flex items-center justify-between" style="display: flex; align-items: center; justify-content: space-between; background: #121212; border: 1px solid #333; padding: 16px; border-radius: 16px;">
             <div class="flex items-center gap-4" style="display: flex; align-items: center; gap: 16px;">
               <div class="w-12 h-12 bg-zinc-800 rounded-full flex items-center justify-center" style="width: 48px; height: 48px; background: #27272a; border-radius: 50%; display: flex; align-items: center; justify-content: center;">
@@ -1875,7 +1875,7 @@ window.renderProfileHub = function() {
                 <p class="text-xs text-zinc-500 m-0">Played 5 times • Tied 2-2</p>
               </div>
             </div>
-            <button class="bg-white text-black font-black px-5 py-2 rounded-full text-sm hover:bg-zinc-200 transition-colors border-none cursor-pointer">
+            <button style="background: #fff; color: #000; font-weight: 900; padding: 8px 20px; border-radius: 30px; font-size: 0.85rem; border: none; cursor: pointer;">
               Challenge
             </button>
           </div>

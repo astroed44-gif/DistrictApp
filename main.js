@@ -1135,8 +1135,8 @@ window.renderBundleDetail = function(id) {
       </div>
 
       <footer class="bundle-detail-footer detail-footer" style="display: flex; gap: 12px; padding: 16px; background: #000; border-top: 1px solid #222;">
-          <button class="secondary-btn" id="customize-btn" style="background: transparent; color: #fff; border: 1px solid #555; padding: 16px; border-radius: 12px; font-weight: 800; cursor: pointer; flex: 1; text-align: center; font-size: 1rem;">Customize Evening</button>
-          <button class="book-slots-btn" id="book-bundle-btn" style="background: #fff; color: #000; border: none; padding: 16px; border-radius: 12px; font-weight: 900; cursor: pointer; flex: 1.5; text-align: center; font-size: 1rem;">Book This Evening</button>
+          <button id="customize-btn" style="flex: 1; padding: 14px 0; background: transparent; color: #fff; border: 1px solid #555; border-radius: 12px; font-weight: 800; font-size: 0.95rem; text-align: center; cursor: pointer;">Customize</button>
+          <button id="book-bundle-btn" style="flex: 1; padding: 14px 0; background: #fff; color: #000; border: none; border-radius: 12px; font-weight: 900; font-size: 0.95rem; text-align: center; cursor: pointer;">Book Evening</button>
       </footer>
     </div>
   `;
@@ -1857,8 +1857,8 @@ window.renderProfileHub = function() {
   appContainer.innerHTML = `
     <div class="profile-screen fade-in" style="background: #000; min-height: 100vh; color: #fff; padding-bottom: 40px; font-family: 'Outfit', sans-serif;">
       <header class="flex items-center" style="padding: 24px 24px 16px;">
-        <button class="rounded-full border-none text-white cursor-pointer flex items-center justify-center" style="width: 32px; height: 32px; margin-right: 12px; background: rgba(255,255,255,0.1);" onclick="navigateTo(screens.PROFILE)">
-          <i class="fa-solid fa-arrow-left" style="font-size: 1rem;"></i>
+        <button style="background: transparent; border: none; padding: 0; margin-right: 16px; cursor: pointer; color: #fff; display: flex; align-items: center;" onclick="navigateTo(screens.PROFILE)">
+          <i class="fa-solid fa-arrow-left" style="font-size: 1.4rem;"></i>
         </button>
         <h1 class="font-black tracking-tight m-0" style="font-size: 1.6rem;">Identity Hub</h1>
       </header>
@@ -1967,7 +1967,8 @@ window.swipeRivalList = [
   { id: 'priya', name: 'Priya', title: 'The Casual Pro', emoji: '👩', traits: 'Chill • Good Vibes Only', sports: 'Badminton', dist: '3.4 km away', sessions: 12, level: 7 },
   { id: 'dev', name: 'Dev', title: 'The Tactician', emoji: '👨‍🎤', traits: 'Competitive • Fast Paced', sports: 'Pickleball', dist: '5.1 km away', sessions: 80, level: 22 },
   { id: 'meera', name: 'Meera', title: 'The Marathon', emoji: '👱‍♀️', traits: 'Relentless • Friendly', sports: 'Tennis • Padel', dist: '2.0 km away', sessions: 33, level: 11 },
-  { id: 'kabir', name: 'Kabir', title: 'The Powerhouse', emoji: '🏋️', traits: 'Aggressive • Quick Match', sports: 'Football', dist: '7.8 km away', sessions: 50, level: 18 }
+  { id: 'kabir', name: 'Kabir', title: 'The Powerhouse', emoji: '🏋️', traits: 'Aggressive • Quick Match', sports: 'Football', dist: '7.8 km away', sessions: 50, level: 18 },
+  { id: 'rahul', name: 'Rahul M.', title: 'The Nemesis', emoji: '🥷', traits: 'Aggressive • Friendly', sports: 'Padel', dist: '0.5 km away', sessions: 25, level: 12 }
 ];
 window.currentSwipeIndex = 0;
 window.nextSwipeRival = function() {
@@ -1980,8 +1981,8 @@ window.renderSwipeRivals = function() {
   appContainer.innerHTML = `
     <div class="profile-screen fade-in" style="background: #000; min-height: 100vh; display: flex; flex-direction: column;">
       <header class="flex items-center" style="padding: 24px 20px 10px; display: flex; align-items: center;">
-        <button class="rounded-full border-none text-white cursor-pointer flex items-center justify-center" style="width: 36px; height: 36px; margin-right: 12px; background: rgba(255,255,255,0.1);" onclick="navigateTo(screens.PLAY)">
-          <i class="fa-solid fa-arrow-left" style="font-size: 1.1rem;"></i>
+        <button style="background: transparent; border: none; padding: 0; margin-right: 16px; cursor: pointer; color: #fff; display: flex; align-items: center;" onclick="navigateTo(screens.PLAY)">
+          <i class="fa-solid fa-arrow-left" style="font-size: 1.4rem;"></i>
         </button>
         <h1 class="text-2xl font-bold tracking-tight m-0" style="font-size: 1.5rem; text-align: center; flex: 1; margin-right: 48px;">Find Your Next Rival</h1>
       </header>
@@ -2035,8 +2036,8 @@ window.renderRivalProfile = function(id) {
   appContainer.innerHTML = `
     <div class="profile-screen fade-in" style="background: #000; min-height: 100vh; color: #fff; padding-bottom: 40px;">
       <header class="flex items-center" style="padding: 24px 20px 10px; display: flex; align-items: center;">
-        <button class="rounded-full border-none text-white cursor-pointer flex items-center justify-center" style="width: 36px; height: 36px; margin-right: 12px; background: rgba(255,255,255,0.1);" onclick="navigateTo(screens.SWIPE_RIVALS)">
-          <i class="fa-solid fa-arrow-left" style="font-size: 1.1rem;"></i>
+        <button style="background: transparent; border: none; padding: 0; margin-right: 16px; cursor: pointer; color: #fff; display: flex; align-items: center;" onclick="navigateTo(screens.SWIPE_RIVALS)">
+          <i class="fa-solid fa-arrow-left" style="font-size: 1.4rem;"></i>
         </button>
       </header>
       
@@ -2126,8 +2127,8 @@ window.renderChallengeCreate = function(id) {
   appContainer.innerHTML = `
     <div class="profile-screen fade-in" style="background: #000; min-height: 100vh; color: #fff; padding-bottom: 40px;">
       <header class="flex items-center" style="padding: 24px 20px 10px; display: flex; align-items: center;">
-        <button class="rounded-full border-none text-white cursor-pointer flex items-center justify-center" style="width: 36px; height: 36px; margin-right: 12px; background: rgba(255,255,255,0.1);" onclick="navigateTo(screens.SWIPE_RIVALS)">
-          <i class="fa-solid fa-arrow-left" style="font-size: 1.1rem;"></i>
+        <button style="background: transparent; border: none; padding: 0; margin-right: 16px; cursor: pointer; color: #fff; display: flex; align-items: center;" onclick="navigateTo(screens.SWIPE_RIVALS)">
+          <i class="fa-solid fa-arrow-left" style="font-size: 1.4rem;"></i>
         </button>
         <h1 class="font-black tracking-tight m-0" style="font-size: 1.5rem; text-align: center; flex: 1; margin-right: 48px;">Challenge ${rival.name}</h1>
       </header>
@@ -2239,8 +2240,8 @@ window.renderChallengeVenue = function() {
   appContainer.innerHTML = `
     <div class="profile-screen fade-in" style="background: #000; min-height: 100vh; color: #fff; padding-bottom: 40px;">
       <header class="flex items-center" style="padding: 24px 20px 10px; display: flex; align-items: center; justify-content: space-between;">
-        <button class="rounded-full border-none text-white cursor-pointer flex items-center justify-center" style="width: 36px; height: 36px; background: rgba(255,255,255,0.1);" onclick="navigateTo(screens.CHALLENGE_NOTIFICATION)">
-          <i class="fa-solid fa-arrow-left" style="font-size: 1.1rem;"></i>
+        <button style="background: transparent; border: none; padding: 0; margin-right: 16px; cursor: pointer; color: #fff; display: flex; align-items: center;" onclick="navigateTo(screens.CHALLENGE_NOTIFICATION)">
+          <i class="fa-solid fa-arrow-left" style="font-size: 1.4rem;"></i>
         </button>
         <h1 class="font-black tracking-tight m-0" style="font-size: 1.3rem;">Choose a Venue</h1>
         <div style="width: 36px;"></div>

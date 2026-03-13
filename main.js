@@ -24,7 +24,12 @@ const screens = {
   CHALLENGE_CREATE: 'challenge_create',
   CHALLENGE_NOTIFICATION: 'challenge_notification',
   CHALLENGE_VENUE: 'challenge_venue',
-  CHALLENGE_CONFIRM: 'challenge_confirm'
+  CHALLENGE_CONFIRM: 'challenge_confirm',
+  EXCLUSIVE_HUB: 'exclusive_hub',
+  EVENT_DETAIL: 'event_detail',
+  JOIN_EVENT: 'join_event',
+  GROUP_BOOKING: 'group_booking',
+  EVENT_CONFIRMATION: 'event_confirmation'
 };
 
 let currentScreen = screens.HOME;
@@ -149,16 +154,15 @@ function getHeaderAndTabsHTML(activeTab) {
 function renderHome() {
   appContainer.innerHTML = getHeaderAndTabsHTML('home') + `
     <div class="main-content home-feed-content fade-in" style="padding-bottom: 80px;">
-      <div class="promo-banner-home">
+      <div class="promo-banner-home" onclick="navigateTo(screens.EXCLUSIVE_HUB)">
         <div class="promo-text">
-            <span class="unlock-text">UNLOCK UP TO</span>
-            <span class="fifty-off">50% OFF</span>
+            <span class="unlock-text">DISTRICT NEON NIGHTS</span>
+            <span class="fifty-off" style="font-size: 2.2rem;">SPORTS AFTER DARK</span>
         </div>
-        <div class="bank-offer">
-          <i class="fa-solid fa-sparkles"></i> Save more with bank offers* <i class="fa-solid fa-sparkles"></i>
+        <div class="bank-offer" style="background: rgba(188, 19, 254, 0.2); color: #fff;">
+          ✨ Exclusive Neon Events Now Live ✨
         </div>
-        <div class="bank-logo">ICICI Bank</div>
-        <button class="explore-btn">Explore now <i class="fa-solid fa-chevron-right"></i></button>
+        <button class="explore-btn" style="background: #bc13fe; color: #fff;">Explore Neon Games <i class="fa-solid fa-chevron-right"></i></button>
       </div>
 
       <div class="home-categories-grid">
@@ -389,6 +393,38 @@ function renderPlay() {
           ${renderSportItem('Table Tennis', '🏓')}
           ${renderSportItem('Turf Football', '⚽')}
           ${renderSportItem('Box Cricket', '🏏')}
+        </div>
+      </section>
+
+      <section class="exclusive-games-section" style="margin-top: 24px;">
+        <div class="section-header" style="justify-content: space-between; align-items: flex-end; display: flex; padding-right: 16px;">
+            <div>
+              <h3 class="section-title" style="margin:0; text-align: left; background: none; -webkit-text-fill-color: #fff; text-fill-color: #fff; font-size: 1.2rem; font-weight: 800;">Exclusive Games</h3>
+              <p style="margin: 4px 0 0 0; color: #888; font-size: 0.85rem;">Play sports like you've never seen before</p>
+            </div>
+            <button style="background: rgba(188, 19, 254, 0.1); border: 1px solid rgba(188, 19, 254, 0.3); color: #bc13fe; padding: 6px 12px; border-radius: 20px; font-size: 0.75rem; font-weight: bold; cursor: pointer;" onclick="navigateTo(screens.EXCLUSIVE_HUB)">
+               View All
+            </button>
+        </div>
+        <div class="exclusive-scroll" style="display: flex; gap: 16px; overflow-x: auto; padding: 16px 20px; scroll-snap-type: x mandatory;">
+          ${exclusiveGames.map(game => `
+            <div class="exclusive-card glass" onclick="navigateTo(screens.EVENT_DETAIL, '${game.id}')" style="min-width: 280px; height: 380px; border-radius: 24px; position: relative; overflow: hidden; scroll-snap-align: center; border: 1px solid rgba(255,255,255,0.1); background: #080808;">
+               <div style="width: 100%; height: 100%; position: absolute; top:0; left:0; background: linear-gradient(to top, #080808 30%, transparent 100%); z-index: 1;"></div>
+               <img src="${game.image}" style="width: 100%; height: 100%; object-fit: cover; position: absolute; top:0; left:0; opacity: 0.6;">
+               
+               <div style="position: absolute; top: 16px; right: 16px; background: ${game.color}; color: #000; padding: 4px 12px; border-radius: 20px; font-size: 0.7rem; font-weight: 900; z-index: 2; text-transform: uppercase;">✨ EXCLUSIVE</div>
+               
+               <div style="position: absolute; bottom: 0; left: 0; right: 0; padding: 24px; z-index: 2;">
+                  <h4 style="font-size: 1.4rem; font-weight: 900; color: #fff; margin-bottom: 8px; line-height: 1.2;">${game.title}</h4>
+                  <div style="display: flex; flex-direction: column; gap: 4px; margin-bottom: 20px; color: #ccc; font-size: 0.85rem;">
+                     <span><i class="fa-regular fa-calendar" style="width: 20px; color: ${game.color};"></i> ${game.time}</span>
+                     <span><i class="fa-solid fa-location-dot" style="width: 20px; color: ${game.color};"></i> ${game.venue}</span>
+                     <span><i class="fa-solid fa-users" style="width: 20px; color: ${game.color};"></i> ${game.players} joining</span>
+                  </div>
+                  <button class="join-game-btn" style="width: 100%; background: #fff; color: #000; border: none; padding: 14px; border-radius: 12px; font-weight: 800; font-size: 1rem;">Join Game</button>
+               </div>
+            </div>
+          `).join('')}
         </div>
       </section>
 
@@ -1049,8 +1085,251 @@ function renderBooking(id) {
   }
 }
 
+
+function renderExclusiveGamesHub() {
+  appContainer.innerHTML = `
+    <div class="exclusive-hub-page fade-in" style="background: #000; min-height: 100vh; padding-bottom: 100px;">
+      <header style="padding: 20px; display: flex; align-items: center; gap: 16px;">
+        <button class="back-btn-small" onclick="navigateTo(screens.PLAY)"><i class="fa-solid fa-arrow-left"></i></button>
+        <h2 style="font-size: 1.2rem; font-weight: 800;">Exclusive Games</h2>
+      </header>
+      
+      <div class="hub-hero-banner" style="position: relative; height: 260px; margin-bottom: 24px; overflow: hidden;">
+         <img src="https://images.unsplash.com/photo-1626224583764-f87db24ac4ea?w=1000&auto=format&fit=crop" style="width: 100%; height: 100%; object-fit: cover;">
+         <div style="position: absolute; inset: 0; background: linear-gradient(to top, #000 10%, transparent 60%);"></div>
+         <div style="position: absolute; bottom: 24px; left: 24px;">
+            <div style="background: #bc13fe; color: #fff; padding: 4px 10px; border-radius: 4px; font-size: 0.7rem; font-weight: 900; display: inline-block; margin-bottom: 8px;">DISTRICT NEON NIGHTS</div>
+            <h1 style="font-size: 2rem; font-weight: 900; margin: 0;">Sports After Dark</h1>
+         </div>
+      </div>
+      
+      <div style="padding: 0 20px; display: flex; flex-direction: column; gap: 20px;">
+         ${exclusiveGames.map(game => `
+            <div class="event-stack-card glass" onclick="navigateTo(screens.EVENT_DETAIL, '${game.id}')" style="display: flex; background: #111; border-radius: 20px; overflow: hidden; border: 1px solid rgba(255,255,255,0.05);">
+               <div style="width: 120px; flex-shrink: 0; position: relative;">
+                  <img src="${game.image}" style="width: 100%; height: 100%; object-fit: cover;">
+                  <div style="position: absolute; inset: 0; background: linear-gradient(to right, transparent, #111);"></div>
+               </div>
+               <div style="padding: 20px; flex: 1;">
+                  <h4 style="font-size: 1.1rem; font-weight: 800; margin-bottom: 12px;">${game.title}</h4>
+                  <div style="display: flex; flex-direction: column; gap: 4px; font-size: 0.8rem; color: #888; margin-bottom: 16px;">
+                     <span><i class="fa-regular fa-calendar-days" style="width: 18px; color: ${game.color};"></i> ${game.time}</span>
+                     <span><i class="fa-solid fa-location-dot" style="width: 18px; color: ${game.color};"></i> ${game.venue}</span>
+                     <span><i class="fa-solid fa-users" style="width: 18px; color: ${game.color};"></i> ${game.players} players joined</span>
+                  </div>
+                  <button style="background: ${game.color}; color: #000; border: none; padding: 8px 16px; border-radius: 8px; font-weight: 800; font-size: 0.8rem;">View Event</button>
+               </div>
+            </div>
+         `).join('')}
+      </div>
+    </div>
+  `;
+}
+
+function renderEventDetail(id) {
+  const game = exclusiveGames.find(g => g.id === id) || exclusiveGames[0];
+  appContainer.innerHTML = `
+    <div class="event-detail-page fade-in" style="background: #000; min-height: 100vh; padding-bottom: 120px;">
+       <div style="position: relative; height: 350px;">
+          <img src="${game.image}" style="width: 100%; height: 100%; object-fit: cover;">
+          <div style="position: absolute; inset: 0; background: linear-gradient(to top, #000, transparent 60%);"></div>
+          <button class="back-btn-small" onclick="navigateTo(screens.EXCLUSIVE_HUB)" style="position: absolute; top: 20px; left: 20px; background: rgba(0,0,0,0.5); width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: #fff;"><i class="fa-solid fa-arrow-left"></i></button>
+       </div>
+       
+       <div style="padding: 24px; margin-top: -40px; position: relative; z-index: 2;">
+          <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 8px;">
+             <h1 style="font-size: 2.2rem; font-weight: 900; letter-spacing: -1px; margin: 0;">${game.title}</h1>
+          </div>
+          <div style="color: #bc13fe; font-weight: 800; font-size: 0.95rem; margin-bottom: 24px; text-transform: uppercase;">✨ District Exclusive Experience</div>
+          
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 32px;">
+             <div style="background: #111; padding: 16px; border-radius: 16px;">
+                <span style="color: #666; font-size: 0.75rem; font-weight: 800; text-transform: uppercase;">Venue</span>
+                <p style="margin: 4px 0 0 0; font-weight: 700;">${game.venue}</p>
+             </div>
+             <div style="background: #111; padding: 16px; border-radius: 16px;">
+                <span style="color: #666; font-size: 0.75rem; font-weight: 800; text-transform: uppercase;">Time</span>
+                <p style="margin: 4px 0 0 0; font-weight: 700; color: #bc13fe;">${game.time}</p>
+             </div>
+          </div>
+          
+          <div style="margin-bottom: 32px;">
+             <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+                <h3 style="font-size: 1rem; font-weight: 800;">Players Joined</h3>
+                <span style="color: #bc13fe; font-weight: bold;">${game.players}/${game.maxPlayers}</span>
+             </div>
+             <div style="width: 100%; height: 8px; background: #222; border-radius: 10px; overflow: hidden; margin-bottom: 20px;">
+                <div style="width: ${(game.players/game.maxPlayers)*100}%; height: 100%; background: linear-gradient(90deg, #bc13fe, #4cc9f0); border-radius: 10px;"></div>
+             </div>
+             
+             <div style="background: #111; padding: 20px; border-radius: 20px; border: 1px solid rgba(255,255,255,0.05);">
+                <h4 style="margin: 0 0 12px 0; font-size: 0.9rem; color: #ccc;">Match Format</h4>
+                <div style="font-weight: 800; font-size: 1.1rem; margin-bottom: 8px;">2v2 King of the Court</div>
+                <p style="color: #888; font-size: 0.85rem; margin: 0;">5 minute matches • Winner stays on. Fast-paced action under neon lights.</p>
+             </div>
+          </div>
+          
+          <h3 style="font-size: 1rem; font-weight: 800; margin-bottom: 16px;">What's Included</h3>
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
+             <div style="display: flex; align-items: center; gap: 10px; font-size: 0.85rem; font-weight: 600; color: #ccc;">
+                <span style="width: 32px; height:32px; background: rgba(188,19,254,0.1); border-radius: 8px; display: flex; align-items: center; justify-content: center; color: #bc13fe;"><i class="fa-solid fa-moon"></i></span> Glow Shuttlecocks
+             </div>
+             <div style="display: flex; align-items: center; gap: 10px; font-size: 0.85rem; font-weight: 600; color: #ccc;">
+                <span style="width: 32px; height:32px; background: rgba(188,19,254,0.1); border-radius: 8px; display: flex; align-items: center; justify-content: center; color: #bc13fe;"><i class="fa-solid fa-music"></i></span> Live DJ Set
+             </div>
+             <div style="display: flex; align-items: center; gap: 10px; font-size: 0.85rem; font-weight: 600; color: #ccc;">
+                <span style="width: 32px; height:32px; background: rgba(188,19,254,0.1); border-radius: 8px; display: flex; align-items: center; justify-content: center; color: #bc13fe;"><i class="fa-solid fa-video"></i></span> Highlight Reel
+             </div>
+             <div style="display: flex; align-items: center; gap: 10px; font-size: 0.85rem; font-weight: 600; color: #ccc;">
+                <span style="width: 32px; height:32px; background: rgba(188,19,254,0.1); border-radius: 8px; display: flex; align-items: center; justify-content: center; color: #bc13fe;"><i class="fa-solid fa-martini-glass"></i></span> Post-game Drinks
+             </div>
+          </div>
+       </div>
+       
+       <div style="position: fixed; bottom: 0; left: 0; right: 0; background: #000; border-top: 1px solid #222; padding: 20px; display: flex; align-items: center; justify-content: space-between; gap: 20px; z-index: 100;">
+          <div style="display: flex; flex-direction: column;">
+             <span style="font-size: 0.75rem; color: #888; font-weight: 800;">PER PERSON</span>
+             <span style="font-size: 1.25rem; font-weight: 900;">₹650</span>
+          </div>
+          <div style="display: flex; gap: 12px; flex: 1;">
+             <button onclick="navigateTo(screens.GROUP_BOOKING, '${id}')" style="flex: 1; padding: 14px; border-radius: 12px; background: rgba(255,255,255,0.1); color: #fff; border: 1px solid #333; font-weight: 800; font-size: 0.9rem;">With Squad</button>
+             <button onclick="navigateTo(screens.JOIN_EVENT, '${id}')" style="flex: 1.5; padding: 14px; border-radius: 12px; background: #bc13fe; color: #fff; border: none; font-weight: 900; font-size: 1rem; box-shadow: 0 0 20px rgba(188,19,254,0.4);">Join Game</button>
+          </div>
+       </div>
+    </div>
+  `;
+}
+
+function renderJoinEvent(id) {
+  const game = exclusiveGames.find(g => g.id === id) || exclusiveGames[0];
+  appContainer.innerHTML = `
+    <div class="join-event-page fade-in" style="background: #000; min-height: 100vh; padding: 20px;">
+       <header style="display: flex; align-items: center; gap: 16px; margin-bottom: 32px;">
+         <button class="back-btn-small" onclick="navigateTo(screens.EVENT_DETAIL, '${id}')"><i class="fa-solid fa-arrow-left"></i></button>
+         <h2 style="font-size: 1.1rem; font-weight: 800;">Join ${game.title}</h2>
+       </header>
+       
+       <div style="background: #111; border-radius: 20px; padding: 24px; border: 1px solid rgba(255,255,255,0.05); margin-bottom: 32px;">
+          <h3 style="font-size: 1rem; font-weight: 800; margin-bottom: 20px;">Select number of spots</h3>
+          <div style="display: flex; gap: 12px;">
+             ${[1, 2, 4].map(n => `<div onclick="this.parentElement.querySelectorAll('div').forEach(d=>d.style.borderColor='transparent'); this.style.borderColor='#bc13fe'" style="flex: 1; padding: 16px; background: #000; border: 2px solid ${n==1 ? '#bc13fe' : 'transparent'}; border-radius: 16px; text-align: center; cursor: pointer;">
+                <div style="font-size: 1.2rem; font-weight: 900;">${n}</div>
+                <div style="font-size: 0.7rem; color: #888; font-weight: bold; text-transform: uppercase;">PLAYER${n>1?'S':''}</div>
+             </div>`).join('')}
+          </div>
+       </div>
+       
+       <div style="background: #111; border-radius: 20px; padding: 24px; border: 1px solid rgba(255,255,255,0.05); margin-bottom: 32px;">
+          <h3 style="font-size: 1rem; font-weight: 800; margin-bottom: 16px;">Invite Friends</h3>
+          <div style="display: flex; gap: 12px;">
+             <button style="flex: 1; background: rgba(255,255,255,0.05); border: 1px solid #333; color: #fff; padding: 12px; border-radius: 12px; display: flex; align-items: center; justify-content: center; gap: 8px; font-weight: 700;">
+                <i class="fa-solid fa-share-nodes"></i> Share Link
+             </button>
+             <button style="flex: 1; background: rgba(255,255,255,0.05); border: 1px solid #333; color: #fff; padding: 12px; border-radius: 12px; display: flex; align-items: center; justify-content: center; gap: 8px; font-weight: 700;">
+                <i class="fa-solid fa-user-plus"></i> Select Friends
+             </button>
+          </div>
+       </div>
+       
+       <div style="background: #080808; border-radius: 20px; padding: 24px; border: 1px solid rgba(188,19,254,0.2);">
+          <h3 style="font-size: 1rem; font-weight: 800; margin-bottom: 16px;">Price Summary</h3>
+          <div style="display: flex; justify-content: space-between; margin-bottom: 8px; color: #888; font-weight: 600;">
+             <span>Entry Fee (1 player)</span>
+             <span>₹650</span>
+          </div>
+          <div style="display: flex; justify-content: space-between; margin-bottom: 8px; color: #888; font-weight: 600;">
+             <span>Platform Fee</span>
+             <span>₹25</span>
+          </div>
+          <div style="display: flex; justify-content: space-between; margin-top: 16px; padding-top: 16px; border-top: 1px solid #222; font-weight: 900; font-size: 1.2rem;">
+             <span>Total</span>
+             <span>₹675</span>
+          </div>
+       </div>
+       
+       <button onclick="navigateTo(screens.EVENT_CONFIRMATION, '${id}')" style="position: fixed; bottom: 20px; left: 20px; right: 20px; background: #bc13fe; border: none; padding: 18px; border-radius: 16px; font-weight: 900; font-size: 1.1rem; color: #fff; box-shadow: 0 0 30px rgba(188,19,254,0.5);">Confirm Spot</button>
+    </div>
+  `;
+}
+
+function renderGroupBooking(id) {
+  const game = exclusiveGames.find(g => g.id === id) || exclusiveGames[0];
+  appContainer.innerHTML = `
+    <div class="group-booking-page fade-in" style="background: #000; min-height: 100vh; padding: 20px;">
+       <header style="display: flex; align-items: center; gap: 16px; margin-bottom: 32px;">
+         <button class="back-btn-small" onclick="navigateTo(screens.EVENT_DETAIL, '${id}')"><i class="fa-solid fa-arrow-left"></i></button>
+         <h2 style="font-size: 1.1rem; font-weight: 800;">Book With Your Squad</h2>
+       </header>
+       
+       <div style="background: #111; border-radius: 20px; padding: 24px; border: 1px solid rgba(255,255,255,0.05); margin-bottom: 32px;">
+          <h3 style="font-size: 1rem; font-weight: 800; margin-bottom: 8px;">Add Team Name</h3>
+          <p style="color: #666; font-size: 0.8rem; margin-bottom: 20px;">Your squad will see this on the scoreboard.</p>
+          <input type="text" placeholder="e.g. Midnight Smashers" style="width: 100%; background: #000; border: 1px solid #333; padding: 16px; border-radius: 12px; color: #fff; font-weight: 800; font-size: 1rem; outline: none;">
+       </div>
+
+       <div style="background: #111; border-radius: 20px; padding: 24px; border: 1px solid rgba(255,255,255,0.05); margin-bottom: 32px;">
+          <h3 style="font-size: 1rem; font-weight: 800; margin-bottom: 20px;">Reserve Spots</h3>
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px;">
+             <span style="font-weight: 700; color: #ccc;">Players: 4 Spots</span>
+             <div style="display: flex; gap: 12px; align-items: center;">
+                <button style="width: 36px; height: 36px; border-radius: 12px; background: #222; border: 1px solid #333; color: #fff; display: flex; align-items: center; justify-content: center; font-size: 1.2rem;">-</button>
+                <span style="font-size: 1.2rem; font-weight: 900; min-width: 24px; text-align: center;">4</span>
+                <button style="width: 36px; height: 36px; border-radius: 12px; background: #222; border: 1px solid #333; color: #fff; display: flex; align-items: center; justify-content: center; font-size: 1.2rem;">+</button>
+             </div>
+          </div>
+          
+          <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px;">
+             ${[1, 2, 3, 4].map(n => `<div style="aspect-ratio: 1; border-radius: 50%; border: 2px dashed ${n==1 ? '#bc13fe' : '#444'}; display: flex; align-items: center; justify-content: center; background: ${n==1 ? 'rgba(188,19,254,0.1)' : 'transparent'};">
+                ${n==1 ? `<span style="font-size: 1.5rem;">${window.onboardingData.avatar || '🥷'}</span>` : `<i class="fa-solid fa-plus" style="color: #444;"></i>`}
+             </div>`).join('')}
+          </div>
+       </div>
+       
+       <button onclick="navigateTo(screens.EVENT_CONFIRMATION, '${id}')" style="position: fixed; bottom: 20px; left: 20px; right: 20px; background: #39FF14; border: none; padding: 18px; border-radius: 16px; font-weight: 900; font-size: 1.1rem; color: #000; box-shadow: 0 0 30px rgba(57,255,20,0.3);">Reserve Spots</button>
+    </div>
+  `;
+}
+
+function renderEventConfirmation(id) {
+  const game = exclusiveGames.find(g => g.id === id) || exclusiveGames[0];
+  appContainer.innerHTML = `
+    <div class="event-confirm-page fade-in" style="background: #000; min-height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; padding: 24px;">
+       <div style="font-size: 5rem; margin-bottom: 24px; animation: scaleIn 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);">✨</div>
+       <h1 style="font-size: 3rem; font-weight: 900; margin: 0; background: linear-gradient(to bottom, #fff, #bc13fe); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">You're In!</h1>
+       <p style="color: #888; font-size: 1.1rem; margin: 8px 0 40px 0;">Get ready for the neon showdown.</p>
+       
+       <div style="background: #111; border: 1px solid rgba(188,19,254,0.3); border-radius: 20px; padding: 30px; width: 100%; position: relative; overflow: hidden;">
+          <h2 style="font-size: 1.2rem; font-weight: 800; margin-bottom: 20px; color: #fff;">${game.title}</h2>
+          <div style="text-align: left; display: flex; flex-direction: column; gap: 16px; font-weight: 700;">
+             <div style="display: flex; justify-content: space-between;">
+                <span style="color: #666;">Venue</span>
+                <span>${game.venue}</span>
+             </div>
+             <div style="display: flex; justify-content: space-between;">
+                <span style="color: #666;">Time</span>
+                <span style="color: #bc13fe;">${game.time}</span>
+             </div>
+             <div style="display: flex; justify-content: space-between;">
+                <span style="color: #666;">Entry Code</span>
+                <span style="font-family: monospace; font-size: 1.2rem; letter-spacing: 2px;">DX-552</span>
+             </div>
+          </div>
+       </div>
+       
+       <div style="margin-top: 40px; display: flex; flex-direction: column; gap: 16px; width: 100%;">
+          <button onclick="navigateTo(screens.HOME)" style="width: 100%; padding: 18px; border-radius: 16px; background: #fff; color: #000; border: none; font-size: 1rem; font-weight: 900;">Add to Calendar</button>
+          <div style="display: flex; gap: 12px;">
+             <button style="flex: 1; padding: 14px; border-radius: 12px; background: rgba(255,255,255,0.05); color: #fff; border: 1px solid #333; font-weight: 800; font-size: 0.9rem;">Invite Friends</button>
+             <button onclick="navigateTo(screens.EVENT_DETAIL, '${id}')" style="flex: 1; padding: 14px; border-radius: 12px; background: rgba(255,255,255,0.05); color: #fff; border: 1px solid #333; font-weight: 800; font-size: 0.9rem;">View Event</button>
+          </div>
+       </div>
+    </div>
+  `;
+}
+
 function navigateTo(screen, id = null, fromPopState = false) {
   currentScreen = screen;
+
   
   // Update browser history for back button support (unless we came from a popstate)
   if (!fromPopState) {
@@ -1108,6 +1387,16 @@ function navigateTo(screen, id = null, fromPopState = false) {
     renderChallengeVenue(id);
   } else if (screen === screens.CHALLENGE_CONFIRM) {
     renderChallengeConfirm(id);
+  } else if (screen === screens.EXCLUSIVE_HUB) {
+    renderExclusiveGamesHub();
+  } else if (screen === screens.EVENT_DETAIL) {
+    renderEventDetail(id);
+  } else if (screen === screens.JOIN_EVENT) {
+    renderJoinEvent(id);
+  } else if (screen === screens.GROUP_BOOKING) {
+    renderGroupBooking(id);
+  } else if (screen === screens.EVENT_CONFIRMATION) {
+    renderEventConfirmation(id);
   }
 }
 

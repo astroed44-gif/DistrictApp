@@ -1312,16 +1312,16 @@ function renderEventDetail(id) {
           </div>
        </div>
        
-       <div style="position: fixed; bottom: 0; left: 0; right: 0; background: #000; border-top: 1px solid #222; padding: 20px; display: flex; align-items: center; justify-content: space-between; gap: 20px; z-index: 100;">
-          <div style="display: flex; flex-direction: column;">
-             <span style="font-size: 0.75rem; color: #888; font-weight: 800;">PER PERSON</span>
-             <span style="font-size: 1.25rem; font-weight: 900;">₹650</span>
-          </div>
-          <div style="display: flex; gap: 12px; flex: 1;">
-             <button onclick="navigateTo(screens.GROUP_BOOKING, '${id}')" style="flex: 1; padding: 14px; border-radius: 12px; background: rgba(255,255,255,0.1); color: #fff; border: 1px solid #333; font-weight: 800; font-size: 0.9rem;">With Squad</button>
-             <button onclick="navigateTo(screens.JOIN_EVENT, '${id}')" style="flex: 1.5; padding: 14px; border-radius: 12px; background: #fff; color: #000; border: none; font-weight: 900; font-size: 1rem; box-shadow: 0 0 20px rgba(255,255,255,0.2);">Join Game</button>
-          </div>
-       </div>
+        <div class="detail-footer" style="padding: 16px 20px; border-top: 1px solid #222; z-index: 100;">
+           <div style="display: flex; flex-direction: column;">
+              <span style="font-size: 0.75rem; color: #888; font-weight: 800;">PER PERSON</span>
+              <span style="font-size: 1.25rem; font-weight: 900;">₹650</span>
+           </div>
+           <div style="display: flex; gap: 12px; flex: 1; justify-content: flex-end;">
+              <button onclick="navigateTo(screens.GROUP_BOOKING, '${id}')" style="padding: 14px 16px; border-radius: 12px; background: rgba(255,255,255,0.1); color: #fff; border: 1px solid #333; font-weight: 800; font-size: 0.85rem;">With Squad</button>
+              <button onclick="navigateTo(screens.JOIN_EVENT, '${id}')" style="padding: 14px 20px; border-radius: 12px; background: #fff; color: #000; border: none; font-weight: 900; font-size: 0.95rem; box-shadow: 0 0 20px rgba(255,255,255,0.2);">Join Game</button>
+           </div>
+        </div>
     </div>
   `;
 }
@@ -1344,7 +1344,7 @@ function renderJoinEvent(id) {
   };
 
   appContainer.innerHTML = `
-    <div class="join-event-page fade-in" style="background: #000; min-height: 100vh; padding: 20px;">
+    <div class="join-event-page fade-in" style="background: #000; min-height: 100vh; padding: 20px 20px 100px 20px;">
        <header style="display: flex; align-items: center; gap: 16px; margin-bottom: 32px;">
          <button class="back-btn-small" onclick="navigateTo(screens.EVENT_DETAIL, '${id}')"><i class="fa-solid fa-arrow-left"></i></button>
          <h2 style="font-size: 1.1rem; font-weight: 800;">Join ${game.title}</h2>
@@ -1388,7 +1388,9 @@ function renderJoinEvent(id) {
           </div>
        </div>
        
-       <button onclick="navigateTo(screens.EVENT_CONFIRMATION, '${id}')" style="position: fixed; bottom: 20px; left: 20px; right: 20px; background: #fff; border: none; padding: 18px; border-radius: 16px; font-weight: 900; font-size: 1.1rem; color: #000; box-shadow: 0 0 30px rgba(255,255,255,0.2);">Confirm Spot</button>
+       <footer class="detail-footer" style="background: transparent; border-top: none;">
+          <button onclick="navigateTo(screens.EVENT_CONFIRMATION, '${id}')" style="width: 100%; background: #fff; border: none; padding: 18px; border-radius: 16px; font-weight: 900; font-size: 1.1rem; color: #000; box-shadow: 0 0 30px rgba(255,255,255,0.2);">Confirm Spot</button>
+       </footer>
     </div>
   `;
 }
@@ -1415,7 +1417,7 @@ function renderGroupBooking(id) {
   };
 
   appContainer.innerHTML = `
-    <div class="group-booking-page fade-in" style="background: #000; min-height: 100vh; padding: 20px;">
+    <div class="group-booking-page fade-in" style="background: #000; min-height: 100vh; padding: 20px 20px 100px 20px;">
        <header style="display: flex; align-items: center; gap: 16px; margin-bottom: 32px;">
          <button class="back-btn-small" onclick="navigateTo(screens.EVENT_DETAIL, '${id}')"><i class="fa-solid fa-arrow-left"></i></button>
          <h2 style="font-size: 1.1rem; font-weight: 800;">Book With Your Squad</h2>
@@ -1447,7 +1449,9 @@ function renderGroupBooking(id) {
           </div>
        </div>
        
-       <button onclick="navigateTo(screens.EVENT_CONFIRMATION, '${id}')" style="position: fixed; bottom: 20px; left: 20px; right: 20px; background: #39FF14; border: none; padding: 18px; border-radius: 16px; font-weight: 900; font-size: 1.1rem; color: #000; box-shadow: 0 0 30px rgba(57,255,20,0.3);">Reserve Spots</button>
+       <footer class="detail-footer" style="background: transparent; border-top: none;">
+          <button onclick="navigateTo(screens.EVENT_CONFIRMATION, '${id}')" style="width: 100%; background: #39FF14; border: none; padding: 18px; border-radius: 16px; font-weight: 900; font-size: 1.1rem; color: #000; box-shadow: 0 0 30px rgba(57,255,20,0.3);">Reserve Spots</button>
+       </footer>
     </div>
   `;
 }
@@ -2545,12 +2549,13 @@ window.renderOnboardingReveal = function() {
          </div>
       </div>
 
-      <button class="ob-primary-btn save-card-btn fade-in-up" style="margin-top: 40px; width: 80%; animation-delay: 1.5s;" onclick="
-         window.hasCompletedOnboarding = true; 
-         saveOnboardingState();
-         navigateTo(screens.PROFILE);
-      ">Save My Card</button>
-
+      <footer class="detail-footer" style="padding: 20px; background: linear-gradient(0deg, #000 0%, transparent 100%); border-top: none; justify-content: center;">
+         <button class="ob-primary-btn save-card-btn fade-in-up" onclick="
+            window.hasCompletedOnboarding = true; 
+            saveOnboardingState();
+            navigateTo(screens.PROFILE);
+         " style="width: 100%; animation-delay: 1.5s;">Save My Card</button>
+      </footer>
     </div>
   `;
   
@@ -2697,7 +2702,7 @@ window.renderSwipeRivals = function() {
         <h1 class="text-2xl font-bold tracking-tight m-0" style="font-size: 1.5rem; text-align: center; flex: 1; margin-right: 48px;">Find Your Next Rival</h1>
       </header>
       
-      <main style="flex: 1; display: flex; flex-direction: column; justify-content: center; align-items: center; padding: 20px; position: relative; overflow: hidden;">
+      <main style="flex: 1; display: flex; flex-direction: column; justify-content: center; align-items: center; padding: 20px 20px 120px 20px; position: relative; overflow: hidden;">
         
         <div class="swipe-card" id="swipe-card" style="width: 100%; max-width: 340px; background: #121212; border-radius: 20px; border: 1px solid rgba(255,255,255,0.1); box-shadow: 0 10px 30px rgba(0,0,0,0.8); overflow: hidden; position: relative;">
           
@@ -2728,14 +2733,16 @@ window.renderSwipeRivals = function() {
           </div>
         </div>
         
-        <div style="display: flex; gap: 30px; margin-top: 40px;">
-           <button style="width: 64px; height: 64px; border-radius: 50%; background: rgba(255,255,255,0.05); border: 2px solid rgba(255,255,255,0.1); color: #aaa; font-size: 1.5rem; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: all 0.2s;" onmousedown="this.style.transform='scale(0.9)';" onmouseup="this.style.transform='scale(1)';" onclick="window.nextSwipeRival()">
-              <i class="fa-solid fa-xmark"></i>
-           </button>
-           <button style="width: 64px; height: 64px; border-radius: 50%; background: #fff; border: none; color: #000; font-size: 1.5rem; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: all 0.2s;" onmousedown="this.style.transform='scale(0.9)';" onmouseup="this.style.transform='scale(1)';" onclick="navigateTo(screens.CHALLENGE_CREATE, '${rival.id}')">
-              <i class="fa-solid fa-bolt"></i>
-           </button>
-        </div>
+        <footer class="detail-footer" style="padding: 24px; background: transparent; border: none; justify-content: center;">
+           <div style="display: flex; gap: 30px;">
+              <button style="width: 64px; height: 64px; border-radius: 50%; background: rgba(255,255,255,0.05); border: 2px solid rgba(255,255,255,0.1); color: #aaa; font-size: 1.5rem; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: all 0.2s;" onmousedown="this.style.transform='scale(0.9)';" onmouseup="this.style.transform='scale(1)';" onclick="window.nextSwipeRival()">
+                 <i class="fa-solid fa-xmark"></i>
+              </button>
+              <button style="width: 64px; height: 64px; border-radius: 50%; background: #fff; border: none; color: #000; font-size: 1.5rem; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: all 0.2s;" onmousedown="this.style.transform='scale(0.9)';" onmouseup="this.style.transform='scale(1)';" onclick="navigateTo(screens.CHALLENGE_CREATE, '${rival.id}')">
+                 <i class="fa-solid fa-bolt"></i>
+              </button>
+           </div>
+        </footer>
       </main>
     </div>
   `;
@@ -2815,9 +2822,11 @@ window.renderRivalProfile = function(id) {
           </div>
         </section>
 
-        <button onclick="navigateTo(screens.CHALLENGE_CREATE, '${rival.id}')" style="width: 100%; padding: 18px; border-radius: 16px; background: #fff; color: #000; border: none; font-size: 1.1rem; font-weight: 900; cursor: pointer; display: flex; justify-content: center; align-items: center; gap: 10px; box-shadow: 0 4px 14px rgba(255,255,255,0.2);">
-           <i class="fa-solid fa-bolt"></i> Challenge Player
-        </button>
+        <footer class="detail-footer" style="background: transparent; border-top: none;">
+           <button onclick="navigateTo(screens.CHALLENGE_CREATE, '${rival.id}')" style="width: 100%; padding: 18px; border-radius: 16px; background: #fff; color: #000; border: none; font-size: 1.1rem; font-weight: 900; cursor: pointer; display: flex; justify-content: center; align-items: center; gap: 10px; box-shadow: 0 4px 14px rgba(255,255,255,0.2);">
+              <i class="fa-solid fa-bolt"></i> Challenge Player
+           </button>
+        </footer>
 
       </main>
     </div>
@@ -2881,9 +2890,11 @@ window.renderChallengeCreate = function(id) {
            `).join('')}
         </div>
 
-        <button onclick="navigateTo(screens.CHALLENGE_NOTIFICATION)" style="width: 100%; padding: 18px; border-radius: 16px; background: #fff; color: #000; border: none; font-size: 1.1rem; font-weight: 900; cursor: pointer; display: flex; justify-content: center; align-items: center; box-shadow: 0 4px 14px rgba(255,255,255,0.2);">
-           Send Challenge
-        </button>
+        <footer class="detail-footer" style="background: transparent; border-top: none;">
+           <button onclick="navigateTo(screens.CHALLENGE_NOTIFICATION)" style="width: 100%; padding: 18px; border-radius: 16px; background: #fff; color: #000; border: none; font-size: 1.1rem; font-weight: 900; cursor: pointer; display: flex; justify-content: center; align-items: center; box-shadow: 0 4px 14px rgba(255,255,255,0.2);">
+              Send Challenge
+           </button>
+        </footer>
       </main>
     </div>
   `;

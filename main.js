@@ -162,6 +162,7 @@ const exclusiveGames = [
     venue: 'Elite Arena',
     players: 12,
     maxPlayers: 16,
+    price: 650,
     image: '/neon_badminton.png',
     color: '#ffffff',
     tag: 'District Exclusive'
@@ -173,6 +174,7 @@ const exclusiveGames = [
     venue: 'Sky Courts',
     players: 8,
     maxPlayers: 12,
+    price: 800,
     image: '/glow_pickleball.png',
     color: '#ffffff',
     tag: 'Premium'
@@ -184,11 +186,18 @@ const exclusiveGames = [
     venue: 'Urban Turf',
     players: 10,
     maxPlayers: 14,
+    price: 450,
     image: '/neon_football.png',
     color: '#ffffff',
     tag: 'Selling Fast'
   }
 ];
+
+window.exclusiveBookingState = {
+  id: null,
+  spots: 1,
+  teamName: ''
+};
 
 function getHeaderAndTabsHTML(activeTab) {
   return `
@@ -580,12 +589,6 @@ function renderPlay() {
     navigateTo(screens.PROFILE);
   });
 
-  // Smart Nudge Trigger (Simulated for demo)
-  setTimeout(() => {
-    const nudgeTypes = ['score', 'rivalry', 'share'];
-    const randomNudge = nudgeTypes[Math.floor(Math.random() * nudgeTypes.length)];
-    showNudge(randomNudge);
-  }, 2000);
 }
 
 function renderSportItem(name, icon) {
@@ -1325,6 +1328,21 @@ function renderEventDetail(id) {
 
 function renderJoinEvent(id) {
   const game = exclusiveGames.find(g => g.id === id) || exclusiveGames[0];
+  const s = window.exclusiveBookingState;
+  
+  if (s.id !== id) {
+    s.id = id;
+    s.spots = 1;
+  }
+
+  const platformFee = 25;
+  const total = (game.price * s.spots) + platformFee;
+
+  window.updateJoinSpots = function(n) {
+    s.spots = n;
+    renderJoinEvent(id);
+  };
+
   appContainer.innerHTML = `
     <div class="join-event-page fade-in" style="background: #000; min-height: 100vh; padding: 20px;">
        <header style="display: flex; align-items: center; gap: 16px; margin-bottom: 32px;">
@@ -1335,8 +1353,8 @@ function renderJoinEvent(id) {
        <div style="background: #111; border-radius: 20px; padding: 24px; border: 1px solid rgba(255,255,255,0.05); margin-bottom: 32px;">
           <h3 style="font-size: 1rem; font-weight: 800; margin-bottom: 20px;">Select number of spots</h3>
           <div style="display: flex; gap: 12px;">
-             ${[1, 2, 4].map(n => `<div onclick="this.parentElement.querySelectorAll('div').forEach(d=>d.style.borderColor='transparent'); this.style.borderColor='#bc13fe'" style="flex: 1; padding: 16px; background: #000; border: 2px solid ${n==1 ? '#bc13fe' : 'transparent'}; border-radius: 16px; text-align: center; cursor: pointer;">
-                <div style="font-size: 1.2rem; font-weight: 900;">${n}</div>
+             ${[1, 2, 4].map(n => `<div onclick="updateJoinSpots(${n})" style="flex: 1; padding: 16px; background: #000; border: 2px solid ${s.spots == n ? '#bc13fe' : 'transparent'}; border-radius: 16px; text-align: center; cursor: pointer; transition: all 0.2s;">
+                <div style="font-size: 1.2rem; font-weight: 900; color: ${s.spots == n ? '#fff' : '#888'};">${n}</div>
                 <div style="font-size: 0.7rem; color: #888; font-weight: bold; text-transform: uppercase;">PLAYER${n>1?'S':''}</div>
              </div>`).join('')}
           </div>
@@ -1357,16 +1375,16 @@ function renderJoinEvent(id) {
        <div style="background: #080808; border-radius: 20px; padding: 24px; border: 1px solid rgba(188,19,254,0.2);">
           <h3 style="font-size: 1rem; font-weight: 800; margin-bottom: 16px;">Price Summary</h3>
           <div style="display: flex; justify-content: space-between; margin-bottom: 8px; color: #888; font-weight: 600;">
-             <span>Entry Fee (1 player)</span>
-             <span>₹650</span>
+             <span>Entry Fee (${s.spots} player${s.spots>1?'s':''})</span>
+             <span>₹${game.price * s.spots}</span>
           </div>
           <div style="display: flex; justify-content: space-between; margin-bottom: 8px; color: #888; font-weight: 600;">
              <span>Platform Fee</span>
-             <span>₹25</span>
+             <span>₹${platformFee}</span>
           </div>
           <div style="display: flex; justify-content: space-between; margin-top: 16px; padding-top: 16px; border-top: 1px solid #222; font-weight: 900; font-size: 1.2rem;">
              <span>Total</span>
-             <span>₹675</span>
+             <span>₹${total}</span>
           </div>
        </div>
        
@@ -1377,6 +1395,25 @@ function renderJoinEvent(id) {
 
 function renderGroupBooking(id) {
   const game = exclusiveGames.find(g => g.id === id) || exclusiveGames[0];
+  const s = window.exclusiveBookingState;
+
+  if (s.id !== id) {
+    s.id = id;
+    s.spots = 4;
+  }
+
+  window.updateGroupSpots = function(delta) {
+    const newSpots = s.spots + delta;
+    if (newSpots >= 2 && newSpots <= 8) {
+      s.spots = newSpots;
+      renderGroupBooking(id);
+    }
+  };
+
+  window.updateTeamName = function(val) {
+    s.teamName = val;
+  };
+
   appContainer.innerHTML = `
     <div class="group-booking-page fade-in" style="background: #000; min-height: 100vh; padding: 20px;">
        <header style="display: flex; align-items: center; gap: 16px; margin-bottom: 32px;">
@@ -1387,24 +1424,26 @@ function renderGroupBooking(id) {
        <div style="background: #111; border-radius: 20px; padding: 24px; border: 1px solid rgba(255,255,255,0.05); margin-bottom: 32px;">
           <h3 style="font-size: 1rem; font-weight: 800; margin-bottom: 8px;">Add Team Name</h3>
           <p style="color: #666; font-size: 0.8rem; margin-bottom: 20px;">Your squad will see this on the scoreboard.</p>
-          <input type="text" placeholder="e.g. Midnight Smashers" style="width: 100%; background: #000; border: 1px solid #333; padding: 16px; border-radius: 12px; color: #fff; font-weight: 800; font-size: 1rem; outline: none;">
+          <input type="text" placeholder="e.g. Midnight Smashers" value="${s.teamName}" oninput="updateTeamName(this.value)" style="width: 100%; background: #000; border: 1px solid #333; padding: 16px; border-radius: 12px; color: #fff; font-weight: 800; font-size: 1rem; outline: none;">
        </div>
 
        <div style="background: #111; border-radius: 20px; padding: 24px; border: 1px solid rgba(255,255,255,0.05); margin-bottom: 32px;">
           <h3 style="font-size: 1rem; font-weight: 800; margin-bottom: 20px;">Reserve Spots</h3>
           <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px;">
-             <span style="font-weight: 700; color: #ccc;">Players: 4 Spots</span>
+             <span style="font-weight: 700; color: #ccc;">Players: ${s.spots} Spots</span>
              <div style="display: flex; gap: 12px; align-items: center;">
-                <button style="width: 36px; height: 36px; border-radius: 12px; background: #222; border: 1px solid #333; color: #fff; display: flex; align-items: center; justify-content: center; font-size: 1.2rem;">-</button>
-                <span style="font-size: 1.2rem; font-weight: 900; min-width: 24px; text-align: center;">4</span>
-                <button style="width: 36px; height: 36px; border-radius: 12px; background: #222; border: 1px solid #333; color: #fff; display: flex; align-items: center; justify-content: center; font-size: 1.2rem;">+</button>
+                <button onclick="updateGroupSpots(-1)" style="width: 36px; height: 36px; border-radius: 12px; background: ${s.spots > 2 ? '#222' : '#0a0a0a'}; border: 1px solid #333; color: ${s.spots > 2 ? '#fff' : '#444'}; display: flex; align-items: center; justify-content: center; font-size: 1.2rem; cursor: pointer;">-</button>
+                <span style="font-size: 1.2rem; font-weight: 900; min-width: 24px; text-align: center;">${s.spots}</span>
+                <button onclick="updateGroupSpots(1)" style="width: 36px; height: 36px; border-radius: 12px; background: ${s.spots < 8 ? '#222' : '#0a0a0a'}; border: 1px solid #333; color: ${s.spots < 8 ? '#fff' : '#444'}; display: flex; align-items: center; justify-content: center; font-size: 1.2rem; cursor: pointer;">+</button>
              </div>
           </div>
           
           <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px;">
-             ${[1, 2, 3, 4].map(n => `<div style="aspect-ratio: 1; border-radius: 50%; border: 2px dashed ${n==1 ? '#bc13fe' : '#444'}; display: flex; align-items: center; justify-content: center; background: ${n==1 ? 'rgba(188,19,254,0.1)' : 'transparent'};">
-                ${n==1 ? `<span style="font-size: 1.5rem;">${window.onboardingData.avatar || '🥷'}</span>` : `<i class="fa-solid fa-plus" style="color: #444;"></i>`}
-             </div>`).join('')}
+             ${Array.from({length: s.spots}).map((_, i) => `
+               <div style="aspect-ratio: 1; border-radius: 50%; border: 2px dashed ${i==0 ? '#bc13fe' : '#444'}; display: flex; align-items: center; justify-content: center; background: ${i==0 ? 'rgba(188,19,254,0.1)' : 'transparent'};">
+                  ${i==0 ? `<span style="font-size: 1.5rem;">${window.onboardingData.avatar || '🥷'}</span>` : `<i class="fa-solid fa-plus" style="color: #444;"></i>`}
+               </div>
+             `).join('')}
           </div>
        </div>
        
@@ -2957,6 +2996,56 @@ window.renderChallengeVenue = function() {
   `;
 };
 
+window.renderEventConfirmation = function(id) {
+  const game = exclusiveGames.find(g => g.id === id) || exclusiveGames[0];
+  const s = window.exclusiveBookingState;
+  
+  appContainer.innerHTML = `
+    <div class="confirmation-screen fade-in" style="background: #000; min-height: 100vh; padding: 60px 24px 40px; display: flex; flex-direction: column; align-items: center; text-align: center;">
+      
+      <div style="width: 100px; height: 100px; background: rgba(188, 19, 254, 0.2); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin-bottom: 24px; border: 2px solid #bc13fe; box-shadow: 0 0 40px rgba(188, 19, 254, 0.4);">
+         <i class="fa-solid fa-check" style="font-size: 3rem; color: #fff;"></i>
+      </div>
+      
+      <h1 style="font-weight: 900; font-size: 2.5rem; margin: 0 0 12px 0; color: #fff;">Spot Confirmed!</h1>
+      <p style="color: #aaa; font-size: 1.1rem; margin: 0 0 40px 0;">You're joining the ${game.title}.</p>
+      
+      <div style="background: #111; border: 1px solid #333; border-radius: 24px; padding: 30px; width: 100%; max-width: 400px; text-align: left;">
+         <div style="margin-bottom: 24px; border-bottom: 1px solid #222; padding-bottom: 20px;">
+            <h4 style="margin: 0 0 8px 0; font-weight: 800; font-size: 1.2rem; color: #fff;">${game.title}</h4>
+            <p style="margin: 0; color: #888; font-weight: 600;">${game.time} • ${game.venue}</p>
+         </div>
+         
+         <div style="display: flex; flex-direction: column; gap: 16px;">
+            <div style="display: flex; justify-content: space-between;">
+               <span style="color: #666; font-weight: 800; font-size: 0.8rem; text-transform: uppercase;">Reservation</span>
+               <span style="font-weight: 900; color: #fff;">${s.spots} Spot${s.spots>1?'s':''}</span>
+            </div>
+            ${s.teamName ? `
+            <div style="display: flex; justify-content: space-between;">
+               <span style="color: #666; font-weight: 800; font-size: 0.8rem; text-transform: uppercase;">Squad Name</span>
+               <span style="font-weight: 900; color: #bc13fe;">${s.teamName}</span>
+            </div>
+            ` : ''}
+            <div style="display: flex; justify-content: space-between;">
+               <span style="color: #666; font-weight: 800; font-size: 0.8rem; text-transform: uppercase;">Status</span>
+               <span style="font-weight: 900; color: #39FF14;">★ Confirmed</span>
+            </div>
+         </div>
+      </div>
+      
+      <div style="margin-top: 40px; display: flex; flex-direction: column; gap: 16px; width: 100%; max-width: 400px;">
+         <button onclick="navigateTo(screens.MATCH_HISTORY)" style="width: 100%; padding: 18px; border-radius: 16px; background: #fff; color: #000; border: none; font-size: 1.1rem; font-weight: 900; cursor: pointer;">
+            View My Matches
+         </button>
+         <button onclick="navigateTo(screens.HOME)" style="width: 100%; padding: 18px; border-radius: 16px; background: rgba(255,255,255,0.05); color: #fff; border: 1px solid rgba(255,255,255,0.1); font-size: 1rem; font-weight: 800; cursor: pointer;">
+            Back to Home
+         </button>
+      </div>
+    </div>
+  `;
+}
+
 window.renderChallengeConfirm = function() {
   appContainer.innerHTML = `
     <div class="profile-screen fade-in" style="background: #000; min-height: 100vh; color: #fff; padding: 60px 24px 40px; display: flex; flex-direction: column; align-items: center; text-align: center;">
@@ -3013,58 +3102,6 @@ window.renderChallengeConfirm = function() {
   `;
 };
 
-function showNudge(type, data = {}) {
-  const existingNudge = document.querySelector('.district-nudge');
-  if (existingNudge) existingNudge.remove();
-
-  let nudgeHTML = '';
-  
-  if (type === 'score') {
-     nudgeHTML = `
-        <div class="district-nudge score-nudge fade-in-up" style="position: fixed; bottom: 100px; left: 16px; right: 16px; background: #111; border: 1px solid #bc13fe; border-radius: 24px; padding: 20px; z-index: 1000; box-shadow: 0 20px 40px rgba(188,19,254,0.2); display: flex; align-items: center; gap: 16px;">
-           <div style="width: 48px; height: 48px; background: rgba(188,19,254,0.1); border-radius: 14px; display: flex; align-items: center; justify-content: center; color: #bc13fe; font-size: 1.5rem;"><i class="fa-solid fa-trophy"></i></div>
-           <div style="flex: 1;">
-              <h4 style="margin: 0; font-size: 0.95rem; font-weight: 800; color: #fff;">Did you play?</h4>
-              <p style="margin: 2px 0 0 0; font-size: 0.75rem; color: #888; font-weight: 600;">Enter your score for Ashish vs Rohan.</p>
-           </div>
-           <button onclick="this.parentElement.remove()" style="background: #fff; color: #000; border: none; padding: 8px 16px; border-radius: 12px; font-weight: 900; font-size: 0.75rem;">Enter</button>
-        </div>
-     `;
-  } else if (type === 'rivalry') {
-     nudgeHTML = `
-        <div class="district-nudge rivalry-nudge fade-in-up" style="position: fixed; bottom: 100px; left: 16px; right: 16px; background: #111; border: 1px solid #ff3b30; border-radius: 24px; padding: 20px; z-index: 1000; box-shadow: 0 20px 40px rgba(255,59,48,0.2); display: flex; align-items: center; gap: 16px;">
-           <div style="width: 48px; height: 48px; background: rgba(255,59,48,0.1); border-radius: 14px; display: flex; align-items: center; justify-content: center; color: #ff3b30; font-size: 1.5rem;"><i class="fa-solid fa-fire"></i></div>
-           <div style="flex: 1;">
-              <h4 style="margin: 0; font-size: 0.95rem; font-weight: 800; color: #fff;">Rohan is on fire!</h4>
-              <p style="margin: 2px 0 0 0; font-size: 0.75rem; color: #888; font-weight: 600;">He's on a 3-match winning streak. Rematch?</p>
-           </div>
-           <button onclick="this.parentElement.remove()" style="background: #ff3b30; color: #fff; border: none; padding: 8px 16px; border-radius: 12px; font-weight: 900; font-size: 0.75rem;">Challenge</button>
-        </div>
-     `;
-  } else if (type === 'share') {
-     nudgeHTML = `
-        <div class="district-nudge share-nudge fade-in-up" style="position: fixed; bottom: 100px; left: 16px; right: 16px; background: #111; border: 1px solid #39FF14; border-radius: 24px; padding: 20px; z-index: 1000; box-shadow: 0 20px 40px rgba(57,255,20,0.2); display: flex; align-items: center; gap: 16px;">
-           <div style="width: 48px; height: 48px; background: rgba(57,255,20,0.1); border-radius: 14px; display: flex; align-items: center; justify-content: center; color: #39FF14; font-size: 1.5rem;"><i class="fa-solid fa-camera-retro"></i></div>
-           <div style="flex: 1;">
-              <h4 style="margin: 0; font-size: 0.95rem; font-weight: 800; color: #fff;">Poster Ready!</h4>
-              <p style="margin: 2px 0 0 0; font-size: 0.75rem; color: #888; font-weight: 600;">That was a close game! Share your match story.</p>
-           </div>
-           <button onclick="navigateTo(screens.STORY_RECAP, 'match2'); this.parentElement.remove()" style="background: #39FF14; color: #000; border: none; padding: 8px 16px; border-radius: 12px; font-weight: 900; font-size: 0.75rem;">Share</button>
-        </div>
-     `;
-  }
-
-  document.body.insertAdjacentHTML('beforeend', nudgeHTML);
-  
-  // Auto remove after 8 seconds
-  const currentNudge = document.querySelector('.district-nudge');
-  setTimeout(() => {
-    if (currentNudge && currentNudge.parentElement) {
-       currentNudge.classList.add('fade-out-down');
-       setTimeout(() => currentNudge.remove(), 500);
-    }
-  }, 8000);
-}
 
 function handleNavigation() {
   const hash = window.location.hash.substring(1);

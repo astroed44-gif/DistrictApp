@@ -31,7 +31,8 @@ const screens = {
   GROUP_BOOKING: 'group_booking',
   EVENT_CONFIRMATION: 'event_confirmation',
   MATCH_HISTORY: 'match_history',
-  STORY_RECAP: 'story_recap'
+  STORY_RECAP: 'story_recap',
+  BOOKING_CONFIRMATION: 'booking_confirmation'
 };
 
 const pastMatches = [
@@ -1166,7 +1167,7 @@ function renderBooking(id) {
             <span class="selected-count">1 court selected</span>
             <span class="selected-slots-text">${bookingState.selectedSlot}</span>
           </div>
-          <button class="proceed-btn">Proceed</button>
+          <button class="proceed-btn" onclick="navigateTo(screens.PAYMENT_METHOD, '${id}')">Proceed</button>
         </div>
       ` : ''}
     </div>
@@ -1645,6 +1646,7 @@ function navigateTo(screen, id = null, fromPopState = false) {
   else if (screen === screens.EVENT_CONFIRMATION) renderEventConfirmation(id);
   else if (screen === screens.MATCH_HISTORY) renderMatchHistory();
   else if (screen === screens.STORY_RECAP) renderStoryRecap(id);
+  else if (screen === screens.BOOKING_CONFIRMATION) renderBookingConfirmation(id);
   if (!fromPopState) {
     const historyState = { screen, id };
     history.pushState(historyState, "", `#${screen}${id ? '-' + id : ''}`);
@@ -1710,6 +1712,8 @@ function navigateTo(screen, id = null, fromPopState = false) {
     renderGroupBooking(id);
   } else if (screen === screens.EVENT_CONFIRMATION) {
     renderEventConfirmation(id);
+  } else if (screen === screens.BOOKING_CONFIRMATION) {
+    renderBookingConfirmation(id);
   }
 }
 
@@ -2049,10 +2053,13 @@ window.renderBundleCheckout = function(id) {
 }
 
 window.renderPaymentMethod = function(id) {
+  const isBundle = eveningBundles.some(b => b.id === id);
+  const nextScreen = isBundle ? screens.BUNDLE_CONFIRMATION : screens.BOOKING_CONFIRMATION;
+
   appContainer.innerHTML = `
     <div class="payment-screen fade-in">
       <header class="payment-header">
-        <button class="back-btn-small" onclick="navigateTo(screens.BUNDLE_CHECKOUT, '${id}')"><i class="fa-solid fa-arrow-left"></i></button>
+        <button class="back-btn-small" onclick="navigateTo('${isBundle ? screens.BUNDLE_CHECKOUT : screens.BOOKING}', '${id}')"><i class="fa-solid fa-arrow-left"></i></button>
         <h2>Select Payment Method</h2>
       </header>
 
@@ -2061,17 +2068,17 @@ window.renderPaymentMethod = function(id) {
         <div class="payment-section">
           <h3 class="payment-section-title">Recommended</h3>
           <div class="payment-list glass">
-            <div class="payment-card" onclick="navigateTo(screens.BUNDLE_CONFIRMATION, '${id}')">
+            <div class="payment-card" onclick="navigateTo('${nextScreen}', '${id}')">
               <div class="payment-icon cred-icon"><i class="fa-brands fa-kickstarter-k"></i></div>
               <span class="payment-name">CRED UPI</span>
               <i class="fa-solid fa-chevron-right payment-arrow"></i>
             </div>
-            <div class="payment-card" onclick="navigateTo(screens.BUNDLE_CONFIRMATION, '${id}')">
+            <div class="payment-card" onclick="navigateTo('${nextScreen}', '${id}')">
               <div class="payment-icon gpay-icon"><i class="fa-brands fa-google-pay"></i></div>
               <span class="payment-name">Google Pay UPI</span>
               <i class="fa-solid fa-chevron-right payment-arrow"></i>
             </div>
-            <div class="payment-card" onclick="navigateTo(screens.BUNDLE_CONFIRMATION, '${id}')">
+            <div class="payment-card" onclick="navigateTo('${nextScreen}', '${id}')">
               <div class="payment-icon paytm-icon"><span class="paytm-text">Paytm</span></div>
               <span class="payment-name">Paytm UPI</span>
               <i class="fa-solid fa-chevron-right payment-arrow"></i>
@@ -2093,7 +2100,7 @@ window.renderPaymentMethod = function(id) {
         <div class="payment-section">
           <h3 class="payment-section-title">Pay by any UPI app</h3>
           <div class="payment-list glass">
-            <div class="payment-card" onclick="navigateTo(screens.BUNDLE_CONFIRMATION, '${id}')">
+            <div class="payment-card" onclick="navigateTo('${nextScreen}', '${id}')">
               <div class="payment-icon jupiter-icon">J</div>
               <span class="payment-name">Jupiter UPI</span>
               <i class="fa-solid fa-chevron-right payment-arrow"></i>
@@ -2980,7 +2987,7 @@ window.renderChallengeVenue = function() {
               <div style="display: flex; gap: 12px; margin-bottom: 20px;">
                  <div style="background: rgba(255,255,255,0.05); padding: 8px 12px; border-radius: 8px; font-size: 0.85rem; font-weight: bold;"><i class="fa-solid fa-check" style="color: #1dd1a1; margin-right: 4px;"></i> 2 Courts Available</div>
               </div>
-              <button onclick="navigateTo(screens.CHALLENGE_CONFIRM)" style="width: 100%; padding: 14px; border-radius: 12px; background: #fff; color: #000; border: none; font-weight: 900; font-size: 1rem; cursor: pointer;">
+              <button onclick="navigateTo(screens.PAYMENT_METHOD, '1')" style="width: 100%; padding: 14px; border-radius: 12px; background: #fff; color: #000; border: none; font-weight: 900; font-size: 1rem; cursor: pointer;">
                  Book Court ₹800
               </button>
            </div>
@@ -3056,6 +3063,122 @@ window.renderEventConfirmation = function(id) {
     </div>
   `;
 }
+
+window.renderBookingConfirmation = function(id) {
+  const venue = venues.find(v => v.id == id) || venues[0];
+  const dateStr = "15 Mar"; 
+  const timeStr = bookingState.selectedSlot || "07:10 PM - 09:14 PM";
+  
+  const recommendations = [
+    {
+      name: "Toscano",
+      offer: "Flat 25% OFF",
+      rating: "4.7",
+      cuisine: "Italian",
+      price: "₹1800 for two",
+      location: "Nexus, Koramangala",
+      image: "/images/toscano.png"
+    },
+    {
+      name: "Salt - Indian Restaurant",
+      offer: "Flat 15% OFF",
+      rating: "4.8",
+      cuisine: "North Indian",
+      price: "₹1500 for two",
+      location: "Nexus, Koramangala",
+      image: "/images/salt.png"
+    },
+    {
+      name: "Burma Burma",
+      offer: "Get 15% OFF",
+      rating: "4.6",
+      cuisine: "Burmese",
+      price: "₹1600 for two",
+      location: "Nexus, Koramangala",
+      image: "/images/burma_burma.png"
+    }
+  ];
+
+  appContainer.innerHTML = `
+    <div class="booking-confirmation-page fade-in" style="background: linear-gradient(180deg, #4a0404 0%, #000 30%); min-height: 100vh; color: #fff; position: relative; padding-bottom: 40px;">
+      
+      <!-- Top Bar -->
+      <header style="padding: 20px; display: flex; justify-content: space-between; align-items: center;">
+        <button onclick="navigateTo(screens.HOME)" style="background: none; border: none; color: #fff; font-size: 1.5rem; cursor: pointer;"><i class="fa-solid fa-arrow-left"></i></button>
+        <button style="background: none; border: none; color: #fff; font-size: 1.5rem; cursor: pointer;"><i class="fa-solid fa-arrow-up-from-bracket"></i></button>
+      </header>
+
+      <div style="text-align: center; margin-top: 10px; margin-bottom: 20px;">
+        <div style="font-size: 0.8rem; font-weight: 800; letter-spacing: 2px; text-transform: uppercase; color: #ff9f43; margin-bottom: 30px;">DINE AT NEXUS MALL KORAMANGALA</div>
+        
+        <div style="position: relative; margin-bottom: 40px;">
+           <h1 style="font-size: 5rem; font-weight: 900; margin: 0; line-height: 1; background: linear-gradient(to bottom, #fff, #f8a5c2); -webkit-background-clip: text; -webkit-text-fill-color: transparent; text-shadow: 0 10px 20px rgba(0,0,0,0.3);">50% <span style="font-size: 3rem;">off</span></h1>
+        </div>
+      </div>
+
+      <!-- Main Booking Card -->
+      <div style="margin: 0 20px 30px 20px; background: #111; border-radius: 20px; border: 1px solid rgba(255,255,255,0.05); display: flex; overflow: hidden; box-shadow: 0 20px 40px rgba(0,0,0,0.5); min-height: 120px;">
+         <div style="background: #1c1c1c; padding: 20px; display: flex; flex-direction: column; align-items: center; justify-content: center; min-width: 80px; border-right: 1px solid #222;">
+            <div style="font-size: 1.4rem; font-weight: 950;">15</div>
+            <div style="font-size: 0.8rem; font-weight: 800; color: #aaa; text-transform: uppercase;">Mar</div>
+         </div>
+         <div style="padding: 20px; flex: 1; position: relative;">
+            <div style="font-size: 0.75rem; color: #888; font-weight: 700; margin-bottom: 4px;">${timeStr} (approx)</div>
+            <h3 style="margin: 0 0 4px 0; font-size: 1.25rem; font-weight: 900;">Badminton Court</h3>
+            <p style="margin: 0; font-size: 0.85rem; color: #666; font-weight: 600;">${venue.name || 'Nexus Mall Koramangala'}</p>
+            
+            <div style="position: absolute; right: 20px; top: 20px; display: flex; flex-direction: column; align-items: flex-end; gap: 8px;">
+               <div style="width: 60px; height: 60px; background: #fff; border-radius: 12px; padding: 6px;">
+                  <img src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=district-booking-${id}" style="width: 100%; height: 100%; object-fit: contain;">
+               </div>
+            </div>
+            
+            <div style="margin-top: 24px; display: flex; justify-content: flex-end;">
+               <span style="font-size: 0.75rem; font-weight: 850; color: #fff; cursor: pointer;">Tickets <i class="fa-solid fa-chevron-right" style="font-size: 0.6rem; margin-left: 4px;"></i></span>
+            </div>
+         </div>
+      </div>
+
+      <!-- Recommendation Section -->
+      <div style="padding: 0 20px;">
+         <div style="color: #ff9f43; font-weight: 800; font-size: 0.95rem; margin-bottom: 8px;">Your movie starts at 07:10 PM</div>
+         <h2 style="font-size: 1.5rem; font-weight: 950; margin: 0 0 24px 0; letter-spacing: -0.5px;">Exclusive dining offers just for you</h2>
+         
+         <div style="display: flex; gap: 16px; overflow-x: auto; padding: 0 2px 20px 2px; margin: 0 -20px; padding-left: 20px; scrollbar-width: none; -ms-overflow-style: none;">
+            ${recommendations.map(res => `
+               <div style="min-width: 300px; background: #111; border-radius: 28px; overflow: hidden; border: 1px solid rgba(255,255,255,0.05); box-shadow: 0 10px 25px rgba(0,0,0,0.3);">
+                  <div style="height: 180px; position: relative;">
+                     <img src="${res.image}" style="width: 100%; height: 100%; object-fit: cover;">
+                     <div style="position: absolute; inset: 0; background: linear-gradient(to top, rgba(0,0,0,0.9) 0%, transparent 60%);"></div>
+                     <div style="position: absolute; bottom: 16px; left: 16px; background: #6200ea; color: #fff; padding: 6px 14px; border-radius: 10px; font-size: 0.75rem; font-weight: 950; display: flex; align-items: center; gap: 8px; box-shadow: 0 4px 10px rgba(0,0,0,0.5);">
+                        <i class="fa-solid fa-tag"></i> ${res.offer}
+                     </div>
+                  </div>
+                  <div style="padding: 20px;">
+                     <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 12px;">
+                        <h4 style="margin: 0; font-size: 1.25rem; font-weight: 900; color: #fff; letter-spacing: -0.3px;">${res.name}</h4>
+                        <div style="background: rgba(56, 142, 60, 0.2); color: #4caf50; padding: 4px 10px; border-radius: 8px; font-size: 0.8rem; font-weight: 900; display: flex; align-items: center; gap: 4px; border: 1px solid rgba(76, 175, 80, 0.3);">
+                           ${res.rating} <i class="fa-solid fa-star" style="font-size: 0.7rem;"></i>
+                        </div>
+                     </div>
+                     <div style="font-size: 0.9rem; color: #aaa; font-weight: 600; margin-bottom: 10px; display: flex; align-items: center; gap: 10px;">
+                        <span>${res.cuisine}</span>
+                        <span style="width: 4px; height: 4px; border-radius: 50%; background: #444;"></span>
+                        <span>${res.price}</span>
+                     </div>
+                     <div style="font-size: 0.9rem; color: #666; font-weight: 600;">
+                        ${res.location}
+                     </div>
+                  </div>
+               </div>
+            `).join('')}
+         </div>
+      </div>
+
+    </div>
+  `;
+};
+
 
 window.renderChallengeConfirm = function() {
   appContainer.innerHTML = `
